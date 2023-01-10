@@ -1,1 +1,0 @@
-# book6_JavaScript
