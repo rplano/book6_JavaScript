@@ -1,0 +1,100 @@
+html,
+body {
+  margin: 5px;
+  padding: 0;
+  /*background-color: aqua;*/
+}
+
+/*
+@media screen and (orientation: portrait) {
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: aqua;
+  }
+}
+*/
+
+@media (orientation: landscape) {
+  .htmlexample {
+    flex-direction: row;
+  }
+
+  .run {
+    display: block;
+    text-align: right;
+    color: rgb(39, 39, 39);
+  }
+}
+
+@media (orientation: portrait) {
+  .htmlexample {
+    flex-direction: column;
+  }
+
+  .run {
+    display: block;
+    text-align: left;
+    color: rgb(39, 39, 39);
+  }
+}
+
+canvas {
+  display: block;
+}
+
+h4 {
+  font-size: 90%;
+}
+
+.htmlexample {
+  height: 8em;
+  display: flex;
+}
+
+.results {
+  height: 8em;
+}
+
+.results {
+  border: 1px solid black;
+  padding: 0.5em;
+  font-family: Menlo, consolas, monospace;
+  font-size: 0.8em;
+  width: 400px;
+  overflow: auto;
+  margin: 0px;
+  box-sizing: border-box;
+  resize: both;
+}
+
+.codePanel {
+  margin-right: 1em;
+}
+
+.codePanel,
+.resultsPanel {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.code {
+  border: 1px solid black;
+  width: 400px;
+  height: 400px;
+  font-size: 80%;
+}
+
+.code,
+code {
+  font-family: Menlo, consolas, monospace;
+}
+
+a {
+  text-decoration: none;
+}
+
+.output {
+  box-sizing: border-box;
+  resize: both;
+}

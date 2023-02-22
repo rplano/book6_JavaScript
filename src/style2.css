@@ -1,0 +1,98 @@
+html,
+body {
+  margin: 2px;
+  padding: 0;
+  /* background-color: aqua; */
+}
+
+.codePanel,
+.resultsPanel {
+  position: absolute;
+  margin-right: 1em;
+  width: 560px;
+  height: 400px;
+}
+
+.run {
+  display: block;
+  text-align: right;
+  /* color: rgb(39, 39, 39); */
+  color: red;
+  text-decoration: none;
+  font-weight: bold;
+  /* background-color: green; */
+}
+
+.code {
+  font-family: Menlo, consolas, monospace;
+  border: 1px solid black;
+  font-size: 80%;
+  box-sizing: border-box;
+}
+
+.iframe {
+  resize: both;
+  box-sizing: border-box;
+}
+
+.results {
+  border: 1px solid black;
+  padding: 0.5em;
+  font-family: Menlo, consolas, monospace;
+  font-size: 0.8em;
+  overflow: auto;
+  margin: 0px;
+  resize: both;
+  box-sizing: border-box;
+}
+
+
+/* .htmlexample { */
+/* flex-direction: row; */
+/* height: 8em; */
+/* display: flex; */
+/* background-color: aqua; */
+/* } */
+
+/* h4 {
+  font-size: 100%;
+  background-color: green;
+} */
+/*
+@media screen and (orientation: portrait) {
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: aqua;
+  }
+}
+*/
+
+/* @media (orientation: landscape) {
+  .htmlexample {
+    flex-direction: row;
+  }
+
+  .run {
+    display: block;
+    text-align: right;
+    color: rgb(39, 39, 39);
+  }
+} */
+
+/* @media (orientation: portrait) {
+  .htmlexample {
+    flex-direction: column;
+  }
+
+  .run {
+    display: block;
+    text-align: left;
+    color: rgb(39, 39, 39);
+  }
+} */
+
+
+/* canvas {
+  display: block;
+} */
