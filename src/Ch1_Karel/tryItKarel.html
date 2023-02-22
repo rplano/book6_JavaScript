@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+
+  <link rel="stylesheet" type="text/css" href="../style2.css">
+
+  <!-- order is importent! -->
+  <script src="../libraries/p5.min.js"></script>
+  <script src="../libraries/p5.sound.min.js"></script>
+  <script src="../libraries/gui.js"></script>
+  <script src="../libraries/graphics.js"></script>
+  <script src="../libraries/utils.js"></script>
+</head>
+
+<body>
+  <div style="width: 560px; height: 650px">
+    <div class="htmlexample" style="width: 560px; height: 620px">
+      <!--      <h4 id="h4">Code:</h4> -->
+      <div class="codePanel" id="codePanel">
+        <textarea id="code" class="code" wrap="off" spellcheck="false" style="width: 100%; height: 610px">
+sample code
+    </textarea>
+      </div>
+      <div class="resultsPanel" id="resultsPanel" style="visibility: hidden;">
+        <div>
+          <iframe id="iframe" class="iframe" style="width: 100%; height: 560px"></iframe>
+          <pre id="results" class="results" style="width: 100%; height: 50px"></pre>
+        </div>
+      </div>
+    </div>
+    <a onclick="runClicked(); return false" href="#" class="run" id="run">Run</a>
+  </div>
+
+  <script>
+    function runClicked() {
+      const resultsPanel = document.getElementById("resultsPanel");
+      const codePanel = document.getElementById("codePanel");
+      const run = document.getElementById("run");
+      if (run.innerText === "Run") {
+        resultsPanel.style.visibility = 'visible';
+        codePanel.style.visibility = 'hidden';
+        run.innerText = "Edit";
+        runCode();
+      } else {
+        resultsPanel.style.visibility = 'hidden';
+        codePanel.style.visibility = 'visible';
+        run.innerText = "Run";
+      }
+    }
+
+    function runCode() {
+      const iframeElement = document.getElementById("iframe");
+      iframeElement.setAttribute('src', './tryItIFrameKarel.html?name=' + name);
+    }
+
+    function addTabToTextArea() {
+      document.getElementById('code').addEventListener('keydown', function (e) {
+        if (e.key == 'Tab') {
+          e.preventDefault();
+          var start = this.selectionStart;
+          var end = this.selectionEnd;
+
+          // set textarea value to: text before caret + tab + text after caret
+          this.value = this.value.substring(0, start) +
+            "\t" + this.value.substring(end);
+
+          // put caret at right position again
+          this.selectionStart =
+            this.selectionEnd = start + 1;
+        }
+      });
+    }
+
+    // get name of program to load
+    let params = (new URL(document.location)).searchParams;
+    let name = params.get('name');
+    document.title = 'TryIt: ' + name;
+
+    // load program
+    let code = "";
+    // let fr = new FileReader2(name);
+    let fr = new Utils.FileReader(name + '.js');
+    while (true) {
+      let line = fr.readLine();
+      if (line == null)
+        break;
+      code += line + "\n";
+    }
+    fr.close();
+    // console.log(code);
+
+    // display program
+    const codeElement = document.getElementById("code");
+    codeElement.innerHTML = code;
+
+    addTabToTextArea();
+
+    //let script = document.createElement('script');
+    //script.setAttribute('src', name);
+    //document.head.appendChild(script);
+  </script>
+</body>
+
+</html>
