@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- order is importent! -->
+  <script src="../libraries/p5.min.js"></script>
+  <script src="../libraries/p5.sound.min.js"></script>
+  <script src="../libraries/gui.js"></script>
+  <script src="../libraries/graphics.js"></script>
+  <script src="../libraries/utils.js"></script>
+</head>
+
+<body>
+  <script>
+    function checkForES6() {
+      "use strict";
+
+      if (typeof Symbol == "undefined") return false;
+      try {
+        eval("class Foo {}");
+        eval("var bar = (x) => x+1");
+      } catch (e) {
+        return false;
+      }
+
+      return true;
+    }
+
+    // first check if browser supports ES6:
+    if (!checkForES6()) {
+      let msg = "Your browser does not seem to support ES6, please use a newer browser.";
+      document.write(msg);
+      console.log(msg);
+
+    } else {
+      // catch log msgs:
+      const resultElement = window.parent.document.getElementById('results');
+      resultElement.innerHTML = '';
+      var console = {};
+      console.log = function (msg) {
+        resultElement.innerHTML = msg;
+      };
+
+      let params = (new URL(document.location)).searchParams;
+      let name = params.get('name');
+      // console.log('name '+name);
+
+      let script = document.createElement('script');
+      script.setAttribute('src', '../libraries/karel.js');
+      script.setAttribute('title', name);
+      script.setAttribute('id', 'karel');
+      document.head.appendChild(script);
+    }
+  </script>
+</body>
+
+</html>

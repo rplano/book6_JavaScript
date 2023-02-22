@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link type="text/css" href="../styles.css">
+
+  <!-- order is importent! -->
+  <script src="../libraries/p5.min.js"></script>
+  <script src="../libraries/p5.sound.min.js"></script>
+  <script src="../libraries/gui.js"></script>
+  <script src="../libraries/graphics.js"></script>
+  <script src="../libraries/utils.js"></script>
+</head>
+
+<body>
+  <script>
+    let params = (new URL(document.location)).searchParams;
+    let name = params.get('name');
+    document.title = name;
+    let script = document.createElement('script');
+    script.setAttribute('src', '../libraries/karel.js');
+    script.setAttribute('title', name);
+    script.setAttribute('id', 'karel');
+    document.head.appendChild(script);
+  </script>
+</body>
+
+</html>
