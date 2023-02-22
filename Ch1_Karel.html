@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" type="text/css" href="style.css">
+
+	<title>Ch1 Karel</title>
+</head>
+
+<body>
+	<p>
+		<img alt="" src="img/370d2c62-31d7-47b3-8bd0-31d0e60fafb0.png" style="display: block; margin-left: auto;  margin-right: auto; width: 310px; height: 212px;" /></p>
+	<h1>
+		Karel</h1>
+	<p>
+		Karel is a little robot that looks a bit like an old iMac. On the following pages we will learn a lot from Karel. Although it seems trivial, in this chapter we probably learn the most important lesson of the whole book, namely to break down complex problems into simpler ones with the top-down approach.</p>
+	<p>
+		A little note for people who already know how to program a bit: don&#39;t skip this chapter! In principle, this chapter is about learning and practicing the top-down approach with simple examples, getting used to a good coding style, and learn how to code without using variables.</p>
+	<p>
+		.</p>
+	<h2>
+		Karel&#39;s World</h2>
+	<p>
+		Karel&#39;s world consists of streets and avenues. Streets run from west to east and avenues from south to north. Besides, there are walls Karel can&#39;t go through, and there are beepers. Karel always carries a bag with an infinite number of beepers, but beepers can also lie around anywhere in his world.</p>
+	<p>
+		Karel knows only four commands:</p>
+	<ul>
+		<li>
+			<strong>move():</strong>&nbsp; he can move one step forward,</li>
+		<li>
+			<strong>turnLeft():</strong>&nbsp; he can turn to the left,</li>
+		<li>
+			<strong>pickBeeper():</strong>&nbsp; he can pick up a beeper, and</li>
+		<li>
+			<strong>putBeeper():</strong>&nbsp; he can put a beeper down.</li>
+	</ul>
+	<p>
+		Although it doesn&#39;t look like much, it turns out that Karel can calculate anything there is to calculate, we say Karel is a &#39;universal computing machine&#39;.</p>
+	<p>
+		.</p>
+	<h2>
+		Karel learns to walk</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Ch1_Karel/tryItKarel.html?name=firstKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/firstKarel2.png" style="width: 200px; height: 121px; display: block;" />Try it</a></div>
+	<p>
+		If we want Karel to pick up the beeper at location (3,2) and carry it to location (5,2), we would tell him:</p>
+	<p>
+		&quot;Karel, take two steps forward, then pick up the beeper, turn left, move one step forward, turn three times to the left, move two more steps forward and put down the beeper.&quot;</p>
+	<p>
+		Why should Karel turn three times to the left? Because he doesn&#39;t know how to &#39;turn to the right&#39;, nobody has ever shown him that.</p>
+	<p>
+		Since Karel doesn&#39;t understand English, we have to talk to him in his language. which sounds like this:</p>
+	<pre style="margin-left: 40px;">
+	move();
+	move();
+	pickBeeper();
+	turnLeft();
+	move();
+	turnLeft();
+	turnLeft();
+	turnLeft();
+	move();
+	move();
+	putBeeper();</pre>
+	<p>
+		Like nobody really understands why you need these funny punctuation marks in English (like commas, periods etc.), nobody knows why Karel needs these round brackets (called parentheses) and semicolons. But we can&#39;t do without them. Karel also pays meticulous attention to upper and lower case, if we make a typo he does nothing at all.</p>
+	<p>
+		.</p>
+	<h2>
+		Karel Program</h2>
+	<p>
+		So for Karel to start his chores we need something called a &#39;program&#39;.&nbsp; This is actually JavaScript, but we don&#39;t need to know that.&nbsp; A Karel program looks like this:</p>
+	<pre style="margin-left: 40px;">
+	function run() {
+	<span style="color:#0000ff;">&nbsp;&nbsp; &nbsp;move();
+	&nbsp;&nbsp; &nbsp;move();
+	&nbsp;&nbsp; &nbsp;pickBeeper();
+	&nbsp;&nbsp; &nbsp;turnLeft();
+	&nbsp;&nbsp; &nbsp;move();
+	&nbsp;&nbsp; &nbsp;turnLeft();
+	&nbsp;&nbsp; &nbsp;turnLeft();
+	&nbsp;&nbsp; &nbsp;turnLeft();
+	&nbsp;&nbsp; &nbsp;move();
+	&nbsp;&nbsp; &nbsp;putBeeper();</span>
+	}</pre>
+	<p>
+		The part that is important for us is marked in blue.&nbsp; In all that follows we will simply insert our Karel commands (also called code) replacing the blue lines above. We don&#39;t care about the rest of the program.</p>
+	<p>
+		.</p>
+	<h2>
+		Exercise: GoodMorningKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Ch1_Karel/tryItKarel.html?name=goodMorningKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/goodMorningKarel2.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+	<p>
+		We want to solve our next Karel problem: Karel has just woken up and wants to drink his morning milk. However, the milk is still at the doorstep where the milkman left it. So Karel has to get up, go to the door, get the milk and then sit down at his breakfast table to drink his milk. How would that look in Karel&#39;s language?</p>
+	<p>
+		.</p>
+	<h2>
+		Karel learns new Tricks</h2>
+	<p>
+		Karel is a bit like a pet and we can teach him new tricks.&nbsp; First, let&#39;s teach him to turn to the right.&nbsp; We tell him that every time he sees the turnRight() command, he should turn left three times.&nbsp; For Karel to understand us, we have to use his language:</p>
+	<pre style="margin-left: 40px;">
+	function turnRight() {
+	&nbsp;&nbsp; &nbsp;turnLeft();
+	&nbsp;&nbsp; &nbsp;turnLeft();
+	&nbsp;&nbsp; &nbsp;turnLeft();
+	}</pre>
+	<p>
+		Now we can just use this new command and Karel understands what to do.&nbsp; Commands we sometimes also call <em>functions</em>, e.g. turnRight() is a function, but also move().&nbsp; In general, functions are always indicated by parentheses.</p>
+	<p>
+		Question: What should be the syntax for a turnAround() command that causes Karel to turn around and look in the opposite direction?</p>
+	<p>
+		.</p>
+	<h2>
+		Exercise: GoodMorningKarel</h2>
+	<p>
+		To see that this really works, we want to modify our GoodMorningKarel so that it uses a turnRight() instead of three turnLeft()&#39;s.</p>
+	<p>
+		.</p>
+	<h2>
+		Karel repeats himself</h2>
+	<p>
+		It is very common that Karel should do something over and over again.&nbsp; For example, he should turn three times to the left or he should walk two steps.&nbsp; For this we have something called a loop, more precisely a &#39;for loop&#39;.&nbsp; In Karel&#39;s language this looks like:</p>
+	<pre style="margin-left: 40px;">
+	function turnRight() {
+	&nbsp;&nbsp; &nbsp;for (let i = 0; i &lt; <span style="color:#0000ff;">3</span>; i++) {
+	&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;turnLeft();
+	&nbsp;&nbsp; &nbsp;}
+	}</pre>
+	<p>
+		What is important here is the &#39;3&#39;, which tells Karel that he should do whatever is inside the curly brackets, three times.&nbsp; We do not need to understand the rest for the time being. (Very few people understand it, they just copy the lines and change the &#39;3&#39;.)</p>
+	<p>
+		.</p>
+	<h2>
+		Exercise: FillRowKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Ch1_Karel/tryItKarel.html?name=fillRowKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/fillRowKarel2.png" style="width: 200px; height: 121px; display: block;" />Try it</a></div>
+	<p>
+		Another application for our loop is FillRowKarel.&nbsp; We want Karel to put five beepers in a row.&nbsp; This actually seems to be a very simple problem, and one would think that the following lines</p>
+	<pre style="margin-left: 40px;">
+	function run() {
+	&nbsp;&nbsp; &nbsp;for (let i = 0; i &lt; 5; i++) {
+	&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;putBeeper();
+	&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;move();
+	&nbsp;&nbsp; &nbsp;}
+	}</pre>
+	<p>
+		should solve the problem.</p>
+	<p>
+		.</p>
+	<p>
+		<img alt="" src="img/deadKarel2.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 99px; float: right;" />However, we realize that Karel runs into the wall at the end and hurts himself.&nbsp; In the program we see that when the red window pops up in which Karel is stung by a wasp.&nbsp; To avoid this, we could only go through the loop four times.&nbsp; But then Karel would only put down four beepers and not five.&nbsp; This problem occurs so often that it has a name: it is called the O-Bob problem.</p>
+	<p>
+		.</p>
+	<h2>
+		OBOB</h2>
+	<p>
+		O-Bob was a Jedi master who first noticed this problem when he tried to program his droid.&nbsp; Seriously, OBOB actually stands for &#39;off by one bug&#39;, usually one to few.&nbsp; In our FillRowKarel problem this means that Karel simply has to put an extra beeper in the end:</p>
+	<pre style="margin-left: 40px;">
+	function run() {
+	&nbsp;&nbsp; &nbsp;for (let i = 0; i &lt; 4; i++) {
+	&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;putBeeper();
+	&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;move();
+	&nbsp;&nbsp; &nbsp;}
+		putBeeper();
+	}</pre>
+	<p>
+		Right now, we have to live with that.&nbsp; In the next chapter we will see how the &#39;Loop-and-a-half&#39; can be used to avoid the O-Bob problem elegantly.</p>
+	<p>
+		.</p>
+	<h2>
+		Karel has Sensors</h2>
+	<p>
+		There&#39;s one little thing I haven&#39;t told you yet: Karel has sensors.&nbsp; For example, he can sense if there is a beeper at the location he is at the moment.&nbsp; So if we wanted Karel to pick up a beeper, if there is one, we could use the following Karel commands:</p>
+	<pre style="margin-left: 40px;">
+	if (beepersPresent()) {
+	&nbsp;&nbsp; &nbsp;pickBeeper();
+	}
+	</pre>
+	<p>
+		So Karel has another command, the <em>if</em> command.</p>
+	<p>
+		Karel has a lot of sensors, the most important ones are:</p>
+	<ul>
+		<li>
+			<strong>beepersPresent():</strong>&nbsp; there is a beeper at the current location,</li>
+		<li>
+			<strong>noBeepersPresent():</strong>&nbsp; there is no beeper at the current location,</li>
+		<li>
+			<strong>frontIsClear():</strong>&nbsp; there is no wall in front of Karel, and</li>
+		<li>
+			<strong>frontIsBlocked():</strong>&nbsp; there is a wall in front of Karel, so Karel should not try to move forward or he will hit his head.</li>
+	</ul>
+	<p>
+		Additionally, there are also sensors for rightIsClear() and leftIsClear(), together with their respective blocked variants.&nbsp; Right actually means down, and left actually means up, always relative to the direction in which Karel is looking.</p>
+	<p>
+		.</p>
+	<h2>
+		Karel, go ahead</h2>
+	<p>
+		Very often we want Karel to do something until something happens.&nbsp; For example, as long as there is no wall in front of him, Karel should move straight.&nbsp; This is where Karel&#39;s while command comes in handy:</p>
+	<pre style="margin-left: 40px;">
+	while (frontIsClear()) {
+	&nbsp;&nbsp; &nbsp;move();
+	}
+	</pre>
+	<p>
+		i.e., as long as there is no wall in front of him, Karel should move straight.&nbsp; This construct is called the &#39;while loop&#39;.</p>
+	<p>
+		.</p>
+	<h2>
+		Exercise: WallKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Ch1_Karel/tryItKarel.html?name=wallKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/wallKarel2.png" style="width: 200px; height: 121px; display: block;" />Try it</a></div>
+	<p>
+		How would a new command <em>moveToWall()</em> look like, which causes Karel to move to the next wall?&nbsp; In WallKarel we want to get Karel to walk straight until a wall comes up.&nbsp; We want to use our new command moveToWall(), because then the code becomes very simple and elegant.</p>
+	<p>
+		This example leads us to our first Software Engineering Principles (SEP):</p>
+	<p>
+		<strong>SEP: Programs should be readable by people and should look like relatively normal English.</strong></p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<h2>
+		Exercise: InfiniteLoopKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Ch1_Karel/tryItKarel.html?name=infiniteLoopKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/infiniteLoopKarel2.png" style="width: 200px; height: 121px; display: block;" />Try it</a></div>
+	<p>
+		The while loop is not entirely unproblematic: because Karel does something until something special happens.&nbsp; In our InfiniteLoopKarel example, Karel should turn to the left until there is no more wall in front of him:</p>
+	<pre style="margin-left: 40px;">
+	while ( frontIsClear() ) {
+	&nbsp;&nbsp; &nbsp;turnLeft();
+	}
+	</pre>
+	<p>
+		This works well as long as Karel is somewhere next to a wall.&nbsp; But if Karel is in the middle of his world, he does not stop turning.&nbsp; This is then called an infinite loop or Merry-Go-Round Karel.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<h2>
+		Exercise: RobinHoodKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Ch1_Karel/tryItKarel.html?name=robinHoodKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/robinHoodKarel2.png" style="width: 200px; height: 121px; display: block;" />Try it</a></div>
+	<p>
+		Karel loves the movies.&nbsp; The other day he saw the movie &#39;Robin Hood&#39;.&nbsp; According to his motto &#39;take from the rich and give to the poor&#39;, Karel walks through his world and every time there is a beeper in the streets he picks it up, and whenever there is no beeper, he puts one down.<br />
+		To do this, we can use Karel&#39;s sensors:</p>
+	<pre style="margin-left: 40px;">
+	if ( beepersPresent() ) {
+	&nbsp;&nbsp; &nbsp;pickBeeper();
+	}&nbsp; &nbsp;
+	if ( noBeepersPresent() ) {
+	&nbsp;&nbsp; &nbsp;putBeeper();
+	}
+	</pre>
+	<p>
+		If we put these lines inside our while loop above, then we almost solved our problem.&nbsp; It works fine if there is no beeper.&nbsp;&nbsp; However, if there is one, Karel first removes it.&nbsp; But then he sees that there is no beeper, and hence puts a beeper where he shouldn&#39;t.&nbsp; To solve this problem we need the else command:</p>
+	<pre style="margin-left: 40px;">
+	if ( beepersPresent() ) {
+	&nbsp;&nbsp; &nbsp;pickBeeper();
+	}&nbsp;else {
+	&nbsp;&nbsp; &nbsp;putBeeper();
+	}
+	</pre>
+	<p>
+		It reads like this: if there&#39;s a beeper pick it up, otherwise put one down.</p>
+	<p>
+		.</p>
+	<h2>
+		Top-Down Approach</h2>
+	<p>
+		In principle, there are two ways to solve any problem.&nbsp; One is the bottom-up approach: starting from the things you know, you try to solve the problem.&nbsp; So far we have used this approach to solve our Karel problems: with the few commands Karel knows and his sensors, we have solved simple problem step by step.&nbsp; For simple problems this works quite well.<br />
+		For more complex problems, however, this no longer works very well.&nbsp; The top-down method becomes extremely helpful here.&nbsp; In the top-down approach we usually have a problem, which seems impossible to solve at first.&nbsp; However, one very often succeeds in breaking down the complex problem into smaller sub-problems.&nbsp; Sometimes those can be solved directly, sometimes those have to be broken down into even smaller sub-problems.&nbsp; This process is called &#39;stepwise refinement&#39;.&nbsp; Let&#39;s take a look at the WindowCleaningKarel example, and see how it works.</p>
+	<p>
+		.</p>
+	<h2>
+		Exercise: WindowCleaningKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Ch1_Karel/tryItKarel.html?name=windowCleaningKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/windowCleaningKarel2.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+	<p>
+		Karel lives in Chicago.&nbsp; And he makes a living by cleaning windows.&nbsp; The job is not entirely harmless, since he is cleaning skyscrapers.&nbsp; Karel has to clean five skyscrapers a week.&nbsp; They are not all the same, some are higher some are less high.&nbsp; Actually, Karel likes the higher ones better, but they&#39;re more work.<br />
+		We want to solve this problem using the top-down approach.&nbsp; It is therefore a question of breaking down the big problem into smaller ones.&nbsp; Suppose we knew how Karel cleans one skyscraper, so assume we had a method called cleanOneSkyScraper().&nbsp; Then the solution to our problem would be very simple, we would just use cleanOneSkyScraper() five times:</p>
+	<pre style="margin-left: 40px;">
+	for (int i = 0; i &lt; 5; i++) {
+	&nbsp;&nbsp; &nbsp;cleanOneSkyScraper();
+	}
+	</pre>
+	<p>
+		So we&#39;ve solved our big problem.<br />
+		Now we have to solve the slightly smaller problem cleanOneSkyScraper().&nbsp; How does Karel clean one skyscraper?&nbsp; Still the problem is to complicated to solve it with move&#39;s and turnLeft&#39;s.&nbsp; Hence, we need to break it down one more time.&nbsp; If we knew how Karel moves up the skyscraper, moveUpAndClean(), moves over the skyscraper, moveOver(), and on the other side then moves down the skyscraper again, moveDownAndClean(), then we would have solved the problem cleanOneSkyScraper():</p>
+	<pre style="margin-left: 40px;">
+	public void cleanOneSkyScraper() {
+	&nbsp;&nbsp; &nbsp;moveUpAndClean();
+	&nbsp;&nbsp; &nbsp;moveOver();
+	&nbsp;&nbsp; &nbsp;moveDownAndClean();
+	}
+	</pre>
+	<p>
+		Although we are not quite finished yet, we can see that we are basically done.&nbsp; We can easily solve the last three commands.&nbsp; For moveUpAndClean(), we let Karel turn to the left, and then let him move as long as his right side is blocked.&nbsp; For moveOver(), we let Karel turn right, move two steps forward and then turn right again. moveDownAndClean() is actually like moveToWall(), but at the end he has to turn left once more.</p>
+	<p>
+		.</p>
+	<h2>
+		Recommendations for the Top-Down Approach</h2>
+	<p>
+		Sometimes it is not quite clear when the top-down approach is finished.&nbsp; Here are a few recommendations to help you:</p>
+	<ul>
+		<li>
+			one method should solve exactly one problem,</li>
+		<li>
+			a method should not have more than 15 lines of code, around five lines is ideal, and</li>
+		<li>
+			method names should describe what the method does.</li>
+	</ul>
+	<p>
+		.</p>
+	<h2>
+		Comments</h2>
+	<p>
+		Every good program has comments.&nbsp; The more important it is, the more comments it has.&nbsp; What are comments?&nbsp; Comments are descriptions of what the program, what the code does.&nbsp; They are intended for people who are trying to understand the program.&nbsp; The computer ignores the comments.<br />
+		The syntax is actually quite simple: a comment starts with the characters &#39;/**&#39; and ends with the characters &#39;*/&#39;.&nbsp; Usually a comment is located at the very beginning of a program and explains what the program as a whole does.&nbsp; In addition, you should briefly describe what each method does.&nbsp; If you want to do it really well, then you also describe briefly which assumptions you make when the method is called (pre-conditions) and in what state you leave the world after the method is finished (post-conditions).</p>
+	<pre style="margin-left: 40px;">
+	/**
+	&nbsp;* Karel&#39;s day job is to clean windows of skyscrapers in Chicago.
+	&nbsp;*
+	&nbsp;* @author Ralph P. Lano
+	&nbsp;*/
+	public class WindowCleaningKarel extends Karel {
+	&nbsp;&nbsp; &nbsp;
+	&nbsp;&nbsp;&nbsp; /**
+	&nbsp;&nbsp;&nbsp;&nbsp; * Karel has to clean five skyscrapers, one at a time.
+	&nbsp;&nbsp;&nbsp;&nbsp; *
+	&nbsp;&nbsp;&nbsp;&nbsp; * PreCondition: Karel is standing in front of the first skyscraper,
+	&nbsp;&nbsp;&nbsp;&nbsp; * facing east
+	&nbsp;&nbsp;&nbsp;&nbsp; * PostCondition: Karel is behind the last skyscraper, facing east
+	&nbsp;&nbsp;&nbsp;&nbsp; */
+	&nbsp;&nbsp;&nbsp; public void run() {
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (int i = 0; i &lt; 5; i++) {
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cleanOneSkyScraper();
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+	&nbsp;&nbsp;&nbsp; }
+	
+	&nbsp;&nbsp;&nbsp; ...
+	}
+	</pre>
+	<p>
+		If the methods are kept short, comments within methods are not necessary.&nbsp; Again, the point is that programs should read like good English.</p>
+	<p>
+		.</p>
+	<h2>
+		Exercise: Comments</h2>
+	<p>
+		As a little exercise, we want to add detailed comments to the WindowCleaningKarel program.&nbsp; For all future programs we write, we should get used to adding a little comment to each program and method.&nbsp; This makes the programs easier to understand (for people).</p>
+	<p>
+		.</p>
+	<hr />
+	<h1>
+		Review</h1>
+	<p>
+		In this chapter we have taken our first programming steps by helping Karel to solve his problems.&nbsp; In addition,</p>
+	<ul>
+		<li>
+			we have taught Karel new commands, also called methods, e.g. moveToWall(),</li>
+		<li>
+			we let Karel repeat things with the for loop, e.g. make three steps forward,</li>
+		<li>
+			we have seen that Karel has sensors and we got to know the if statement,</li>
+		<li>
+			we learned about the while loop,</li>
+		<li>
+			we acquainted ourselves with our first software engineering principles,</li>
+		<li>
+			we made our first programming errors, e.g. the OBOB and the infinite loop, &nbsp;</li>
+		<li>
+			and we learned about comments.</li>
+	</ul>
+	<p>
+		But the most important thing we learned in this chapter was the top-down approach.&nbsp; Its goal is to break down a big problem into smaller ones, and to repeat this until each sub-problem is easy to solve.&nbsp; This approach can be applied not only to programming problems, but also to solve problems in all possible other fields.</p>
+	<p>
+		.</p>
+	<hr />
+	<h1>
+		Projects</h1>
+	<p>
+		We know enough about Karel now to help him solve any problems he may have.&nbsp; In the book by Pavel Solin [4] there are many more Karel examples.</p>
+	<p>
+		.</p>
+	<h2>
+		WritingKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Pr1_Karel/tryItKarel.html?name=writingKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/writingKarel2.png" style="width: 200px; height: 164px; display: block;" />Try it</a></div>
+	<p>
+		Karel learned to write in school. His favorite letter is the &#39;K&#39;. So we want to help Karel write his favorite letter using the top-down approach.</p>
+	<p>
+		.</p>
+	<p>
+		&nbsp;</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<h2>
+		AdventureKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Pr1_Karel/tryItKarel.html?name=adventureKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/adventureKarel2.png" style="width: 200px; height: 164px; display: block;" />Try it</a></div>
+	<p>
+		Karel is not a coward, on the contrary, he loves adventures.&nbsp; But that can be quite dangerous sometimes.&nbsp; The other day he was at the White Cliffs of Dover.&nbsp; Of course he wants to get as close as possible, but he doesn&#39;t want to fall over either (Karel can&#39;t swim).&nbsp; What makes this problem hard is that we don&#39;t know how far the cliffs are.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<h2>
+		PartyKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Pr1_Karel/tryItKarel.html?name=partyKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/partyKarel2.png" style="width: 200px; height: 164px; display: block;" />Try it</a></div>
+	<p>
+		Karel lives in a flat, which he shares with his brother SuperKarel.&nbsp; Both love parties and after the last one it looks like cabbage and turnips in their apartment.&nbsp; Tonight Karel&#39;s parents are coming to visit, so he has to clean up.&nbsp; Let&#39;s help Karel fix his apartment by cleaning up all the beepers lying around.<br />
+		The part that makes this program a bit complicated is that Karel should stop after cleaning everything up.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<h2>
+		EasterEggKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Pr1_Karel/tryItKarel.html?name=easterEggKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/easterEggKarel2.png" style="width: 200px; height: 164px; display: block;" />Try it</a></div>
+	<p>
+		Karel loves Easter and searching for Easter eggs.&nbsp; His parents were hiding them all over the garden, so we&#39;ll help Karel collect all the Easter eggs.&nbsp; Since he will visits his grandparents later, and their garden is much larger, the program must also work for gardens of different sizes.<br />
+		Again, we want to make sure Karel stops when he is finished.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<h2>
+		TulipKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Pr1_Karel/tryItKarel.html?name=tulipKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/tulipKarel2.png" style="width: 200px; height: 164px; display: block;" />Try it</a></div>
+	<p>
+		Karel has Dutch ancestors, that&#39;s why he loves tulips.&nbsp; And every winter he plants tulip bulbs, so that his garden is full of tulips again in spring.&nbsp; Let&#39;s help Karel with planting the tulips, but using the top-down approach.&nbsp; Since Karel also plants tulips for his parents and grandparents, our program has to work for differently sized gardens.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<h2>
+		BuilderKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Pr1_Karel/tryItKarel.html?name=builderKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/builderKarel2.png" style="width: 200px; height: 128px; display: block;" />Try it</a></div>
+	<p>
+		From time to time there are tornadoes in Chicago.&nbsp; The last one got Karel&#39;s house.&nbsp; It is still standing but the pillars have gotten some damage and have to be repaired.&nbsp; In Karel&#39;s house there are three pillars, which are of course made of beepers.&nbsp; The three pillars are three steps apart, but could be of different heights.&nbsp; Let&#39;s help Karel repair his house, of course with the top-down approach.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<h2>
+		PyramidKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Pr1_Karel/tryItKarel.html?name=pyramidKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/pyramidKarel2.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+	<p>
+		We have already heard that Karel is a little adventurer.&nbsp; The other day he saw a report on TV about the pyramids, and of course he has to build one in his garden immediately.&nbsp; Since he wants to build several, of different sizes, our program should work in worlds with different sizes as well, so it makes sense to use the top-down approach again.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<h2>
+		YardstickKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Pr1_Karel/tryItKarel.html?name=yardstickKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/yardstickKarel2.png" style="width: 200px; height: 164px; display: block;" />Try it</a></div>
+	<p>
+		Karel is not quite as stupid as he looks.&nbsp; He can actually count even though he has no fingers (or variables).&nbsp; Karel counts with beepers.&nbsp; In this example he is supposed to measure how long the yardstick in front of him is.&nbsp; So we want him to put as many beepers as the yardstick is long, at the end of the street he is standing on.<br />
+		We can assume that Karel is standing just before the yardstick.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<h2>
+		DoubleBeeperKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Pr1_Karel/tryItKarel.html?name=doubleBeeperKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/doubleBeeperKarel2.png" style="width: 200px; height: 121px; display: block;" />Try it</a></div>
+	<p>
+		Karel can also do math.&nbsp; In this example he should double the number of beepers lying on the pile in front of him.&nbsp; After being finished, we want Karel to stand in front of the pile again.&nbsp; Very important: Karel does not know about variables, and although he can count (see last example) this does not really help.&nbsp; Furthermore, the program should work for any number of beepers.</p>
+	<p>
+		The easiest way to solve this problem is the top-down approach.&nbsp; How about turning one beeper into two?&nbsp; And you do that until there are no more beepers.</p>
+	<p>
+		Question: What would the code look like if Karel is to triple or halve the number of beepers?</p>
+	<p>
+		So Karel can do any of the basic arithmetic operations, and with those he can actually calculate anything there is to be calculated, one also says Karel is a <em>Universal Computing Machine</em>.</p>
+	<p>
+		.</p>
+	<h2>
+		DonkeyKongKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Pr1_Karel/tryItKarel.html?name=donkeyKongKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/donkeyKongKarel2.png" style="width: 200px; height: 164px; display: block;" />Try it</a></div>
+	<p>
+		Karel likes to play computer games when not cleaning windows. Preferably the classic arcade games of the 80&#39;s. His favorite game is Donkey Kong. This game is about collecting as many beepers as possible and moving from one level to the next. The exit is at the top right and we can assume that one level consists of nine floors.</p>
+	<p>
+		Of course we use the top-down approach again.</p>
+	<p>
+		&nbsp;</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<h2>
+		BreadcrumbKarel</h2>
+	<div style="display:block; float: right; margin: 10px;">
+		<a href="./src/Pr1_Karel/tryItKarel.html?name=breadcrumbKarel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/breadcrumbKarel2.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+	<p>
+		Karel read about the Cretan princess Ariadne and how she helped Theseus to escape the labyrinth of the Minotaur.&nbsp; So he thought he could do the same thing using breadcrumbs.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<p>
+		.</p>
+	<hr />
+	<h1>
+		Questions</h1>
+	<ol>
+		<li>
+			Name the four most important commands of Karel.<br />
+			&nbsp;</li>
+		<li>
+			Give an example of an Off By One Bug (OBOB).<br />
+			&nbsp;</li>
+		<li>
+			In the exercise &quot;PartyKarel&quot; you taught Karel how to clean up. Explain briefly how Karel will clean up the beeper chaos. (No code required, just outline your procedure in words)<br />
+			&nbsp;</li>
+		<li>
+			Like 3) only with PyramidKarel, DoubleBeepersKarel, WindowCleaningKarel,...<br />
+			&nbsp;</li>
+		<li>
+			In the lecture we got to know recommendations for the top-down approach. These are rules regarding the names of methods, how many lines of code a method should have, etc. Name two of these guidelines.<br />
+			&nbsp;</li>
+		<li>
+			What are comments good for?<br />
+			&nbsp;</li>
+		<li>
+			What is the difference between bottom-up design and top-down design?&nbsp; Which is preferable?<br />
+			&nbsp;</li>
+		<li>
+			Karel watched the film &#39;Robin Hood&#39; and was totally impressed by the hero. That is why he wants to follow his example &quot;take from the rich and give to the poor&quot;. So you should write a Karel program in which Karel picks up a beeper when he finds one and puts one down when there is none.&nbsp; To solve the problem, you may make the following assumptions about the world:<br />
+			&bull; The world is at least 3x3.<br />
+			&bull; At the start, Karel stands at the corner of 1st Street and 1st Avenue, looking east and has an infinite number of beepers in his beeper bag.<br />
+			Make sure that you only use Karel commands.</li>
+	</ol>
+	<p>
+		.</p>
+	<hr />
+	<h1>
+		References</h1>
+	<p>
+		The idea behind Karel comes from Rich Pattis, a former student of Stanford University [1].&nbsp; The name &#39;Karel&#39; is inspired by the first name of the Czech writer Karel Capek in whose play R.U.R. (Rossum&#39;s Universal Robots) the word &#39;robot&#39; appears for the first time [2].&nbsp; More details about Karel with many examples can be found in the Karel Reader [3].&nbsp; Many of the examples used here are from the Karel Reader [3] and the Stanford Lecture &#39;Programming Methodologies&#39; [4].&nbsp; Even more Karel examples can be found in the book by Pavel Solin [5].</p>
+	<p>
+		[1] Karel the Robot: A Gentle Introduction to the Art of Programming by R.E. Pattis</p>
+	<p>
+		[2] Seite &bdquo;Karel Čapek&ldquo;. In: Wikipedia, Die freie Enzyklopädie. URL: <a href="https://de.wikipedia.org/w/index.php?title=Karel_%C4%8Capek&amp;oldid=148374315">https://de.wikipedia.org/w/index.php?title=Karel_%C4%8Capek&amp;oldid=148374315</a></p>
+	<p>
+		[3] KAREL THE ROBOT LEARNS JAVA, von Eric Roberts</p>
+	<p>
+		[4] CS106A - Programming Methodology - Stanford University, <a href="https://see.stanford.edu/Course/CS106A">https://see.stanford.edu/Course/CS106A</a></p>
+	<p>
+		[5] Learn How to Think with Karel the Robot, von Pavel Solin, <a href="http://femhub.com/pavel/work/textbook-1.pdf">http://femhub.com/pavel/work/textbook-1.pdf</a></p>
+	<p>
+		.</p>	
+</body>
+
+</html>

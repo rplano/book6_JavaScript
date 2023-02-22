@@ -1,0 +1,36 @@
+html,
+body {
+  margin: 5px;
+  padding: 0px;
+}
+
+/* canvas {
+  display: block;
+}
+
+.fig_figure {
+  position: relative;
+  margin: 10px;
+  float: right;
+}
+
+.fig_img {
+  position: absolute;
+  top: 0;
+  overflow: auto;
+  display: block;
+}
+
+.fig_figcaption {
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+  border: 1px solid blue;
+}
+
+.fig_a {
+  font-family: serif;
+  font-weight: normal;
+  font-size: 12px;
+  text-decoration: none;
+} */
