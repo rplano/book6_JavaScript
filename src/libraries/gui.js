@@ -5,7 +5,7 @@
  * 
  * @see http://www.VariationenZumThema.de/
  * @author Ralph P. Lano
- * @version 0.03
+ * @version 0.03.5
  */
 
 "use strict";
@@ -14,12 +14,20 @@ const DEFAULT_PADDING = '0px 0px 0px 0px';
 // const DEFAULT_PADDING = '2px 2px 2px 2px';
 const DEFAULT_MARGIN = '2px 2px 2px 2px';
 // const DEFAULT_MARGIN = '0px 0px 0px 0px';
+const ZERO_MARGIN = '0px 0px 0px 0px';
 
-let GUI_WIDTH = 300;
-let GUI_HEIGHT = 150;
-let GUI_FRAME_RATE = 0;
+var GUI_WIDTH = 300;
+var GUI_HEIGHT = 150;
+var GUI_FRAME_RATE = 0;
+var panel;  // central panel, all widgets are inside this panel
 
 function createGUI(_WIDTH, _HEIGHT) {
+    // make the p5js canvas invisible:
+    let element = document.getElementById("defaultCanvas0");
+    // element.remove();
+    element.style = 'visibility: hidden; border: 1px solid transparent';
+    element.width = 0;
+    element.height = 0;
 
     // redefine println():
     println = function (msg) {
@@ -37,24 +45,22 @@ function createGUI(_WIDTH, _HEIGHT) {
         GUI_HEIGHT = _HEIGHT;
     }
 
-    // find body tag 
-    let _body = document.getElementsByTagName('body')[0];
 
     // add key listeners: onkeydown, onkeypress, onkeyup
-    this.program = this;
+    //this.window = this;
     document.addEventListener('keydown',
         function (ev) {
-            program.keyDown(ev.key, ev.code);
+            window.keyDown(ev.key, ev.code);
         }
     );
     document.addEventListener('keyup',
         function (ev) {
-            program.keyUp(ev.key, ev.code);
+            window.keyUp(ev.key, ev.code);
         }
     );
     document.addEventListener('keypress',
         function (ev) {
-            program.keyTyped(ev.key, ev.code);
+            window.keyTyped(ev.key, ev.code);
         }
     );
     // document.addEventListener('onmousedown',
@@ -64,20 +70,22 @@ function createGUI(_WIDTH, _HEIGHT) {
     // );
 
     // add panel to body
-    this.body = _body;
-    this.pnl = new JSPanel('flow');
-    this.pnl.windw = this;
-    this.pnl.addStyle('position: absolute; border: 1px solid black');
+    panel = new JSPanel('flow');
+    panel.windw = window;
+    panel.addStyle('position: absolute; border: 1px solid black');
     // this.element.style.border = '1px solid red'; //"thick solid #0000FF";
 
-    this.pnl.setLocation(0, 0);
-    this.pnl.setSize(GUI_WIDTH + 'px', GUI_HEIGHT + 'px');
-    // this.pnl.setLayout('border');
-    this.body.appendChild(this.pnl.element);
+    // panel.setLocation(0, 0);
+    panel.setSize(GUI_WIDTH + 'px', GUI_HEIGHT + 'px');
+    // panel.setLayout('border');
+
+    // find body tag 
+    let body = document.getElementsByTagName('body')[0];
+    body.appendChild(panel.element);
 }
 
 function updateJSCanvas(canvas) {
-    // print('updateJSCanvas ' + canvas._gobjects.length);
+    // print('updateJSCanvas ' + canvas.gobjects.length);
 
     // dirty hack to get defaultCanvas0 to get right size and scaling
     const canvs = document.getElementById("defaultCanvas0");
@@ -91,42 +99,36 @@ function updateJSCanvas(canvas) {
 
     // draw gobjects
     clear();
-    for (var i = 0; i < canvas._gobjects.length; i++) {
-        // print(i + ',' + canvas._gobjects[i]);
-        canvas._gobjects[i].draw();
+    for (var i = 0; i < canvas.gobjects.length; i++) {
+        // print(i + ',' + canvas.gobjects[i]);
+        canvas.gobjects[i].draw();
     }
 }
 
 function setLayout(_layout, _cols) {
-    this.pnl.setLayout(_layout, _cols);
+    panel.setLayout(_layout, _cols);
 }
 
 function addWidget(obj, where) {
-    // this.addActionListener(obj);
     if (obj instanceof JSPanel) {
         if (obj.windw === null) {
-            // print('JSPanel: ' + obj.windw);
-            obj.windw = this;
-            // print('JSPanel: ' + obj.windw);
+            obj.windw = window;
         }
     }
-    this.pnl.add(obj, where);
+    panel.add(obj, where);
 }
 
 function removeWidget(obj, where) {
-    this.pnl.removeWidget(obj, where);
+    // TODO: also need to remove listeners...
+    panel.removeWidget(obj, where);
 }
 
 function addActionListener(obj) {
-    // print('addActionListener(' + obj.constructor.name + ')');
     if (obj instanceof JSAbstractButton) {
-        // print(obj.constructor.name + '(' + obj.element.id + ')');
-        // add action listener
-        //const program = this;
         obj.element.addEventListener('click',
             function (ev) {
                 let ae = new ActionEvent(ev.target.id, obj);
-                program.actionPerformed(ae);
+                window.actionPerformed(ae);
             }
         );
     } else if (obj instanceof JSCanvas) {
@@ -135,17 +137,16 @@ function addActionListener(obj) {
                 // we can not call this 'mouseClicked', because 
                 // mouseClicked gets also called from some other place
                 const rect = obj.element.getBoundingClientRect();
-                program.canvasClicked(ev.clientX - rect.left, ev.clientY - rect.top);
+                window.canvasClicked(ev.clientX - rect.left, ev.clientY - rect.top);
             }
         );
     } else if (obj instanceof JSTextField) {
-        // print('addActionListener() for JSTextField not implemented');
         obj.element.addEventListener("keyup",
             function (ev) {
                 if (ev.key === "Enter") {
                     // print('enter was pressed');
                     let ae = new ActionEvent(ev.target.id, obj);
-                    program.actionPerformed(ae);
+                    window.actionPerformed(ae);
                 }
             }
         );
@@ -163,17 +164,11 @@ function canvasClicked(mouseX, mouseY) {
 
 function addChangeListener(obj) {
     if (obj instanceof JSFileUpload) {
-        // print(obj.constructor.name + '(' + obj.element.id + ')');
-        // add action listener
-        //const program = this;
         obj.element.addEventListener('change',
             function (ev) {
-                // let ae = new ActionEvent(ev.target.id, obj);
-                program.onChange(ev);
+                window.onChange(ev);
             }
         );
-        // } else  {
-        //     print('addChangeListener() not implemented for '+obj.constructor.name);
     }
 }
 
@@ -192,7 +187,6 @@ function keyTyped(key, code) {
 }
 
 class ActionEvent {
-
     constructor(id, obj) {
         this.command = '' + id;
         this.source = obj;
@@ -208,7 +202,6 @@ class ActionEvent {
 }
 
 class JSObject {
-
     constructor() {
         this.element = document.createElement('span');
     }
@@ -240,7 +233,6 @@ class JSObject {
 }
 
 class JSLabel extends JSObject {
-
     constructor(text) {
         super();
         this.element = document.createElement('span');
@@ -260,7 +252,6 @@ class JSLabel extends JSObject {
 }
 
 class JSLink extends JSObject {
-
     constructor(text, href) {
         super();
         this.element = document.createElement('a');
@@ -280,7 +271,6 @@ class JSLink extends JSObject {
 }
 
 class JSTextField extends JSObject {
-
     constructor(_size, _text) {
         super();
         this.element = document.createElement('input');
@@ -318,7 +308,8 @@ class JSTextArea extends JSObject {
             this.element.cols = cols;
         }
         this.element.style.padding = DEFAULT_PADDING;
-        this.element.style.margin = DEFAULT_MARGIN;
+        // this.element.style.margin = DEFAULT_MARGIN;
+        this.element.style.margin = ZERO_MARGIN;
         // this.element.style.width = '100%';
         // this.element.style.height = '100%';
         // this.element.style='font: 30px Arial;';
@@ -344,7 +335,6 @@ class JSAbstractButton extends JSObject {
 }
 
 class JSButton extends JSAbstractButton {
-
     constructor(text) {
         super();
         this.element = document.createElement('button');
@@ -365,7 +355,6 @@ class JSButton extends JSAbstractButton {
 }
 
 class JSCheckBox extends JSAbstractButton {
-
     constructor(text) {
         super();
         this.element = document.createElement('span');
@@ -392,7 +381,6 @@ class JSCheckBox extends JSAbstractButton {
 }
 
 class JSRadioButton extends JSAbstractButton {
-
     constructor(text, _name) {
         super();
         this.element = document.createElement('span');
@@ -423,7 +411,6 @@ class JSRadioButton extends JSAbstractButton {
 }
 
 class JSComboBox extends JSAbstractButton {
-
     constructor() {
         super();
         this.element = document.createElement('select');
@@ -461,29 +448,31 @@ class JSCanvas extends JSObject {
         //     print('onclick');
         // });
 
-        this._gobjects = [];
+        this.gobjects = [];
     }
 
     getAllGObjects() {
-        return this._gobjects;
+        return this.gobjects;
     }
 
     add(obj, x, y) {
         if (x !== undefined && y !== undefined) {
             obj.setLocation(x, y);
         }
-        this._gobjects.push(obj);
+        this.gobjects.push(obj);
     }
 
     remove(obj) {
-        const pos = this._gobjects.indexOf(obj);
+        // TODO: also may need to remove listeners...
+        const pos = this.gobjects.indexOf(obj);
         if (pos > -1) {
-            this._gobjects.splice(pos, 1);
+            this.gobjects.splice(pos, 1);
         }
     }
 
     removeAll() {
-        this._gobjects = [];
+        // TODO: also may need to remove listeners...
+        this.gobjects = [];
     }
 
     setBackgroundColor(col) {
@@ -492,8 +481,8 @@ class JSCanvas extends JSObject {
 
     // getElementsAt(x, y) {
     //     var retObj = [];
-    //     for (var i = 0; i < this._gobjects.length; i++) {
-    //         const r = this._gobjects[i];
+    //     for (var i = 0; i < this.gobjects.length; i++) {
+    //         const r = this.gobjects[i];
     //         if (r.contains(x, y)) {
     //             retObj.push(r);
     //         }
@@ -504,7 +493,6 @@ class JSCanvas extends JSObject {
 
 
 class JSPanel extends JSObject {
-
     // layout: flow, border, grid
     constructor(_layout, _cols) {
         super();
@@ -516,7 +504,8 @@ class JSPanel extends JSObject {
         this.element = document.createElement('div');
         // this.element.style.display = 'inline-block';
         this.element.style.padding = DEFAULT_PADDING;
-        this.element.style.margin = DEFAULT_MARGIN;
+        // this.element.style.margin = DEFAULT_MARGIN;
+        this.element.style.margin = ZERO_MARGIN;
         // this.element.style.verticalAlign = 'top'; // top, middle, bottom
         // this.element.style.width = '100px'; //width: auto
         // this.element.style.height='50%';
@@ -559,6 +548,7 @@ class JSPanel extends JSObject {
             this.north.element.setAttribute('align', 'center');
             // this.north.element.innerHTML += 'Header';
             // this.north.addStyle('border: 1px solid green');
+            // this.north.addStyle('box-sizing: border-box;');
             this.element.appendChild(this.north.element);
 
             this.center = new JSPanel('flow');
@@ -566,6 +556,7 @@ class JSPanel extends JSObject {
             this.center.element.setAttribute('align', 'center');
             // this.center.element.innerHTML += 'Center';
             // this.center.addStyle('border: 1px solid blue');
+            // this.center.addStyle('box-sizing: border-box;');
             this.element.appendChild(this.center.element);
 
             this.south = new JSPanel('flow');
@@ -573,6 +564,7 @@ class JSPanel extends JSObject {
             this.south.element.setAttribute('align', 'center');
             // this.south.element.innerHTML += 'Footer';
             // this.south.addStyle('border: 1px solid cyan');
+            // this.south.addStyle('box-sizing: border-box;');
             this.element.appendChild(this.south.element);
 
         } else if (this.layout == 'grid') {
@@ -627,7 +619,7 @@ class JSPanel extends JSObject {
 
     // not sure if this really works...
     removeWidget(obj, where) {
-        // ToDo: buttons, etc need to be unregistered!
+        // TODO: also may need to remove listeners...
         // if (this.windw !== null) {
         //     // print('JSPanel.add(): ' + obj + ', ' + this.windw.constructor.name);
         //     this.windw.removeActionListener(obj);
@@ -655,6 +647,7 @@ class JSPanel extends JSObject {
 
     // seems to complicated to implement... better to create new JSPanel
     removeAll() {
+        // TODO: also may need to remove listeners...
         if (this.layout == 'border') {
             throw new Error('JSPanel.removeAll() for border layout not implemented!  Use removeWidget() instead!');
         } else {
@@ -683,12 +676,13 @@ class JSPanel extends JSObject {
 
 
 class JSFileUpload extends JSObject {
-
-    constructor(_fileType,) {
+    constructor(_fileType) {
         super();
         // <input type='file' accept='image/*' onchange='openFile(event)'>
         this.element = document.createElement('input');
         this.element.type = 'file';
+        //this.element.id = 'JSFileUpload';
+        this.element.style.display = 'inline-block';
         if (_fileType !== undefined) {
             this.element.accept = _fileType;
         }

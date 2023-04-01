@@ -9,6 +9,27 @@
  * @version 0.01
  */
 
+/* https://www.educative.io/answers/how-to-dynamically-load-a-js-file-in-javascript */
+function include(file, async = false) {
+	let script = document.createElement("script");
+
+	script.setAttribute("src", file);
+	script.setAttribute("type", "text/javascript");
+	script.setAttribute("async", async);
+
+	document.body.appendChild(script);
+
+	// success event 
+	script.addEventListener("load", () => {
+		//console.log("File loaded")
+	});
+	// error event
+	script.addEventListener("error", (ev) => {
+		console.log("Error loading file", ev);
+	});
+}
+//include("Pr4_Agrar/ticTacToeLogic.js");
+
 class RandomGenerator {
     // the order of the method declaration is important!!!
     nextColor() {
@@ -154,7 +175,7 @@ class URLReader {
 // }
 
 // we need a namespace, since FileReader exists in normal JS
-let Utils = {}
+var Utils = {}
 Utils.FileReader = class {
 
     constructor(uri) {
@@ -397,6 +418,10 @@ class ArrayList {
     remove(value) {
         const start = this.arry.indexOf(value);
         this.arry.splice(start, 1);
+    }
+
+    clear() {
+        this.arry.length = 0;
     }
 
     contains(value) {

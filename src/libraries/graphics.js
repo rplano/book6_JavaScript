@@ -5,38 +5,34 @@
  * 
  * @see http://www.VariationenZumThema.de/
  * @author Ralph P. Lano
- * @version 0.03
+ * @version 0.04
  */
 
 "use strict";
 
-let _gobjects = [];
-let _backgroundColor = 'white';
-let _HTMLCanvasElement;
-
-// function createCanvas2(_WIDTH, _HEIGHT) {
-//     let c = createCanvas(_WIDTH, _HEIGHT);
-//     _HTMLCanvasElement = c.elt;
-// 	print(_HTMLCanvasElement);
-//     return c;
-// }
+var gobjects = [];
+var backgroundColor = 'white';
 
 function update() {
-    background(_backgroundColor);
+    background(backgroundColor);
     // draw gobjects
-    for (let i = 0; i < _gobjects.length; i++) {
-        // print(i+','+_gobjects[i].constructor.name);
-        _gobjects[i].draw();
+    for (let i = 0; i < gobjects.length; i++) {
+        // print(i+','+gobjects[i].constructor.name);
+        gobjects[i].draw();
     }
+    // needed for key focus:
+    const canvas = document.getElementById('defaultCanvas0');
+    canvas.setAttribute('tabindex',0);
+    canvas.focus();
 }
 
 function setBackground(color) {
-    _backgroundColor = color;
+    backgroundColor = color;
 }
 
 function getElementAt(x, y) {
-    for (let i = 0; i < _gobjects.length; i++) {
-        const r = _gobjects[i];
+    for (let i = 0; i < gobjects.length; i++) {
+        const r = gobjects[i];
         if (r.contains(x, y)) {
             return r;
         }
@@ -45,8 +41,8 @@ function getElementAt(x, y) {
 
 function getElementsAt(x, y) {
     let retObj = [];
-    for (let i = 0; i < _gobjects.length; i++) {
-        const r = _gobjects[i];
+    for (let i = 0; i < gobjects.length; i++) {
+        const r = gobjects[i];
         if (r.contains(x, y)) {
             retObj.push(r);
         }
@@ -59,25 +55,48 @@ function add(obj, x, y) {
     if ((x !== undefined) && (y !== undefined)) {
         obj.setLocation(x, y);
     }
-    _gobjects.push(obj);
+    gobjects.unshift(obj); // add at beginning, slower but easier to use
+    // gobjects.push(obj);
+}
+
+function addAtEnd(obj, x, y) {
+    // obj.setLocation(0, 0);
+    if ((x !== undefined) && (y !== undefined)) {
+        obj.setLocation(x, y);
+    }
+    // gobjects.unshift(obj); // add at beginning, slower but easier to use
+    gobjects.push(obj);
+}
+
+function sendToBack(obj) {
+    removeObj(obj);
+    gobjects.push(obj);
+}
+
+function sendToFront(obj) {
+    removeObj(obj);
+    gobjects.unshift(obj);
 }
 
 function removeObj(obj) {
-    const pos = _gobjects.indexOf(obj);
+    const pos = gobjects.indexOf(obj);
     // print('pos='+pos);
     if (pos > -1) {
-        _gobjects.splice(pos, 1);
+        gobjects.splice(pos, 1);
     }
 }
 
 function removeAll() {
-    _gobjects = [];
+    gobjects = [];
 }
 
 
 class GObject {
 
     constructor(x, y, width, height) {
+        if (this.constructor === GObject) {
+            throw new Error("This is an abstract class, it should not be instantiated!");
+        }
         this.x = 0;
         this.y = 0;
         this.width = 0;
@@ -172,6 +191,10 @@ class GObject {
         return false;
     }
 
+    draw() {
+        throw new Error("GObject is an abstract class, hence this method should never be called. ");
+    }
+
     toString() {
         return "GObject [x=" + this.x + ", y=" + this.y + ", width=" + this.width + ", height="
             + this.height + ", color=" + this.color + ", filled=" + this.filled
@@ -196,6 +219,7 @@ class GOval extends GObject {
 
     constructor(x, y, width, height) {
         if ((width === undefined) && (height === undefined)) {
+            // new GOval(50,50) is a GOval with width and height = 50, but x and y = 0!
             super(0, 0, x, y);
         } else {
             super(x, y, width, height);
@@ -230,6 +254,7 @@ class GRect extends GObject {
 
     constructor(x, y, width, height) {
         if ((width === undefined) && (height === undefined)) {
+            // new GRect(50,50) is a GRect with width and height = 50, but x and y = 0!
             super(0, 0, x, y);
         } else {
             super(x, y, width, height);
@@ -492,9 +517,9 @@ class GWebCam extends GObject {
 }
 
 class GVideo extends GObject {
-    constructor(x, y, width, height) {
+    constructor(x, y, width, height, videoName) {
         super(x, y, width, height);
-        this.video = createVideo("socialweb.mp4");
+        this.video = createVideo(videoName);
         this.video.hide();
 
         this.element = document.querySelector("video");
@@ -550,9 +575,9 @@ class GVideo extends GObject {
 }
 
 class GVideoPreview extends GObject {
-    constructor(x, y, width, height) {
+    constructor(x, y, width, height, videoName) {
         super(x, y, width, height);
-        this.video = createVideo("socialweb.mp4");
+        this.video = createVideo(videoName);
 
         this.element = document.querySelector("video");
         this.element.setAttribute('width', width);
@@ -580,6 +605,113 @@ class GVideoPreview extends GObject {
 }
 
 class GImage extends GObject {
+    constructor(width, height, imageName) {
+        if (width !== undefined && height !== undefined && imageName === undefined) {
+            // console.log("new (200, 200)");
+            super(0, 0, width, height);
+            this.image = createImage(width, height);
+            image(this.image, this.x, this.y, this.width, this.height);
+            this.sx = 1;
+            this.sy = 1;
+            this.pixelArray1 = [];
+            this.image.loadPixels();
+            // create empty image
+            for (let i = 0; i < this.image.pixels.length; i++) {
+                this.image.pixels[i] = 128;
+                this.pixelArray1[i] = 128;
+            }
+            this.image.updatePixels();
+            this.imageLoaded = true;
+
+        } else {
+            if (imageName !== undefined) {
+                // console.log("new GImage(200, 200, 'tada.gif')");
+                super(0, 0, width, height);
+
+            } else if (width !== undefined && typeof (width) === 'string') {
+                // console.log("new GImage('tada.gif')");
+                super(0, 0, 0, 0);
+                imageName = width;
+
+            } else {
+                throw new Error('GImage() constructor has wrong arguments!');
+            }
+
+            // load image, we need to wait until image is loaded, takes some time
+            this.sx = 1;
+            this.sy = 1;
+            this.pixelArray1 = [];
+            this.imageName = imageName;
+            this.imageLoaded = false;
+            let that = this;
+            this.image = loadImage(imageName, img => {
+                image(that.image, that.x, that.y);
+                // console.log("that.width" + that.width);
+                if (that.width > 0) {
+                    that.image.resize(that.width, that.height);
+                }
+                that.image.loadPixels();
+                // remember pixels for modification
+                for (let i = 0; i < that.image.pixels.length; i++) {
+                    that.pixelArray1[i] = that.image.pixels[i];
+                }
+                that.image.updatePixels();
+                that.width = that.image.width;
+                that.height = that.image.height;
+                that.imageLoaded = true;
+            });
+        }
+    }
+
+    setPixelArray(pixels) {
+        for (let i = 0; i < pixels.length; i++) {
+            this.pixelArray1[i] = pixels[i];
+        }
+    }
+
+    getPixelArray() {
+        return new Promise((resolveOuter) => {
+            let that = this;
+            resolveOuter(
+                new Promise((resolveInner) => {
+                    var check = function () {
+                        if (that.imageLoaded) {
+                            resolveInner(that.pixelArray1);
+                        } else {
+                            setTimeout(check, 100); // check again in a second
+                        }
+                    }
+                    check();
+                })
+            );
+        });
+    }
+
+    scale(sw, sh) {
+        if (sh === undefined) {
+            this.sx = sw;
+            this.sy = sw;
+        } else {
+            this.sx = sw;
+            this.sy = sh;
+        }
+    }
+
+    draw() {
+        if (this.imageLoaded) {
+            image(this.image, this.x, this.y, this.image.width * this.sx, this.image.height * this.sy);
+            this.image.loadPixels();
+            // show modified pixels
+            for (let i = 0; i < this.image.pixels.length; i++) {
+                this.image.pixels[i] = this.pixelArray1[i];
+            }
+            this.image.updatePixels();
+        }
+    }
+}
+
+// needed for Karel
+class GImage2 extends GObject {
 
     constructor(x, y, imageName) {
         if ((x === undefined) && (y === undefined) && (imageName === undefined)) {
@@ -617,90 +749,90 @@ class GImage extends GObject {
         // print('scale'+this.sx);
     }
 
-    setPixelArray(imgData) {
-        let that = this; // dirty trick for promise below
-
-        this.image = createImage(imgData.width, imgData.height);
-        this.image.loadPixels();
-        for (let i = 0; i < imgData.data.length; i++) {
-            this.image.pixels[i] = imgData.data[i];
-        }
-        this.image.updatePixels();
-        this.src = 'created';
-
-        // we need to remember the imageData
-        Promise.resolve(imgData).then(function (value) {
-            that.imageData = value;
-        })
-    }
-
-    // this is a little tricky, because we must wait until the image has been loaded and drawn
-    getPixelArray() {
-        return new Promise((resolveInner) => {
-            //const canvas = document.getElementById('defaultCanvas0');
-            const canvas = document.createElement('canvas');
-            canvas.width = 800;
-            canvas.height = 800;
-            const ctx = canvas.getContext('2d');
-            let img = new Image();
-            img.onload = () => {
-                createImageBitmap(img);
-                ctx.drawImage(img, 0, 0);
-                let imgData = ctx.getImageData(0, 0, img.width, img.height);
-                canvas.remove();
-                // print('imageData='+imageData);
-                resolveInner(imgData);
-            }
-            // img.src = 'Taj_Mahal_(Edited).jpeg';
-            img.src = this.src;
-        });
-    }
-
-    async getImageData() {
-        let imgData = image.imageData;
-        if (imgData === undefined) {
-            imgData = await this.getPixelArray();
-        }
-        return imgData;
-    }
-
     draw() {
         if (this.image !== undefined) {
             image(this.image, this.x, this.y, this.image.width * this.sx, this.image.height * this.sy);
         }
     }
 
-    offScreenDrawing() {
-        // @see https://stackoverflow.com/questions/3892010/create-2d-context-without-canvas
-        // Create a canvas element
-        let canvas = document.createElement('canvas');
-        canvas.width = 500;
-        canvas.height = 400;
+//     setPixelArray(imgData) {
+//         let that = this; // dirty trick for promise below
 
-        // Get the drawing context
-        let ctx = canvas.getContext('2d');
+//         this.image = createImage(imgData.width, imgData.height);
+//         this.image.loadPixels();
+//         for (let i = 0; i < imgData.data.length; i++) {
+//             this.image.pixels[i] = imgData.data[i];
+//         }
+//         this.image.updatePixels();
+//         this.src = 'created';
 
-        // Then you can do stuff, e.g.:
-        ctx.fillStyle = '#f00';
-        ctx.fillRect(20, 10, 80, 50);
+//         // we need to remember the imageData
+//         Promise.resolve(imgData).then(function (value) {
+//             that.imageData = value;
+//         })
+//     }
 
-        // Once you've used the canvas, you can of course add it to the document
+//     // this is a little tricky, because we must wait until the image has been loaded and drawn
+//     getPixelArray() {
+//         return new Promise((resolveInner) => {
+//             //const canvas = document.getElementById('defaultCanvas0');
+//             const canvas = document.createElement('canvas');
+//             canvas.width = 800;
+//             canvas.height = 800;
+//             const ctx = canvas.getContext('2d');
+//             let img = new Image();
+//             img.onload = () => {
+//                 createImageBitmap(img);
+//                 ctx.drawImage(img, 0, 0);
+//                 let imgData = ctx.getImageData(0, 0, img.width, img.height);
+//                 canvas.remove();
+//                 // print('imageData='+imageData);
+//                 resolveInner(imgData);
+//             }
+//             // img.src = 'Taj_Mahal_(Edited).jpeg';
+//             img.src = this.src;
+//         });
+//     }
 
-        let element = document.getElementById('canvas_container');
-        element.appendChild(canvas);
+//     async getImageData() {
+//         let imgData = image.imageData;
+//         if (imgData === undefined) {
+//             imgData = await this.getPixelArray();
+//         }
+//         return imgData;
+//     }
 
-        // Or you could make an image from it:
+//     offScreenDrawing() {
+//         // @see https://stackoverflow.com/questions/3892010/create-2d-context-without-canvas
+//         // Create a canvas element
+//         let canvas = document.createElement('canvas');
+//         canvas.width = 500;
+//         canvas.height = 400;
 
-        let new_image_url = canvas.toDataURL();
-        let img = document.createElement('img');
-        img.src = new_image_url;
+//         // Get the drawing context
+//         let ctx = canvas.getContext('2d');
 
-        // Or you could access the canvas data as values with:
+//         // Then you can do stuff, e.g.:
+//         ctx.fillStyle = '#f00';
+//         ctx.fillRect(20, 10, 80, 50);
 
-        let image_data = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        let rgba_byte_array = image_data.data;
-        rgba_byte_array[0];  // red value for first pixel (top left) in the canvas
-    }
+//         // Once you've used the canvas, you can of course add it to the document
+
+//         let element = document.getElementById('canvas_container');
+//         element.appendChild(canvas);
+
+//         // Or you could make an image from it:
+
+//         let new_image_url = canvas.toDataURL();
+//         let img = document.createElement('img');
+//         img.src = new_image_url;
+
+//         // Or you could access the canvas data as values with:
+
+//         let image_data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+//         let rgba_byte_array = image_data.data;
+//         rgba_byte_array[0];  // red value for first pixel (top left) in the canvas
+//     }
 }
 
 class GCompound extends GObject {

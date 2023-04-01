@@ -62,7 +62,7 @@ function draw() {
 	}
 	update();
 }
-
+ 
 // p5js: we start here
 function setup() {
 	// get name of karel program to load:
@@ -91,7 +91,7 @@ function setup() {
 	frameRate(FPS);
 
 	// create karel
-	karel = new GImage(0, APP_HEIGHT - SIZE, '../libraries/Karel0.png');
+	karel = new GImage2(0, APP_HEIGHT - SIZE, '../libraries/Karel0.png');
 
 	// load code
 	let code;
@@ -128,9 +128,9 @@ function setup() {
 	simulationRun = false;
 	reset();
 
-	drawWorld();
-	drawDotsAndBeepers();
 	drawKarel();
+	drawDotsAndBeepers();
+	drawWorld();
 }
 
 class InfiniteLoopError extends Error {
@@ -297,10 +297,10 @@ function putBeeper() {
 		if (simulationRun) {
 			codeLines.push('putBeeper();');
 		} else {
-			removeAll();
-			drawWorld();
-			drawDotsAndBeepers();
+			removeAll();	
 			drawKarel();
+			drawDotsAndBeepers();
+			drawWorld();
 		}
 	}
 }
@@ -321,9 +321,9 @@ function pickBeeper() {
 			codeLines.push('pickBeeper();');
 		} else {
 			removeAll();
-			drawWorld();
-			drawDotsAndBeepers();
 			drawKarel();
+			drawDotsAndBeepers();
+			drawWorld();
 		}
 	}
 }
@@ -434,6 +434,11 @@ function drawDotsAndBeepers() {
 				//const beeper = new acm.GOval(j * SIZE,i  * SIZE, SIZE, SIZE);
 				//beeper.color = 'rgb(255,0,0)';
 				//super.add(beeper);
+				const label = new GLabel((j + 0.5) * SIZE - 3, (i + 0.5) * SIZE + 3, s);
+				// label.font = '10px Arial';
+				label.setFont('Arial');
+				label.setFontSize(10);
+				add(label);
 				const beeper = new GPolygon((j + 0.5) * SIZE, (i + 0.5) * SIZE);
 				beeper.addVertex(-SIZE / 2, 0);
 				beeper.addVertex(0, -SIZE / 2);
@@ -443,11 +448,6 @@ function drawDotsAndBeepers() {
 				beeper.setFilled(true);
 				beeper.setColor(Color.LIGHT_GRAY);
 				add(beeper);
-				const label = new GLabel((j + 0.5) * SIZE - 3, (i + 0.5) * SIZE + 3, s);
-				// label.font = '10px Arial';
-				label.setFont('Arial');
-				label.setFontSize(9);
-				add(label);
 			} else {
 				const dot = new GOval((j + 0.5) * SIZE, (i + 0.5) * SIZE, 2, 2);
 				add(dot);

@@ -5,117 +5,124 @@
  * 
  * @see http://www.VariationenZumThema.de/
  * @author Ralph P. Lano
- * @version 0.01
+ * @version 0.02
  */
 
 "use strict";
 
-let ROWS = 10;
-let COLS = 40;
+var CONSOLE_ROWS = 10;
+var CONSOLE_COLS = 32;
 
-function createConsole(_ROWS, _COLS) {
+var textarea;
+var textEntered = '';   // needed for readLine()
+var enterPressed = false; // needed for readLine()
+
+function createConsole(rows, cols) {
     // redefine print():
     print = function (msg) {
         if (msg === undefined) {
             msg = '';
         }
-        // this.textarea.append(msg);
-        this.textarea.value += msg;
-    }
-
-    // redefine println():
-    println = function (msg) {
-        if (msg === undefined) {
-            msg = '';
-        }
-        this.textarea.value += msg + '\n';
+        // textarea.append(msg);
+        textarea.value += msg;
     }
 
     // redefine clear():
     clear = function () {
-        this.textarea.value = '';
+        textarea.value = '';
     }
+
+    // remove the p5js canvas:
+    let element = document.getElementById("defaultCanvas0");
+    // element.remove();
+    element.style = 'visibility: hidden;';
+    element.width = 0;
+    element.height = 0;
 
     // init some values
-    frameRate(0);
-    if (_COLS !== undefined) {
-        COLS = _COLS;
+    noLoop();
+    frameRate(0);   // just to make sure
+    if (cols !== undefined) {
+        CONSOLE_COLS = cols;
     }
-    if (_ROWS !== undefined) {
-        ROWS = _ROWS;
+    if (rows !== undefined) {
+        CONSOLE_ROWS = rows;
     }
-
-    // find body tag 
-    let _body = document.getElementsByTagName('body')[0];
 
     // add key listeners
-    const program = this;
     document.addEventListener('keydown',
         function (ev) {
-            program.keyDown(ev.key, ev.code);
+            keyDown(ev.key, ev.code);
         }
     );
     document.addEventListener('keypress',
         function (ev) {
-            program.keyPress(ev.key, ev.code);
+            keyPress(ev.key, ev.code);
         }
     );
 
     // create text area
-    this.textarea = document.createElement('textarea');
-    // this.textarea.value = 'hi';
-    this.textarea.rows = ROWS;
-    this.textarea.cols = COLS;
-    this.textarea.style.position = "absolute";
-    this.textarea.style.left = '0px';
-    this.textarea.style.top = '0px';
-    this.textarea.readOnly = true;
+    textarea = document.createElement('textarea');
+    textarea.id = 'console';
+    // textarea.value = 'hi';
+    textarea.rows = CONSOLE_ROWS;
+    textarea.cols = CONSOLE_COLS;
+    // textarea.style.position = "absolute";
+    // textarea.style.left = '0px';
+    // textarea.style.top = '0px';
+    textarea.readOnly = true;
 
     // add text area to body
-    this.body = _body;
-    this.body.appendChild(this.textarea);
+    let _body = document.getElementsByTagName('body')[0];
+    _body.appendChild(textarea);
 
-    // needed for readLine()
-    this.textEntered = '';
+    textarea.focus();
 }
 
 function setFont(fon) {
-    this.textarea.style.font = fon;   // '30px Arial'
+    textarea.style.font = fon;   // '30px Arial'
 }
 
 function keyDown(key, code) {
     // console.log('keyDown(' + key + ',' + code + ')');
-    if (key === 'Backspace' && this.textarea !== undefined) {
-        this.textarea.value = this.textarea.value.slice(0, -1);
-        this.textEntered = this.textEntered.slice(0, -1);
+    if (key === 'Backspace' && textarea !== undefined) {
+        textarea.value = textarea.value.slice(0, -1);
+        textEntered = textEntered.slice(0, -1);
     }
 }
 
 function keyPress(key, code) {
     if (key === 'Enter') {
-        this.enterPressed = true;
-    } else if (this.textarea !== undefined) {
-        this.textarea.value += key;
-        this.textEntered += key;
+        enterPressed = true;
+    } else if (textarea !== undefined) {
+        textarea.value += key;
+        textEntered += key;
     }
+}
+
+function println(msg) {
+    if (msg === undefined) {
+        msg = '';
+    }
+    textarea.value += msg + '\n';
 }
 
 function readLine(msg) {
     if (msg === undefined) {
         msg = '';
     }
-    this.textarea.value += msg;
+    textarea.value += msg;
 
-    this.enterPressed = false;
-    this.textEntered = '';
+    enterPressed = false;
+    textEntered = '';
     return new Promise((resolveOuter) => {
         resolveOuter(
             new Promise((resolveInner) => {
                 var check = function () {
-                    if (this.enterPressed) {
+                    if (enterPressed) {
                         // print('Enter');
-                        this.textarea.value += '\n';
-                        resolveInner(this.textEntered);
+                        textarea.value += '\n';
+                        resolveInner(textEntered);
                     } else {
                         // print('No Enter');
                         setTimeout(check, 100); // check again in a second
@@ -128,7 +135,7 @@ function readLine(msg) {
 }
 
 async function readInt(msg) {
-    var nr;
+    let nr;
     do {
         let res = await readLine(msg);
         nr = Number(res);
@@ -138,7 +145,7 @@ async function readInt(msg) {
 }
 
 async function readDouble(msg) {
-    var nr;
+    let nr;
     do {
         let res = await readLine(msg);
         nr = Number(res);
