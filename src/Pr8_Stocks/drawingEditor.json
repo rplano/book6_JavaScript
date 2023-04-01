@@ -1,0 +1,42 @@
+[
+    {
+        "x": 147,
+        "y": 96,
+        "width": 20,
+        "height": 20,
+        "color": "red",
+        "filled": false,
+        "fillColor": "white",
+        "type": "GRect"
+    },
+    {
+        "x": 263,
+        "y": 99,
+        "width": 20,
+        "height": 20,
+        "color": "red",
+        "filled": false,
+        "fillColor": "white",
+        "type": "GRect"
+    },
+    {
+        "x": 189,
+        "y": 203,
+        "width": 20,
+        "height": 20,
+        "color": "red",
+        "filled": false,
+        "fillColor": "white",
+        "type": "GRect"
+    },
+    {
+        "x": 210,
+        "y": 138,
+        "width": 20,
+        "height": 20,
+        "color": "blue",
+        "filled": true,
+        "fillColor": "blue",
+        "type": "GOval"
+    }
+]
