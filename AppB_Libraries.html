@@ -36,8 +36,8 @@
 
 <h1>
 	Libraries</h1>
-	<p>
-		How does it all work?&nbsp; In this chapter we take a look behind the scenes.&nbsp; If you look at the tryItFrame.html file, you will notice the following imports in the head section:</p>
+<p>
+	How does it all work?&nbsp; In this chapter we take a look behind the scenes.&nbsp; If you look at the tryItFrame.html file, you will notice the following imports in the head section:</p>
 <pre style="margin-left: 40px;">
 &lt;head&gt;
 &nbsp; ...
@@ -50,10 +50,10 @@
 &nbsp; &lt;script src=&quot;./libraries/<span style="color:#0000ff;">utils.js</span>&quot;&gt;&lt;/script&gt;
 &lt;/head&gt;
 </pre>
-	<p>
-		The first library is the standard p5.js library from Processing.&nbsp; The other four are what we will explain on the pages below.</p>
-	<p>
-		.</p>
+<p>
+	The first library is the standard p5.js library from Processing.&nbsp; The other four are what we will explain on the pages below.</p>
+<p>
+	.</p>
 <h2>
 	Console Programs</h2>
 <p>
@@ -312,7 +312,7 @@ class GRect extends GObject {
 
 &nbsp;&nbsp;&nbsp; constructor(x, y, width, height) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ((width === undefined) &amp;&amp; (height === undefined)) {
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // new GRect(50,50) has width and height = 50, but x and y = 0!
+			// new GRect(50,50) has width and height = 50, but x and y = 0!
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super(0, 0, x, y);
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super(x, y, width, height);
@@ -524,7 +524,8 @@ function addActionListener(obj) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; obj.element.addEventListener(&#39;click&#39;,
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; function (ev) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const rect = obj.element.getBoundingClientRect();
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; window.canvasClicked(ev.clientX - rect.left, ev.clientY - rect.top);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; window.canvasClicked(ev.clientX - rect.left, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                      ev.clientY - rect.top);
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; );
 &nbsp;&nbsp;&nbsp; } else if (obj instanceof JSTextField) {
@@ -573,7 +574,8 @@ this.element.style.display = &#39;inline-block&#39;;</pre>
 this.element.style.display = &#39;inline-block&#39;;
 this.element.setAttribute(&#39;class&#39;, &#39;wrapper&#39;);
 this.element.style.display = &#39;grid&#39;;
-this.element.style.gridTemplateColumns = &#39;repeat(&#39; + _cols + &#39;, &#39; + Math.trunc(100 / _cols) + &#39;%)&#39;;
+this.element.style.gridTemplateColumns = 
+	&#39;repeat(&#39; + _cols + &#39;, &#39; + Math.trunc(100 / _cols) + &#39;%)&#39;;
 </pre>
 <p>
 	If you know your CSS the above should make some sense.</p>
@@ -583,8 +585,9 @@ this.element.style.gridTemplateColumns = &#39;repeat(&#39; + _cols + &#39;, &#39
 	So the first thing we do, we dynamically add a style to an existing HTML page, by inserting it into the &lt;head&gt; tag:</p>
 <pre style="margin-left: 40px;">
 let stle = document.createElement(&quot;style&quot;);
-stle.innerHTML = &quot;.flexbox-parent { width: 100%; height: 100%; display: flex; flex-direction: column; 
-						justify-content: flex-start; align-items: stretch; align-content: stretch;}&quot;;
+stle.innerHTML = &quot;.flexbox-parent { 
+	width: 100%; height: 100%; display: flex; flex-direction: column; 
+	justify-content: flex-start; align-items: stretch; align-content: stretch;}&quot;;
 stle.innerHTML += &quot;.flexbox-item-grow { flex: 1;}&quot;;
 stle.innerHTML += &quot;.fill-area-content { overflow: auto;}&quot;;
 document.getElementsByTagName(&quot;head&quot;)[0].appendChild(stle);</pre>
@@ -625,9 +628,11 @@ add(obj, where) {
 &nbsp;&nbsp;&nbsp; ...
 
 &nbsp;&nbsp;&nbsp; if (this.layout == &#39;border&#39;) {
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (where.toLowerCase() == &#39;north&#39; || where.toLowerCase() == &#39;west&#39;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (where.toLowerCase() == &#39;north&#39; || 
+			where.toLowerCase() == &#39;west&#39;) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.north.add(obj);
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else if (where.toLowerCase() == &#39;south&#39; || where.toLowerCase() == &#39;east&#39;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else if (where.toLowerCase() == &#39;south&#39; || 
+					where.toLowerCase() == &#39;east&#39;) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.south.add(obj);
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.center.add(obj);
@@ -672,7 +677,7 @@ class JSCanvas extends JSObject {
 <h2>
 	Util Library</h2>
 <p>
-	What is the point of the Util library?&nbsp; Well, as I stated before, I wanted to transfer my existing Java code to JavaScript with as little changes as possible.&nbsp; For the standard Java classes, I was first considering to use one of a transpiler like J2CL [1], JSweet [2], or the old GWT [3].&nbsp; But the JavaScript code these transpilers generate is ugly as hell, and humongous in size.&nbsp; Since I needed just a handful of classes, I decided to write them myself, as there are:</p>
+	What is the point of the Util library?&nbsp; Well, as I stated before, I wanted to transfer my existing Java code to JavaScript with as little changes as possible.&nbsp; For the standard Java classes, I was first considering to use one of a transpilers like J2CL [1], JSweet [2], or the old GWT [3].&nbsp; But the JavaScript code these transpilers generate is ugly as hell, and humongous in size.&nbsp; Since I needed just a handful of classes, I decided to write them myself, as there are:</p>
 <ul>
 	<li>
 		RandomGenerator</li>
@@ -744,6 +749,13 @@ include(&quot;Pr4_Agrar/ticTacToeLogic.js&quot;);</pre>
 	and you can use your own handwritten classes.</p>
 <p>
 	.</p>
+<p>
+	[1] J2CL, https://github.com/google/j2cl<br />
+	[2] JSweet:&nbsp;http://www.jsweet.org/<br />
+	[3] GWT: https://padlet.com/lofidewanto/gwtintro<br />
+	[4] FileAPI, https://w3c.github.io/FileAPI/</p>
+<p>
+	.</p>
 <h2>
 	Karel Programs</h2>
 <p>
@@ -799,21 +811,11 @@ function catchInfiniteLoops() {
 <p>
 	We simplify our halting problem: if this method has been called more than 200 times, we say we have an infinite loop and throw an error.&nbsp; Thus executing the code in a simulation run with eval(code), will always stop, even if there is an infinite loop.&nbsp; And we can tell our users that their code most likely has an infinite loop.</p>
 <p>
-	There are a few more code gems in Karel (or hacks as some might call them), but you have to discover them for yourself!</p>
-<p>
+	There are a few more code gems in Karel (or hacks as some might call them), but you have to discover them for yourself!</p>	
+	<p>
 	.</p>
-	<h1>
-		References</h1>
-<p>
-	[1] J2CL, https://github.com/google/j2cl</p>
-	<p>
-	[2] JSweet:&nbsp;http://www.jsweet.org/</p>
-	<p>
-	[3] GWT: https://padlet.com/lofidewanto/gwtintro</p>
-	<p>
-		.</p>
 <p class="footer">
-	Copyright &copy; 2016-2023 <a href="http://www.lano.de">Ralph P. Lano</a>. All rights reserved.
+Copyright &copy; 2016-2023 <a href="http://www.lano.de">Ralph P. Lano</a>. All rights reserved.
 </p>
 </div>
 </div>
