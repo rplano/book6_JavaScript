@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>JavaScript: Ch8 Stocks</title>
+<meta name="title" content="Variations on a Theme: JavaScript: Ch8 Stocks">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="UTF-8">
+<meta name="description" content="An object-oriented Introduction">
+<meta name="keywords" content="JavaScript,object orientation,introduction">
+<meta name="author" content="Ralph P. Lano">
+<meta name="robots" content="index,follow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="book.css">
+</head>
+
+<body>
+<center>
+<div id="wrap">
+<ul class="sidenav">
+<p><a href="../index.html">Variations on a Theme</a><a href="index.html">JavaScript</a></p>
+<li><a href="Ch1_Karel.html">Karel</a></li>
+<li><a href="Ch2_Graphics.html">Graphics</a></li>
+<li><a href="Ch3_Console.html">Console</a></li>
+<li><a href="Ch4_Agrar.html">Agrar</a></li>
+<li><a href="Ch5_MindReader.html">MindReader</a></li>
+<li><a href="Ch6_Swing.html">Swing</a></li>
+<li><a href="Ch7_Asteroids.html">Asteroids</a></li>
+<li><a href="Ch8_Stocks.html">Stocks</a></li>
+<li><a href="index.html"> </a></li>
+<li><a href="AppA_Primer.html">Primer</a></li>
+<li><a href="AppB_Libraries.html">Libraries</a></li>
+<li><a href="AppC_Ideas.html">Ideas</a></li>
+</ul>
+<div class="content">
+<p>
+	<img alt="" src="img/c24f32f0-1b68-42ac-a304-5a7e04e7d05b.png" style="display: block; margin-left: auto;  margin-right: auto; width: 364px; height: 307px;" /></p>
+<h1>
+	Stocks</h1>
+<p>
+	The book is coming to an end, which usually means it&#39;s getting interesting. We will cover such topics as files, exception handling and we will get to know our first data structures.&nbsp; We continue with object-oriented analysis, learn a little more about interfaces and hear about polymorphism.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch8_Stocks/readFromFile" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/readFromFile.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	Files</h2>
+<p>
+	As soon as we turn off the computer, all data is gone - unless it has been saved.&nbsp; Saved means that we wrote it to a file.&nbsp; This is easier than you might think, but we start with reading from a file.</p>
+<p>
+	To read from a file we have to do three things:</p>
+<ol>
+	<li>
+		open the file,</li>
+	<li>
+		read from the file, line by line, and</li>
+	<li>
+		close the file.</li>
+</ol>
+<p>
+	In code it looks like this:</p>
+<pre style="margin-left: 40px;">
+// open file
+let fr = new <span style="color:#0000ff;">Utils.FileReader</span>(fileName);
+
+// read from file, line by line
+while (true) {
+&nbsp;&nbsp; &nbsp;let line = <span style="color:#0000ff;">fr.readLine()</span>;
+&nbsp;&nbsp; &nbsp;if (<span style="color:#0000ff;">line == null</span>)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;println(line);
+}
+
+// close file
+fr.close();</pre>
+<p>
+	We use our Utils.FileReader class to read text files.&nbsp; We simply pass the file name of the file to be opened.&nbsp;</p>
+<p>
+	Then we simply use a Loop-And-A-Half to read line by line from the file using the readLine() method.&nbsp; We know that we have reached the end of the file when readLine() returns null.&nbsp; Then there is nothing more to read, which means we close the file reader with the close() method.</p>
+<p>
+	A brief note on our Utils.FileReader class is in order: a browser can not directly access your file system.&nbsp; What the browser can do, is upload files, we see that later in the project UploadFile.&nbsp; What our class Utils.FileReader does is to load a file from the web server where we host our JavaScript files.&nbsp; Also, interesting, most of the programs we wrote up to now, do work locally from the file system without hosting.&nbsp; The Utils.FileReader does not, because it violate the CORS policy of your browser [8].&nbsp; And a final remark, why did we not call it simply FileReader?&nbsp; There already exists a class in JavaScript that is called FileReader, which does not really do what you would expect of it, coming from Java.&nbsp; And it is a nice opportunity to show, how to handle naming conflicts in JavaScript.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch8_Stocks/writeToFile" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/writeToFile.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	Write to File</h2>
+<p>
+	When writing to a file we have to do three things:</p>
+<ol>
+	<li>
+		open the file for writing,</li>
+	<li>
+		then write to the file, and</li>
+	<li>
+		close the file.</li>
+</ol>
+<p>
+	The code looks very similar to the one above:</p>
+<pre style="margin-left: 40px;">
+// open file
+let fw = new <span style="color:#0000ff;">Utils.FileWriter</span>(&quot;test.txt&quot;);
+
+// write to file, one string at a time
+println(&quot;Enter text to write (&#39;.&#39; to quit): &quot;);
+while (true) {
+&nbsp;&nbsp; &nbsp;let line = await readLine(&quot;&quot;);
+&nbsp;&nbsp; &nbsp;if (line == &#39;.&#39;)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">fw.append(line + &quot;\n&quot;);</span>
+}
+
+// close file
+fw.close();</pre>
+<p>
+	<img alt="" src="img/testTxt.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;" />We use the FileWriter class to write to text files.&nbsp; First we pass the file name to which we want to write.&nbsp; Then we use the Loop-And-A-Half again to write line by line using the method write().&nbsp; The &#39;\n&#39; may also be interesting: it is the character for new line, and ensures that the next string in the &quot;test.txt&quot; file is written to a new line.&nbsp; To avoid getting stuck in an infinite loop, we check if the user has entered a period, this is our abort criterion.&nbsp; Then we close our writer with the close() method.</p>
+<p>
+	Like not being allowed to read files, the browser also is not allowed to write files.&nbsp; But what the browser can do is download files.&nbsp; So this is what we do here, we actually download the files, and the user can then choose whether and where to store the files.</p>
+<p>
+	.</p>
+<h2>
+	Data Structures</h2>
+<p>
+	Data structures are extremely important.&nbsp; Unfortunately, most people stop with the array data structure, which we have seen already.&nbsp; More important, however, is the Map data structure.&nbsp; JavaScript has the Array class and the Map class for these.&nbsp; The equivalent classes in Java are called ArrayList and HashMap.&nbsp; Let us briefly compare the two:</p>
+<table align="center" border="0" cellpadding="10" cellspacing="10" style="width: 100%;">
+	<tbody>
+		<tr>
+			<td style="text-align: center; vertical-align: middle;">
+				<table align="center" border="0" cellpadding="1" cellspacing="1" width="200">
+					<tbody>
+						<tr>
+							<td>
+								<b>Array</b></td>
+							<td>
+								<b>ArrayList</b></td>
+						</tr>
+						<tr>
+							<td>
+								new Array()</td>
+							<td>
+								new ArrayList()</td>
+						</tr>
+						<tr>
+							<td>
+								push(value)</td>
+							<td>
+								add(value)</td>
+						</tr>
+						<tr>
+							<td>
+								at(idx)</td>
+							<td>
+								get(idx)</td>
+						</tr>
+						<tr>
+							<td>
+								includes(value)</td>
+							<td style="vertical-align: top;">
+								contains(value)</td>
+						</tr>
+						<tr>
+							<td>
+								indexOf(value)</td>
+							<td>
+								indexOf(value)</td>
+						</tr>
+						<tr>
+							<td>
+								&nbsp;</td>
+							<td>
+								values()</td>
+						</tr>
+						<tr>
+							<td>
+								length</td>
+							<td>
+								size()</td>
+						</tr>
+						<tr>
+							<td>
+								splice(indexOf(value),1)</td>
+							<td>
+								remove(value)</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+			<td style="text-align: center; vertical-align: middle;">
+				<table align="center" border="0" cellpadding="1" cellspacing="1" width="200">
+					<tbody>
+						<tr>
+							<td style="vertical-align: top;">
+								<b>Map</b></td>
+							<td>
+								<b>HashMap</b></td>
+						</tr>
+						<tr>
+							<td>
+								new Map()</td>
+							<td>
+								new HashMap()</td>
+						</tr>
+						<tr>
+							<td>
+								set(key, value)</td>
+							<td>
+								put(key, value)</td>
+						</tr>
+						<tr>
+							<td>
+								get(key)</td>
+							<td>
+								get(key)</td>
+						</tr>
+						<tr>
+							<td>
+								has(key)</td>
+							<td>
+								containsKey(key)</td>
+						</tr>
+						<tr>
+							<td>
+								keys()</td>
+							<td>
+								keySet()</td>
+						</tr>
+						<tr>
+							<td>
+								values()</td>
+							<td>
+								values()</td>
+						</tr>
+						<tr>
+							<td>
+								size</td>
+							<td>
+								size()</td>
+						</tr>
+						<tr>
+							<td>
+								delete(key)</td>
+							<td>
+								remove(key)</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	As you can see they are basically equivalent from a user point of view.&nbsp; I wrote little wrapper classes in the utils library, so you can choose either the Java syntax or the JavaScript syntax.&nbsp; The simple reason for this is, that I had all the examples written in Java, and did not want to do a complete rewrite.&nbsp; I was surprised that this worked so well, that I did want to show you this, because it is a very nice example of software portability [9].</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch8_Stocks/uniqueNames" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/uniqueNames.png" style="width: 200px; height: 135px; display: block;" />Try it</a></div>
+<h2>
+	ArrayList</h2>
+<p>
+	Let&#39;s start by declaring and instantiating an ArrayList:</p>
+<pre style="margin-left: 40px;">
+let names = new ArrayList();
+</pre>
+<p>
+	Here we create an ArrayList with the name &quot;names&quot;.&nbsp; An ArrayList can grow and shrink, depending on requirements.&nbsp; That&#39;s very practical!</p>
+<p>
+	Next, we want to add a few names to our list of names, but only if the name is not already in the list:</p>
+<pre style="margin-left: 40px;">
+while (true) {
+&nbsp;&nbsp; &nbsp;let name = await readLine(&quot;Enter new name: &quot;);
+&nbsp;&nbsp; &nbsp;if (name.length == &#39;&#39;)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;if (!names.<span style="color:#0000ff;">contains</span>(name)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;names.<span style="color:#0000ff;">add</span>(name);
+&nbsp;&nbsp; &nbsp;}
+}
+</pre>
+<p>
+	With the method contains() we check, if a certain name is already in the list.&nbsp; If not, we add it with add().&nbsp; Also, we don&#39;t have to specify an index when adding, new entries are simply inserted at the end of the list.</p>
+<p>
+	If we want to print our list of names, we have to iterate over the list:</p>
+<pre style="margin-left: 40px;">
+for (let i = 0; i &lt; names.<span style="color:#0000ff;">size</span>(); i++) {
+&nbsp;&nbsp; &nbsp;println(names.<span style="color:#0000ff;">get</span>(i));
+}</pre>
+<p>
+	With the size() method we can determine how many entries our list has, and with get() we read the entry at a certain position.&nbsp; Additionally, the ArrayList has the following practical methods:</p>
+<ul>
+	<li>
+		<strong>set():</strong>&nbsp; replaces the entry at a certain position with a new one,</li>
+	<li>
+		<strong>indexOf():</strong>&nbsp; searches for an entry and returns the position,</li>
+	<li>
+		<strong>remove():</strong>&nbsp; removes an entry from the list, and</li>
+	<li>
+		<strong>clear():</strong>&nbsp; deletes the complete list.</li>
+</ul>
+<p>
+	But as I stated before, you can also use the equivalent JavaScript Array methods.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch8_Stocks/phoneBook" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/phoneBook.png" style="width: 200px; height: 222px; display: block;" />Try it</a></div>
+<h2>
+	HashMap</h2>
+<p>
+	HashMaps are probably the most useful of all data structures: because we can use them for searching.&nbsp; Classic examples of hash maps are telephone books and dictionaries.&nbsp; Let&#39;s take a closer look at the former, the PhoneBook.&nbsp; We&#39;ll start with the HashMap declaration:</p>
+<pre style="margin-left: 40px;">
+let phoneBook = new HashMap();</pre>
+<p>
+	A HashMap associates a value with a key, which is why it is sometimes also called an associative array.</p>
+<p>
+	Let&#39;s add some values to our PhoneBook:</p>
+<pre style="margin-left: 40px;">
+while (true) {
+&nbsp;&nbsp; &nbsp;name = await readLine(&quot;Enter name: &quot;);
+&nbsp;&nbsp; &nbsp;if (name == &#39;&#39;)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;let number = await readInt(&quot;Enter number: &quot;);
+&nbsp;&nbsp; &nbsp;phoneBook.<span style="color:#0000ff;">put</span>(name, number);
+}</pre>
+<p>
+	Inserting is done with the method put(): it takes two arguments, a name and a number.&nbsp; If the name already exists in the map, it is overwritten, if not, it is inserted.&nbsp; In a HashMap there can never be two entries with the same name, keys must be unique.</p>
+<p>
+	After we have filled our PhoneBook with some data, we want to search in it, because that&#39;s what the HashMap is good for:</p>
+<pre style="margin-left: 40px;">
+name = await readLine(&quot;Enter name to search: &quot;);
+if (name == &#39;&#39;)
+&nbsp;&nbsp; &nbsp;break;
+if (phoneBook.<span style="color:#0000ff;">containsKey</span>(name)) {
+&nbsp;&nbsp; &nbsp;println(phoneBook.<span style="color:#0000ff;">get</span>(name));
+} else {
+&nbsp;&nbsp; &nbsp;println(&quot;no entry for this name&quot;);
+}</pre>
+<p>
+	With the containsKey() method we can test if a name exists in the map, and with get() we can get the number to the name.&nbsp; This looks very similar to the ArrayList, but it is much cooler: with the ArrayList we have to know the index of the entry we want to access, with the HashMap we simply say: give me the phone number for that name.</p>
+<p>
+	Just in case we want to list all phone numbers in our PhoneBook, let us iterate through our map:</p>
+<pre style="margin-left: 40px;">
+for (const name of phoneBook.<span style="color:#0000ff;">keySet</span>()) {
+&nbsp;&nbsp; &nbsp;let number = phoneBook.<span style="color:#0000ff;">get</span>(name);
+&nbsp;&nbsp; &nbsp;println(name + &quot;: &quot; + number);
+}</pre>
+<p>
+	This looks different: the first line seems to make no sense at all.&nbsp; The problem with maps is that they do not have an index, i.e. we can not say give me the second element, because a map does not know what its second element is (or at least it doesn&#39;t tell us).&nbsp; There is also not really any fixed ordering, i.e. the order in which the entries are output may be completely different from the order in which they were inserted.</p>
+<p>
+	This is why the iteration uses this pseudo-for-loop trick:</p>
+<pre style="margin-left: 40px;">
+for (const name of phoneBook.<span style="color:#0000ff;">keySet</span>()) { ... }</pre>
+<p>
+	It basically says: give me a name from the list of names in the map.&nbsp; And after that one, you give me the next one, etc. until we&#39;re all through.&nbsp; Once you&#39;ve accepted that is how a map works, the rest is easy.</p>
+<p>
+	.</p>
+<h2>
+	Object-Orientierted Analysis</h2>
+<p>
+	We are at a transition: we are just leaving the procedural one-class world and entering the object-oriented multi-class world.&nbsp; This transition is not entirely painless.&nbsp; And where the top-down approach has served us really well so far, it now only helps us on a small scale, but no longer on a larger scale.</p>
+<p>
+	However, this is where object-oriented analysis comes to the rescue.&nbsp; Before we start to write any code, we first need to think about what we want. This is called requirements analysis.&nbsp; It is best to write the requirements down in very simple sentences.&nbsp; For example, the requirements for a web shop could be formulated in the following way:</p>
+<p style="margin-left: 40px;">
+	&quot;The Azamon Shop has articles and shopping carts.&nbsp; An article has a name, type and price.&nbsp; A shopping cart has a user name and a list of articles.&nbsp; We can list all the articles of the shop.&nbsp; We can list all the articles in a shopping cart.&nbsp; We can put an article in a shopping cart.&nbsp; We can calculate the price of all articles in a shopping cart.&quot;</p>
+<p>
+	These requirements are the basis for our object-oriented analysis.</p>
+<p>
+	<strong>1.Step:</strong>&nbsp; In the first step of this analysis we take a colored pencil and underline the verbs green and the nouns with red:</p>
+<p style="margin-left: 40px;">
+	&quot;The <span style="color:#ff0000;">Azamon Shop</span> <span style="color:#00ff00;">has</span> <span style="color:#ff0000;">articles</span> and <span style="color:#ff0000;">shopping carts</span>.&nbsp; An <span style="color:#ff0000;">article</span> <span style="color:#00ff00;">has</span> a <span style="color:#ff0000;">name</span>, <span style="color:#ff0000;">type</span> and <span style="color:#ff0000;">price</span>.&nbsp; A <span style="color:#ff0000;">shopping cart</span> <span style="color:#00ff00;">has</span> a <span style="color:#ff0000;">user name</span> and a list of <span style="color:#ff0000;">articles</span>.&nbsp; We can <span style="color:#00ff00;">list</span> all the <span style="color:#ff0000;">articles</span> of the <span style="color:#ff0000;">shop</span>.&nbsp; We can <span style="color:#00ff00;">list</span> all the <span style="color:#ff0000;">articles</span> in a <span style="color:#ff0000;">shopping cart</span>.&nbsp; We can <span style="color:#00ff00;">put</span> an <span style="color:#ff0000;">article</span> in a <span style="color:#ff0000;">shopping cart</span>.&nbsp; We can <span style="color:#00ff00;">calculate</span> the <span style="color:#ff0000;">price</span> of all <span style="color:#ff0000;">articles</span> in a <span style="color:#ff0000;">shopping cart</span>.&quot;</p>
+<p>
+	<strong>2.Step:</strong>&nbsp; In the second step we make a list for all the verbs:</p>
+<ul>
+	<li>
+		has</li>
+	<li>
+		list</li>
+	<li>
+		list</li>
+	<li>
+		put</li>
+	<li>
+		calculate</li>
+</ul>
+<p>
+	and the nouns are listed and counted:</p>
+<ul>
+	<li>
+		shop: II</li>
+	<li>
+		article: IIIIIII</li>
+	<li>
+		shopping cart: IIIII</li>
+	<li>
+		name: I</li>
+	<li>
+		type: I</li>
+	<li>
+		price: II</li>
+	<li>
+		user name: I</li>
+</ul>
+<p>
+	Counting is not absolutely necessary, but helps to recognize what may be more important.</p>
+<p>
+	<strong>3.Step:</strong>&nbsp; In the third step we look at the list of nouns.&nbsp; Which of the nouns can we describe with a simple data type like int, double, string etc.?</p>
+<ul>
+	<li>
+		shop: ???</li>
+	<li>
+		article: ???</li>
+	<li>
+		shopping cart: ???</li>
+	<li>
+		name: String</li>
+	<li>
+		type: String</li>
+	<li>
+		price: int</li>
+	<li>
+		user name: String</li>
+</ul>
+<p>
+	If something is complicated, i.e. consists of other parts, such as shop, article and shopping cart, then it is a complicated data type, i.e. a class.&nbsp; So we have identified our classes: Shop, Article and ShoppingCart.</p>
+<p>
+	<strong>4.Step:</strong>&nbsp; The fourth step is to assign the right attributes to the right classes.&nbsp; To do this, we simply re-read our requirements.&nbsp; They say:</p>
+<ul>
+	<li>
+		&quot;The Azamon Shop has articles and shopping carts&quot;: so obviously articles and shopping carts belong to the shop, are therefore attributes of the Shop.</li>
+	<li>
+		&quot;An article has a name, a type and a price&quot;: so name, type and price are part of the Article.</li>
+	<li>
+		&quot;A shopping cart has a user name and a list of articles&quot;: so user name and list of articles belong to the ShoppingCart.</li>
+</ul>
+<p>
+	At this point it also makes sense to pay attention to the plural: every time a word appears in the plural, this means that we need a list (or map) of the respective attributes.&nbsp; For example, &quot;list of articles&quot; or &quot;shopping carts&quot; then become ArrayLists.</p>
+<p>
+	<img alt="" src="img/5e5039fa-0351-444b-b855-7fc03777b3ab.png" style="width: 221px; height: 170px; float: right;" />With this information we can already write down our classes with attributes:</p>
+<pre style="margin-left: 40px;">
+class Shop {
+&nbsp;&nbsp;&nbsp; constructor() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.carts;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.articles;
+&nbsp;&nbsp;&nbsp; }
+}
+
+class Article {
+&nbsp;&nbsp;&nbsp; constructor() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.name;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.type;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.price;
+&nbsp;&nbsp;&nbsp; }
+}
+
+class AzamonCart {
+&nbsp;&nbsp;&nbsp; constructor() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.userName;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.articles;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	<strong>5.Step:</strong>&nbsp; The last step is to assign the methods to the correct classes.&nbsp; All the verbs we collected in the second step, turn into methods (we have always said that methods are verbs).&nbsp; We go through our list of verbs one at a time:</p>
+<ul>
+	<li>
+		has:&nbsp; &quot;has&quot; does not count as a verb, since it expresses affiliation and was already used in step 4.</li>
+	<li>
+		list:&nbsp; refers to &quot;We can list all items in the shop&quot;, so it is part of the Shop and should be called listArticles().</li>
+	<li>
+		list:&nbsp; refers to &quot;We can list all items in a shopping cart&quot;, so it is part of the ShoppingCart and should also be called listArticles().</li>
+	<li>
+		put:&nbsp; refers to &quot;We can put an item in a shopping cart&quot;, therefore it belongs to the ShoppingCart and should be called putArticle() or addArticle().</li>
+	<li>
+		calculate:&nbsp; refers to &quot;We can calculate the price of all items in a shopping cart&quot;, so it belongs to the ShoppingCart, and should be called calculatePrice().</li>
+</ul>
+<p>
+	After this analysis, our classes, their attributes and methods are basically fixed:</p>
+<pre style="margin-left: 40px;">
+class Shop {
+&nbsp;&nbsp;&nbsp; constructor() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.carts;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.articles;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; listArticles() {
+&nbsp;&nbsp;&nbsp; }
+}
+
+class Article {
+&nbsp;&nbsp;&nbsp; constructor() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.name;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.type;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.price;
+&nbsp;&nbsp;&nbsp; }
+}
+
+class Cart {
+&nbsp;&nbsp;&nbsp; constructor() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.userName;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.articles;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; listArticles() {
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; addArticleToCart() {
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; calculatePriceOfArticlesInCart() {
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	What we have not decided yet are the parameters the methods accept and what they return.&nbsp; And it never hurts to give each class a constructor.&nbsp; And of course a minor thing: the code is still missing.</p>
+<p>
+	.</p>
+<h2>
+	Errors</h2>
+<p>
+	What if something goes wrong?&nbsp; Or first of all, what can go wrong?&nbsp; For example, look at the following two lines of code:</p>
+<pre style="margin-left: 40px;">
+let fritz;
+fritz.setColor(Color.RED);</pre>
+<p>
+	If you run this in the browser, nothing happens.&nbsp; However, if you look at the browser&#39;s console (usually with F12) you will see the following error message:</p>
+<p style="margin-left: 40px;">
+	<img alt="" src="img/JSError.png" style="margin-left: 10px; margin-right: 10px; width: 387px; height: 98px;" /></p>
+<p>
+	The error message says that fritz is undefined.&nbsp; The error is a <em>TypeError</em>.&nbsp; It even tells you where the problem is: at line 16&nbsp; column 3 of your JavaScript file (16:3).&nbsp; Usually it provides a link which you can click on and it navigates you automatically to the problematic line in the code.</p>
+<p>
+	Can anything else go wrong?&nbsp; Yes, many things can go wrong.&nbsp; Here are a couple of typical cases:</p>
+<pre style="margin-left: 40px;">
+// TypeError
+let num = 1;
+num.toUpperCase();
+
+// RangeError
+let b = new Array(-1)
+
+// ReferenceError
+let x = 3;
+x = x + y;
+
+// SyntaxError
+eval(&quot;let s = &#39;hi&quot;);</pre>
+<p>
+	You want the upper case version of a number, or an array with a negative size, or you are using a variable that has not been initialized, and then there can be errors in you JavaScript code itself.&nbsp;</p>
+<p>
+	What happens to our program when an error occurs?&nbsp; Well, other programming languages just crash., but JavaScript is very cool about this: it tries to ignore the errors, and continues as if nothing had happened, kind of like my mother in law.&nbsp; But naturally, the results that come out will most likely be wrong or nonsense.&nbsp; Hence, what we should do is appropriate error handling with try-catch.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch8_Stocks/exceptions" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/exceptions.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	Try-Catch</h2>
+<p>
+	With a try-catch statement we first try if everything works.&nbsp; If it works, fine, if not, then we tell the program what to do.&nbsp; In code it looks like this:</p>
+<pre style="margin-left: 40px;">
+try {
+&nbsp;&nbsp; &nbsp;// problematic code
+&nbsp;&nbsp; &nbsp;...
+} catch ( e ) {
+&nbsp;&nbsp; &nbsp;// deal with error
+&nbsp;&nbsp; &nbsp;...
+}
+...
+</pre>
+<p>
+	We surround our problematic code with a try block.&nbsp; If everything works, the program continues normally (the catch block is not executed).&nbsp; If something goes wrong, however, the program does not terminate, but jumps to the catch block instead and executes it.&nbsp; After that, the program assumes that we have everything under control and executes the code after the catch block as if nothing had happened.</p>
+<p>
+	Interesting maybe that what would be errors in other languages, are no problem for JavaScript:</p>
+<pre style="margin-left: 40px;">
+// ArithmeticException
+let x = 5 / 0;
+console.log(x);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Infinity
+
+// NumberFormatException
+let y = parseInt(&quot;five&quot;);
+console.log(y);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // NaN
+
+// ArrayIndexOutOfBoundsException
+let eggs = [0, 1, 2, 3];
+console.log(eggs[5]);&nbsp; // undefined</pre>
+<h3>
+	throw</h3>
+<p>
+	If you want to, you can also throw your own errors.&nbsp; For instance,</p>
+<pre style="margin-left: 40px;">
+if (!locateKarel()) {
+&nbsp;&nbsp; &nbsp;throw Error(&quot;Could not locate Karel in the world&quot;);
+}</pre>
+<p>
+	would throw an error, which then should be caught with some try-catch.</p>
+<h3>
+	&quot;use strict&quot;</h3>
+<p>
+	While we are at errors: recall that in JavaScript we are not required to declare variables.&nbsp; This can lead to problems:</p>
+<pre style="margin-left: 40px;">
+//&quot;use strict&quot;;  // uncomment this line
+
+function run(() {
+&nbsp;&nbsp;&nbsp; let fritz = 5;
+&nbsp;&nbsp;&nbsp; frits = 4;
+&nbsp;&nbsp;&nbsp; console.log(fritz);
+}</pre>
+<p>
+	In the third line, we want to reassign a new value to the variable <em>fritz</em>.&nbsp; But we made a typo, and hence instead of a reassignment, we declared a new variable named <em>frits</em>.&nbsp; JavaScript does not care, there is no error here.&nbsp; To avoid these kinds of stupid mistakes, it is highly recommended that you start all of your JavaScript code with the &quot;use strict&quot; keyword.&nbsp; Adding it, will result in an error being thrown.</p>
+<p>
+	<strong>SEP: Always add the line &quot;use strict&quot; at the top of your code!</strong></p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/numberGuessConsole" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/numberGuessConsole.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	Interfaces</h2>
+<p>
+	Finally we come to the last topic of this chapter: <em>interfaces</em>.&nbsp; We could make this very short by saying that JavaScript does not have interfaces or abstract classes.&nbsp; Period.</p>
+<p>
+	But obviously, if so many languages have it, there must be a good reason for it.&nbsp; Until now we have always programmed alone.&nbsp; But what if we work in teams, meaning several people write on the same program?&nbsp; How do we know who writes what?&nbsp; How can we be sure the different pieces fit together?&nbsp; We use interfaces for exactly this purpose.</p>
+<p>
+	Let&#39;s take NumberGuess as an example.&nbsp; The objective of the game is for the computer to choose a random number, let&#39;s say between 0 and 99, and for the player to guess that number in as few steps as possible.&nbsp; The program consists of two parts: the part that takes care of the logic (NumberGuessLogic) and the part that interacts with the player (NumberGuessConsole).&nbsp; This means we have two classes, who depend on each other.&nbsp; We want to clearly define this dependency, and we do this by means of an interface.&nbsp; Since JavaScript does not have interfaces or abstract classes, we just use a normal class:</p>
+<pre style="margin-left: 40px;">
+// interface or abstract class
+class NumberGuessLogic {
+
+&nbsp;&nbsp;&nbsp; constructor() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // if we need &#39;this&#39; in constructor of subclass, then super() must be called,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // hence we can not throw an Error here:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // throw new Error(&#39;NumberGuessLogic is interface, can not be instantiated!&#39;);
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; /**
+&nbsp;&nbsp;&nbsp;&nbsp; * guess should be number between 0 and 99 &lt;br/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp; * return 0 if guess was correct &lt;br/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp; * return +1 if guess was higher &lt;br/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp; * return -1 if guess was lower
+&nbsp;&nbsp;&nbsp;&nbsp; *
+&nbsp;&nbsp;&nbsp;&nbsp; * @param guess
+&nbsp;&nbsp;&nbsp;&nbsp; * @return
+&nbsp;&nbsp;&nbsp;&nbsp; */
+&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">makeGuess(guess)</span> {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw new Error(&#39;Method is abstract, needs to be implemented!&#39;);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	This interface is a contract between two developers:</p>
+<ul>
+	<li>
+		For one developer (NumberGuessConsole) it means that there will be a method <em>makeGuess(int guess)</em>, which takes the number guessed as a parameter, and which returns whether the number was to small, to large or correct (-1, +1, 0).</li>
+	<li>
+		For the other developer (NumberGuessLogic) it means that she has to write a method <em>makeGuess(int guess)</em>, which compares a guess with the internally generated random number and returns whether the number was to small, to large or correct (-1, +1, 0).</li>
+</ul>
+<p>
+	This allows two or more developers to independently write separate pieces for a common program that can then easily be merged.&nbsp; Notice two things about the code: it has lots of comments, because two people have to agree explicitely what the method is supposed to do, there should be no ambiguity.&nbsp; And it throws an error, indicating, that this class is not really supposed to be used.</p>
+<p>
+	Let&#39;s continue with how this would be used: We start with the part that implements the NumberGuessLogic interface.&nbsp; It is customary to add the extension &quot;Impl&quot; to classes that implement a given interface, hence the name NumberGuessLogicImpl:</p>
+<pre style="margin-left: 40px;">
+// implementation of interface
+class NumberGuessLogicImpl <span style="color:#0000ff;">extends NumberGuessLogic</span> {
+
+&nbsp;&nbsp;&nbsp; constructor() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const rgen = new RandomGenerator();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.number = rgen.nextInt(0, 99);
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; /**
+&nbsp;&nbsp;&nbsp;&nbsp; * guess should be number between 0 and 99 return 0 if guess was correct
+&nbsp;&nbsp;&nbsp;&nbsp; * return +1 if guess was higher return -1 if guess was lower
+&nbsp;&nbsp;&nbsp;&nbsp; *
+&nbsp;&nbsp;&nbsp;&nbsp; * @param guess
+&nbsp;&nbsp;&nbsp;&nbsp; * @return
+&nbsp;&nbsp;&nbsp;&nbsp; */
+&nbsp;&nbsp;&nbsp; makeGuess(guess) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (guess == this.number) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (guess &gt; this.number) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return +1;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return -1;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	This class must have a method called makeGuess(int guess), which of course must do something now.&nbsp; Naturally, the random number must be generated somewhere, probably in the constructor.</p>
+<p>
+	Regardless of this, the other developer can already start with NumberGuessConsole class.&nbsp; This is a normal console program:</p>
+<pre style="margin-left: 40px;">
+async function setup() {
+&nbsp;&nbsp;&nbsp; createConsole();
+
+&nbsp;&nbsp;&nbsp; // let logic = new NumberGuessLogic();
+&nbsp;&nbsp;&nbsp; let logic = new NumberGuessLogicImpl();
+
+&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">if (logic instanceof NumberGuessLogic)</span> {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while (true) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let guess = await readInt(&quot;Enter guess: &quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (logic.makeGuess(guess) == 0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (logic.makeGuess(guess) == 1) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println(&quot;Number is smaller.&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println(&quot;Number is higher.&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println(&quot;You won!&quot;);
+&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println(&quot;&#39;logic&#39; is not of type NumberGuessLogic!&quot;);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Notice first that with the <em>instanceof</em> operator we make sure that the Impl class is of the correct type.&nbsp; And second the commented line, that is the line the second developer used before the Impl class was finished, to write her code.&nbsp; When both developers are done, we just put the classes together into one project, and everything should work fine.</p>
+<p>
+	We could have used the same approach also in the TicTacToe and the MindReader projects, if we wanted to.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch8_Stocks/polymorphism" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/polymorphism.png" style="width: 200px; height: 120px; display: block;" />Try it</a></div>
+<h2>
+	Polymorphism</h2>
+<p>
+	Steve Jobs used to end his presentation with the sentence &quot;one more thing...&quot; and usually that&#39;s when it got interesting.&nbsp; Polymorphism literally means &quot;many forms&quot;.&nbsp; And what does this have to do with JavaScript?&nbsp;</p>
+<p>
+	Let&#39;s remember our Student example from the MindReader chapter.&nbsp; We defined a class Student:</p>
+<pre style="margin-left: 40px;">
+class Student {
+&nbsp;&nbsp;&nbsp; constructor(name, id = -1) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.name = name;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; toString() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return &quot;Student [name=&quot; + this.name + &quot;, id=&quot; + this.getId()
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + &quot;, credits=&quot; + this.incrementCredits() + &quot;]&quot;;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	In addition, we could also define a class Freshman, which extends a Student:</p>
+<pre style="margin-left: 40px;">
+class Freshman extends Student {
+	constructor(name, id = -1) {
+		super(name, id);
+	}
+
+&nbsp;&nbsp;&nbsp; toString() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return &quot;Freshman [name=&quot; + this.name + &quot;, id=&quot; + this.getId()
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + &quot;, credits=&quot; + this.incrementCredits() + &quot;]&quot;;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	This means, Freshman can do everything Student can, the only difference is when calling the toString() method.</p>
+<p>
+	Since both classes are of type Student, we can assume that they have a toString() method, and thus the following function makes totally sense,</p>
+<pre style="margin-left: 40px;">
+function polymorphic(studnt) {
+&nbsp;&nbsp;&nbsp; println(studnt.toString());
+}</pre>
+<p>
+	if it is called with with a Student or a Freshman object:</p>
+<pre style="margin-left: 40px;">
+async function setup() {
+&nbsp;&nbsp;&nbsp; createConsole();
+
+&nbsp;&nbsp;&nbsp; const hansel = new Freshman(&quot;Hänschen&quot;);
+&nbsp;&nbsp;&nbsp; polymorphic(hansel);
+&nbsp;&nbsp;&nbsp; const gretel = new Student(&quot;Gretchen&quot;);
+&nbsp;&nbsp;&nbsp; polymorphic(gretel);
+}</pre>
+<p>
+	Now in JavaScript there is a little problem: there is no compiler preventing us from doing stupid things.&nbsp; For instance we could call the polymorphic() function with a string:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; polymorphic(&quot;hi there&quot;);</pre>
+<p>
+	That would work, but it is not really what we wanted.&nbsp; But if we change the polymorphic() function slightly,</p>
+<pre style="margin-left: 40px;">
+function polymorphic(studnt) {
+&nbsp;&nbsp; &nbsp;if (studnt <span style="color:#0000ff;">instanceof</span> Student) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;println(studnt.toString());
+&nbsp;&nbsp; &nbsp;} else {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;throw Error(&quot;Parameter is not of type Student!&quot;);
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	we get exactly what we wanted: a method that works for both Students and Freshmen, meaning it is polymorph.&nbsp; Well, as polymorph as it is going to get in JavaScript.</p>
+<p>
+	We now know all three pillars of object-oriented programming:</p>
+<ul>
+	<li>
+		Data Encapsulation and Information Hiding,</li>
+	<li>
+		Inheritance and Composition,</li>
+	<li>
+		and Polymorphism.</li>
+</ul>
+<p style="margin-left: 40px;">
+	<img alt="" src="img/e5c22719-1927-42b8-86c6-2c21661acdaf.png" style="width: 273px; height: 229px;" /></p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Review</h1>
+<p>
+	It was about time we learned how to work with files.&nbsp; Also the exception handling should have come much earlier, but of course it makes much more sense to introduce it together with files.&nbsp; What is really new and will prove very useful for the future are the data structures ArrayList and HashMap.&nbsp; They will make our lives easier many times over.&nbsp; And we have checked off the topics of interfaces and polymorphism, nothing really to be afraid of.</p>
+<p>
+	But the most important thing in this chapter was the object-oriented analysis, so to speak Top-Down 2.0.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Projects</h1>
+<p>
+	Was all the trouble worthwhile?&nbsp; Well, see for yourself.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch8_Stocks/writeToStorage" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/writeToStorage.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	WriteToStorage</h2>
+<p>
+	Most browsers have something that is called local storage.&nbsp; It kind of acts like a file system, and one way we can use it is as a kind of replacement.&nbsp; The API is very similar to the FileWriter&#39;s:</p>
+<pre style="margin-left: 40px;">
+async function setup() {
+&nbsp;&nbsp;&nbsp; ...
+
+&nbsp;&nbsp;&nbsp; let fw = new StorageWriter(&#39;test.txt&#39;);
+&nbsp;&nbsp;&nbsp; fw.clear();
+
+&nbsp;&nbsp;&nbsp; println(&#39;Enter text to write (\&#39;.\&#39; to quit): &#39;);
+&nbsp;&nbsp;&nbsp; while (true) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let line = await readLine(&#39;&#39;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (line == &#39;.&#39;)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fw.append(line + &#39;\n&#39;);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Naturally, you must allow access to local storage in your browser for this to work.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch8_Stocks/readFromStorage" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/readFromStorage.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	ReadFromStorage</h2>
+<p>
+	Once you have written something, maybe you also want to read it, that&#39;s what the StorageReader is for:</p>
+<pre style="margin-left: 40px;">
+async function setup() {
+&nbsp;&nbsp;&nbsp; createConsole();
+
+&nbsp;&nbsp;&nbsp; let fileName = await readLine(&quot;Enter file to read (test.txt): &quot;);
+
+&nbsp;&nbsp;&nbsp; // open file
+&nbsp;&nbsp;&nbsp; let sr = new StorageReader(fileName);
+
+&nbsp;&nbsp;&nbsp; let line = sr.read();
+&nbsp;&nbsp;&nbsp; println(line);
+}</pre>
+<p>
+	You can&#39;t really store a lot in the storage, but it is easy to use and sometime comes in quite handy.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch8_Stocks/uploadFile" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/uploadFile.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	UploadFile</h2>
+<p>
+	When we were discussing the FileReader, we mentioned that the browser does not really have access to the local file system of the user.&nbsp; But, what we can do in a browser is upload files.&nbsp; In this case, the user usually has to select a file on her computer, and then click on an upload button.&nbsp; The class JSFileUpload wraps the underlying HTML &lt;input type=&#39;file&#39;&gt; tag:</p>
+<pre style="margin-left: 40px;">
+function setup() {
+&nbsp;&nbsp;&nbsp; createGUI(300, 150);
+
+&nbsp;&nbsp;&nbsp; let fritz = new JSFileUpload();
+&nbsp;&nbsp;&nbsp; addWidget(fritz);
+}</pre>
+<p>
+	Once the user selected a file, we can read it in the onChange() function:</p>
+<pre style="margin-left: 40px;">
+function onChange(ev) {
+&nbsp;&nbsp;&nbsp; let input = ev.target;
+&nbsp;&nbsp;&nbsp; let reader = new FileReader();
+&nbsp;&nbsp;&nbsp; reader.onload = function () {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let text = reader.result;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print(text);
+&nbsp;&nbsp;&nbsp; };
+&nbsp;&nbsp;&nbsp; reader.readAsText(input.files[0]);
+}</pre>
+<p>
+	Notice, that the FileReader class used here is JavaScript normal FileReader class, and not our Utils.FileReader class.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/minutes" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/minutes.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	Minutes</h2>
+<p>
+	Sometimes we are responsible for the minutes of a team meeting.&nbsp; Wouldn&#39;t it be nice to have a program for taking the meeting notes?&nbsp; The idea is this: just type a sentence, press Enter and the line will be saved in a file called &quot;minutes.txt&quot;.&nbsp; For this we open a file with a FileWriter, read line by line (loop-and-a-half) from the console with readLine(), and write each line into the file immediately.&nbsp; Of course, we still need an abort criterion (sentinel): this could simply be an empty line.&nbsp; After that, of course, we must not forget to close our file.&nbsp; A useful extension would be to add the time when the text was entered to each line.&nbsp; Then our program would really deserve its name.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/wordCount" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/wordCount.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	WordCount</h2>
+<p>
+	WordCount is a very simple program: it reads a specific file line by line and counts the lines, words and characters it contains.&nbsp; We use the FileReader together with the BufferedReader to read line by line.&nbsp; We need three variables for counting:</p>
+<pre style="margin-left: 40px;">
+let counterLines = 0;
+let counterWords = 0;
+let counterChars = 0;</pre>
+<p>
+	(these can be local variables).&nbsp; Counting the lines is very easy.&nbsp; Counting the characters is also easy, because we know how many characters are in a line with line.length().&nbsp; To count the words we could either use the StringTokenizer, or use the method split() of the String class:</p>
+<pre style="margin-left: 40px;">
+function countWords(line) {
+&nbsp;&nbsp;&nbsp; let words = line.split(&quot; &quot;);
+&nbsp;&nbsp;&nbsp; return words.length;
+}</pre>
+<p>
+	The split() method should be used with caution.&nbsp; Apparently it looks as if it would simply cut a string into its individual parts and store these individual parts in a string array.&nbsp; Sure it does that, but what criterion does it use to cut the string?&nbsp; Unlike the StringTokenizer, which simply takes a list of separators to split a string, the split() method uses regular expressions.&nbsp; So until we know what regular expressions are we shouldn&#39;t really use the split() method.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/createFileWithRandomNumbers" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/createFileWithRandomNumbers.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	CreateFileWithRandomNumbers</h2>
+<p>
+	From time to time (e.g. in the next project) we need a file with some random values.&nbsp; These could be just numbers, but these could also be random names or addresses or whatever.&nbsp; The user should tell us the name of the file into which we are supposed to write the random numbers, then we need the range in which the numbers should be, and we need to know how many numbers we should generate.&nbsp; The program should then create a file using FileWriter and RandomGenerator.&nbsp; For the next project we need those random numbers.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/histogram" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/histogram.png" style="width: 200px; height: 135px; display: block;" />Try it</a></div>
+<h2>
+	Histogram</h2>
+<p>
+	To get a quick overview of the grade distribution in an exam, it would be nice to have a histogram of that data.&nbsp; You can of course do this with some fancy graphics program (comes later), but it&#39;s much quicker to do this with a console program.</p>
+<p>
+	We want to accumulate points, so we count how many exams had points between 0 and 9, between 10 and 19, and so on.&nbsp; For example, we could define an array for eleven numbers, and we want the array to be prefilled with all zeros:</p>
+<pre style="margin-left: 40px;">
+let histogramData = new Array(11).fill(0);</pre>
+<p>
+	Then there is a small trick on how to easily add entries into the array using integer numbers:</p>
+<pre style="margin-left: 40px;">
+function putScoreInHistogram(score) {
+&nbsp;&nbsp;&nbsp; const idx = Math.trunc(score / 10);
+&nbsp;&nbsp;&nbsp; histogramData[idx]++;
+}</pre>
+<p>
+	That&#39;s a tough line to digest, but after long enough admiration, let&#39;s move on.&nbsp;</p>
+<p>
+	We read line by line from our Scores.txt file, convert the strings into ints using</p>
+<pre style="margin-left: 40px;">
+let score = parseInt(line);</pre>
+<p>
+	Then we add them to our array using our miracle method putScoreInHistogram().&nbsp; After reading all our data, we iterate through our array and output it to the console.&nbsp; We could just print the numbers, but much prettier are little stars (also called asterisks not Asterix!):</p>
+<pre style="margin-left: 40px;">
+function convertToStars(i) {
+&nbsp;&nbsp;&nbsp; let stars = &quot;&quot;;
+&nbsp;&nbsp;&nbsp; for (let j = 0; j &lt; i; j++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stars += &quot;*&quot;;
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; return stars;
+}</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/punctuation" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/punctuation.png" style="width: 200px; height: 137px; display: block;" />Try it</a></div>
+<h2>
+	Punctuation</h2>
+<p>
+	When we browse the Internet, there are programs (or rather algorithms) that can automatically recognize in which language we are writing.&nbsp; We type a few words and punctuation marks, and the program can tell us what language we are using.&nbsp; Actually, it turns out this is not really that difficult.</p>
+<p>
+	The idea in this project is to count the punctuation marks, such as: &quot;;,.!?&#39;.&nbsp; Similar as in the last project (histogram) we read a given text from a file and then show the frequency of punctuation marks in a histogram.&nbsp; It turns out that each language has its favorite punctuation marks, and we can recognize a language by the frequency with which certain punctuation marks occur.&nbsp; Of course the text to be analyzed should be of a certain length, and it should be typical for a given languag (so Ulysses would be rather unsuitable [2]).</p>
+<p>
+	The highlight of this program is the instance variable punctuation:</p>
+<pre style="margin-left: 40px;">
+const punctuation = &quot;;:&#39;\&quot;,!?.&quot;;</pre>
+<p>
+	i.e. a string containing all possible punctuation marks.&nbsp; We have specially marked the character &#39;\&quot;&#39; here, because it is the only way to get the quotation mark into a string.&nbsp;</p>
+<p>
+	We then read line by line from a file that the user gave us, and analyze each line:</p>
+<pre style="margin-left: 40px;">
+function analyzeForPunctuation(line) {
+&nbsp;&nbsp;&nbsp; for (let i = 0; i &lt; line.length; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let c = line.charAt(i);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (punctuation.includes(c)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let index = punctuation.indexOf(c);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; histogramData[index]++;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; totalNrOfPunctuations++;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	That&#39;s pretty heavy tobacco.&nbsp; Again, we read line by line.&nbsp; Then we iterate over each character in each line, one character at a time.&nbsp; We check if it is a punctuation mark, and if so, we increase the counter for that punctuation mark by one.&nbsp; We also have a counter for the total number of punctuation marks, which allows us to normalize the numbers when displaying the asterisks.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/worldMap" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/worldMap.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	WorldMap</h2>
+<p>
+	Wikipedia has a list with the longitude and latitude of many cities worldwide [3].&nbsp; If we go through this list, &quot;Cities.txt&quot;, and paint a GOval for each city, then we can draw a world map.&nbsp; Again, we use the FileReader/BufferedReader combo to read line by line from the file.&nbsp; The data is in the following form:</p>
+<pre style="margin-left: 40px;">
+Germany, Berlin, <span style="color:#0000ff;">52</span>, 32, N, <span style="color:#0000ff;">13</span>, 25, E</pre>
+<p>
+	We must parse, i.e. transform this information in such a way that it is useful for us.&nbsp; For our purposes, the country and the name of the city are useless.&nbsp; Also, we do not need a very high accuracy, therefore the degree specification, i.e. the 52, suffices for us.&nbsp; What we do need to know is whether the city is in the northern or the southern hemisphere:</p>
+<pre style="margin-left: 40px;">
+// Germany, Berlin, 52&quot;, 32&#39;, N, 13&quot;, 25&#39;, E
+let data = line.split(&quot;,&quot;);
+let country = data[0].trim();
+let name = data[1].trim();
+let lat1 = data[2].trim();
+let lat2 = data[3].trim();
+let lat3 = data[4].trim();
+
+let lat = parseInt(lat1);
+if (lat3.endsWith(&quot;S&quot;)) {
+&nbsp;&nbsp; &nbsp;lat = -lat;
+}
+...
+</pre>
+<p>
+	We do the same for length (longitude).&nbsp; We scale our values to fit on our screen, hence</p>
+<pre style="margin-left: 40px;">
+let x = (0.5 - lon / 360.0) * WIDTH;
+let y = (0.5 - lat / 180.0) * HEIGHT;
+let city = new GOval(CITY_SIZE, CITY_SIZE);
+add(city, x, y);</pre>
+<p>
+	And that&#39;s it.&nbsp; Looks very pretty, doesn&#39;t it?</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/editor" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/editor2.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	Editor</h2>
+<p>
+	In the Swing chapter we already wrote a UI for an editor.&nbsp; Now finally we can read and write files.&nbsp; In the saveFile() method we simply get the text from the JSTextArea display using</p>
+<pre style="margin-left: 40px;">
+let text = display.getText()</pre>
+<p>
+	and write the whole text to a file using a FileWriter.&nbsp; In the method openFile() we read line by line from the file into a string and then display it in the JSTextArea display using display.setText(text).</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/quiz" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/quiz2.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	Quiz</h2>
+<p>
+	Also for the quiz program we have written the UI already.&nbsp; However, a quiz with only one question is not very useful.&nbsp; We want to be able to do various quizzes with many questions.</p>
+<p>
+	We&#39;ll start with the questions.&nbsp; If they come from a text file, then we can give any kind of quiz.&nbsp; For our example, this is simply a text file called &quot;Quiz.txt&quot;:</p>
+<pre style="margin-left: 40px;">
+Correct:  1 + 1 = 2 ?; Yes; No; Maybe
+What is 2 ^ 2 ?; 2; 4; 8
+A zebra has stripes?; Yes; No</pre>
+<p>
+	Each line corresponds to a question with the possible answers.&nbsp; The question comes first, followed by the possible answers.&nbsp; Question and answers are separated by semicolons.&nbsp; We can read this file line by line, and using the split() method we get questions and answers:</p>
+<pre style="margin-left: 40px;">
+let words = line.split(&quot;;&quot;);</pre>
+<p>
+	Each line we turn into a Question object,</p>
+<pre style="margin-left: 40px;">
+class Question {
+&nbsp;&nbsp;&nbsp; constructor(words) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.question = words[0];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.answers = words;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; toString() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return this.question + this.answers;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	simply by passing this array to the constructor.&nbsp; Since the Question class is only used in our quiz class, it can be a local class, but does not have to be.</p>
+<p>
+	Now what do we do with the questions?&nbsp; We put all of them into a global ArrayList:</p>
+<pre style="margin-left: 40px;">
+let questions = new ArrayList();</pre>
+<p>
+	In summary, this is what the parsing part looks like:</p>
+<pre style="margin-left: 40px;">
+while (true) {
+&nbsp;&nbsp; &nbsp;let line = fr.readLine();
+&nbsp;&nbsp; &nbsp;if (line == null)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;let words = line.split(&quot;;&quot;);
+&nbsp;&nbsp; &nbsp;let q = new Question(words);
+&nbsp;&nbsp; &nbsp;questions.add(q);
+}</pre>
+<p>
+	Let&#39;s get to the presentation part of our program.&nbsp; Of course we need an actionPerformed() method for the Previous and Next JSButtons:</p>
+<pre style="margin-left: 40px;">
+function actionPerformed(e) {
+&nbsp;&nbsp;&nbsp; if (e.getSource() == btnNext) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; currentQuestion++;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; currentQuestion = currentQuestion % questions.size();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setQuestion(currentQuestion);
+&nbsp;&nbsp;&nbsp; } else if (e.getSource() == btnPrevious) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	For this we need a counter, currentQuestion, which points to the current question, i.e. the index in the ArrayList questions.&nbsp; We still need to implement the setQuestion() method:</p>
+<pre style="margin-left: 40px;">
+function setQuestion(index) {
+&nbsp;&nbsp;&nbsp; let q = questions.get(index);
+&nbsp;&nbsp;&nbsp; lbl.setText(q.question);
+&nbsp;&nbsp;&nbsp; buildMultipleChoiceAnswers(q.answers);
+}</pre>
+<p>
+	It simply gets the current question from the ArrayList, sets the label to the question and calls our old buildMultipleChoiceAnswers() method with the answers.</p>
+<p>
+	Extensions: What is still missing is that the user&#39;s answers are stored somewhere and graded at the end.&nbsp; This is not difficult, but somebody has to write the code.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/dictionary" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/dictionary.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	Dictionary</h2>
+<p>
+	Dictionaries are a typical application for a HashMap.&nbsp; As an example we want to implement a German-English dictionary.&nbsp; We hold the dictionary as an instance variable:</p>
+<pre style="margin-left: 40px;">
+let dictionary = new HashMap();</pre>
+<p>
+	and the first step is to initialize the dictionary:</p>
+<pre style="margin-left: 40px;">
+function initialzeDictionary() {
+&nbsp;&nbsp;&nbsp; dictionary.put(&quot;hund&quot;, &quot;dog&quot;);
+&nbsp;&nbsp;&nbsp; dictionary.put(&quot;katze&quot;, &quot;cat&quot;);
+&nbsp;&nbsp;&nbsp; dictionary.put(&quot;fisch&quot;, &quot;fish&quot;);
+}</pre>
+<p>
+	We then ask the user for a German word using readLine() from the console and with the get() method,</p>
+<pre style="margin-left: 40px;">
+let english = dictionary.get(german.toLowerCase());</pre>
+<p>
+	we get the English translation from the map.&nbsp; Very important, the translation only goes in one direction.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/stateLookup" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/stateLookup.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	StateLookup</h2>
+<p>
+	Another typical application for HashMaps are lookup tables: for example, we have the abbreviation of a US state (e.g. &quot;NY&quot;) and we would like to know which state it is.&nbsp; Looking on the internet we can find tables with the list of all states, e.g. of the form:</p>
+<pre style="margin-left: 40px;">
+AL,Alabama
+AK,Alaska
+AZ,Arizona
+...</pre>
+<p>
+	So we read line by line, and insert them into our HashMap:</p>
+<pre style="margin-left: 40px;">
+function readStateEntry(line) {
+&nbsp;&nbsp;&nbsp; let comma = line.indexOf(&quot;,&quot;);
+&nbsp;&nbsp;&nbsp; let stateInitial = line.substring(0, comma).trim();
+&nbsp;&nbsp;&nbsp; let stateName = line.substring(comma + 1).trim();
+&nbsp;&nbsp;&nbsp; states.put(stateInitial, stateName);
+}</pre>
+<p>
+	(you can also do this with the StringTokenizer or the split() method of the String class).&nbsp; The rest works in the same way as in the previous project.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/vocabularyTrainer" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/vocabularyTrainer.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	VocabularyTrainer</h2>
+<p>
+	Related to a dictionary is a vocabulary trainer.&nbsp; However, our vocabulary trainer should work for any language, so we can&#39;t just hard-code the vocabulary, but should read it from a file.&nbsp; The words are stored in the file &quot;Vocabulary.txt&quot; in the following form:</p>
+<pre style="margin-left: 40px;">
+dog,Hund
+cat,Katze
+fish,Fisch
+...</pre>
+<p>
+	We read line by line and put the word pairs in a HashMap called vocabulary:</p>
+<pre style="margin-left: 40px;">
+let vocabulary = new HashMap();</pre>
+<p>
+	What distinguishes the vocabulary trainer from the dictionary is that it asks the user for the translation of an English word.&nbsp; If the user&#39;s answer is correct, he gets a verbal pat on the back.&nbsp; However, if the user does not know the answer, we have to save the word in a list of unknownWords:</p>
+<pre style="margin-left: 40px;">
+let unknownWords = new ArrayList();</pre>
+<p>
+	At the end we should list all the words the user did not know, so he can study them some more later.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/vocabularyTrainerSwing" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/vocabularyTrainerSwing.png" style="width: 200px; height: 160px; display: block;" />Try it</a></div>
+<h2>
+	VocabularyTrainerSwing</h2>
+<p>
+	Console applications are simple, but ugly.&nbsp; Since we did all the hard work already in the last project, let&#39;s turn it into a UI application.&nbsp; The application should consist of a JSLabel in the north and a JSTextField in the south.&nbsp; We show the user the word to be translated in the JSLabel, and the user should then enter the translation in the JSTextField.</p>
+<p>
+	We would like to use a dialog box for feedback to the user.&nbsp; In Swing this is possible with the JSOptionPane:</p>
+<pre style="margin-left: 40px;">
+function actionPerformed(e) {
+&nbsp;&nbsp;&nbsp; let english = englishLbl.getText();
+&nbsp;&nbsp;&nbsp; let guess = germanTf.getText();
+&nbsp;&nbsp;&nbsp; if (guess.toLowerCase() == dictionary.get(english)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">JSOptionPane.showMessageDialog(this, &quot;Great job!&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;Check&quot;, JSOptionPane.INFORMATION_MESSAGE);</span>
+&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; JSOptionPane.showMessageDialog(this, &quot;Try again!&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;Check&quot;, JSOptionPane.INFORMATION_MESSAGE);
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; setRandomWord();
+}</pre>
+<p>
+	Otherwise, we can reuse the code from the project VocabularyTrainer.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/trains" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/trains.png" style="width: 200px; height: 135px; display: block;" />Try it</a></div>
+<h2>
+	Trains</h2>
+<p>
+	A very nice application for HashMaps are timetables for trains.&nbsp; Let&#39;s assume we want to go from Munich to Berlin and there is no direct connection.&nbsp; Then we check the timetable and see that you can travel from Munich to Nuremberg, and from Nuremberg there is a train to Berlin.&nbsp; A timetable could be a text file containing all the connections in the following form:</p>
+<pre style="margin-left: 40px;">
+Nuremberg &gt; Berlin
+Nuremberg &gt; Frankfurt
+Nuremberg &gt; Munich
+Munich &gt; Nuremberg
+Hamburg &gt; Berlin</pre>
+<p>
+	It is important here that the connections between cities have a direction, so the train goes from Nuremberg to Berlin, but does not have to go back.</p>
+<p>
+	The next step is to think about how to put such a timetable in a HashMap.&nbsp; It is clear that the key must be the starting station.&nbsp; But since a key in a HashMap must be unique, this means we can not have two or more values for one key.&nbsp; However, there is a solution: we simply use a list for the destination stations:</p>
+<pre style="margin-left: 40px;">
+let connections = new HashMap();</pre>
+<p>
+	At first this may seem a little difficult to understand: what we have here is a hash map that has a string as key but a list as values.&nbsp;</p>
+<p>
+	In addition, it also makes sense to have a list of all stations:</p>
+<pre style="margin-left: 40px;">
+let cities = new ArrayList();</pre>
+<p>
+	In the setup() we read the timetable and fill our two data structures.&nbsp; With the StringTokenizer we separate source from destination:</p>
+<pre style="margin-left: 40px;">
+let st = new StringTokenizer(line, &quot;&gt;&quot;);
+let source = st.nextToken().trim();
+let destination = st.nextToken().trim();</pre>
+<p>
+	Then we should check if the departure station already exists.</p>
+<pre style="margin-left: 40px;">
+if (!cities.contains(source)) {
+&nbsp;&nbsp; &nbsp;cities.add(source);
+&nbsp;&nbsp; &nbsp;connections.put(source, new ArrayList());
+}</pre>
+<p>
+	and finally we have to add the new connection:</p>
+<pre style="margin-left: 40px;">
+let cits = connections.get(source);
+cits.add(destination);
+</pre>
+<p>
+	Now that the data is loaded, we can continue with the actual program.&nbsp; First, we should give the user a list of all departure stations.&nbsp; From this she should choose her starting station.&nbsp; In the next step we list the possible destination stations and let the user choose again.&nbsp; We do this until the user has reached her destination, i.e. enters an empty string.</p>
+<p>
+	Extensions: What would be cool, of course, if the user could just enter her starting station and destination station and the program would then automatically suggest a route.&nbsp; Towards the end of next semester we will learn how to do that.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/adventure" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/adventure.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	Adventure</h2>
+<p>
+	Another nice application for HashMaps are adventure games.&nbsp; Many of these text-based games are about exploring a world and collecting items.&nbsp; We focus here on the exploring part, but the collecting part is also not that difficult.</p>
+<p>
+	Similar to the Trains project we need a description of the environment.&nbsp; The easiest way is to describe our apartment.&nbsp; This is what it looks like at home:</p>
+<pre style="margin-left: 40px;">
+hallway &gt; kitchen
+hallway &gt; living room
+hallway &gt; bath room
+kitchen &gt; hallway
+living room &gt; hallway
+bath room &gt; hallway
+bath room &gt; kitchen</pre>
+<p>
+	Again we use a HashMap which contains the map of our apartment:</p>
+<pre style="margin-left: 40px;">
+let roomMap = new HashMap();</pre>
+<p>
+	Since this is an exploration game, we don&#39;t need a list of all rooms, instead we just let the player start exploration in the kitchen.&nbsp; We then list the rooms that can be reached from the kitchen and ask the player to make a choice.&nbsp; In this way, the player can gradually explore our entire home.&nbsp; The game ends when you enter the empty string.</p>
+<p>
+	Extensions:&nbsp; There are countless extensions for this game type.&nbsp; One could, for example, depict the world of StarWars or Lord of the Rings in this way.&nbsp; You could hide magical objects in the different rooms.&nbsp; And some rooms can only be entered if you have a certain object, etc...</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/buildIndex" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/buildIndex.png" style="width: 200px; height: 116px; display: block;" />Try it</a></div>
+<h2>
+	BuildIndex</h2>
+<p>
+	Paper books are not as easy to search as electronic books.&nbsp; That&#39;s why most of the paper books have an index in the back.&nbsp; As an example we want to create a list of keywords for the book &quot;TomSawyer.txt&quot;.</p>
+<p>
+	As usual, we walk through the book line by line and use the StringTokenizer</p>
+<pre style="margin-left: 40px;">
+let st = new StringTokenizer(line, &quot;[]\&quot;&#39;,;:.!?()-/ \t\n\r\f&quot;);</pre>
+<p>
+	to extract the words from a line.&nbsp; This is one of the few times where the split() method of the String class would not work (unless you know regular expressions).</p>
+<p>
+	So we go through all lines and all words (tokens) and save them in a HashMap:</p>
+<pre style="margin-left: 40px;">
+let words = new HashMap();</pre>
+<p>
+	Here the key is the word and the integer counts how often that word occurs in the text.&nbsp; We then fill this HashMap using the following method:</p>
+<pre style="margin-left: 40px;">
+function addWordToHashMap(word) {
+&nbsp;&nbsp;&nbsp; if (word != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (words.containsKey(word)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let count = words.get(word);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; words.put(word, ++count);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; words.put(word, 1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Now all we have to do is print the map to the console.</p>
+<p>
+	Extensions:</p>
+<ul>
+	<li>
+		When we look at the list, we find that most words with less than eight letters should not be indexed.</li>
+	<li>
+		We could filter out words that end in a plural (this is relatively simple to do in English).</li>
+	<li>
+		We could filter out words with useless extensions (like &quot;ly&quot;, &quot;ial&quot;, &quot;ive&quot;, &quot;ous&quot;, &quot;ed&quot;).</li>
+	<li>
+		We can also have a list of stop words and filter those out [6].</li>
+	<li>
+		Sorting: if we use a TreeMap instead of a HashMap, the index will be sorted.&nbsp; We&#39;ll learn more about sorting in the next semester.</li>
+</ul>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/languages" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/languages.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	Languages</h2>
+<p>
+	What is a dictionary that translates only from one language into another?&nbsp; We want a dictionary that translates from one language into ten!&nbsp; First we have to find the necessary data somewhere.&nbsp; Fortunately, on the website of the book &quot;Introduction to Programming in Java&quot; by Robert Sedgewick and Kevin Wayne [4] (a great book by the way) there is a file containing the translations of over 800 English words into ten other languages [5].</p>
+<p>
+	The file &quot;Languages.csv&quot; contains the data in the form:</p>
+<pre style="margin-left: 40px;">
+&quot;cat&quot;,&quot;kat&quot;,&quot;kattekop&quot;,&quot;kissa&quot;,<span style="color:#0000ff;">&quot;chat, matou, rosse&quot;</span>,&quot;Katze&quot;,...</pre>
+<p>
+	The first word in each line is the English word, followed by the Danish, Dutch, etc., translations.&nbsp; The first line of the file tells us which languages comes at which position.&nbsp; Parsing the data will not be quite&nbsp; as easy as we are used to: when we look at the French translation for cat, we see that there seem to be at least three words for cat in French.&nbsp; However, if we look for quotes using the indexOf() method,</p>
+<pre style="margin-left: 40px;">
+function parseLine(line) {
+&nbsp;&nbsp;&nbsp; let translations = new ArrayList();
+&nbsp;&nbsp;&nbsp; while (true) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let begin = line.indexOf(&quot;\&quot;&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (begin &lt; 0)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let end = line.indexOf(&quot;\&quot;&quot;, begin + 1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (end &lt; 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log(&quot;***** this should never happen! *****&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let s = line.substring(begin + 1, end);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; line = line.substring(end + 1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; translations.add(s);
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; return translations;
+}</pre>
+<p>
+	parsing is totally feasible.&nbsp; The method parseLine() splits a line from our file and converts it into an array list of strings.&nbsp; This ArrayList contains the English word with all its translations.&nbsp; German is in sixth place, i.e. with</p>
+<pre style="margin-left: 40px;">
+let translations = parseLine(line);
+let german = translations.get(5);</pre>
+<p>
+	we get the German translation of the word.&nbsp; Thus parsing is done.</p>
+<p>
+	Similar to our simple Dictionary project, we want to search for words, and for this we use the HashMap:</p>
+<pre style="margin-left: 40px;">
+let dictionary = new HashMap();</pre>
+<p>
+	Since we will not only save one word per English word, but ten, we need to use a list for the values.&nbsp; Filling the list is very simple:</p>
+<pre style="margin-left: 40px;">
+let translations = parseLine(line);
+dictionary.put(translations.get(0), translations);</pre>
+<p>
+	Translating also is very simple.&nbsp; We just need to know which language is desired (e.g. 5 for German) and the word to be translated:</p>
+<pre style="margin-left: 40px;">
+function doTranslation(english, lang) {
+&nbsp;&nbsp;&nbsp; let words = dictionary.get(english);
+&nbsp;&nbsp;&nbsp; if (words != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return words.get(lang);
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; return null;
+}</pre>
+<p>
+	If the searched word is in our database, we simply return it, otherwise our method returns null.</p>
+<p>
+	Possible extensions could be:</p>
+<ul>
+	<li>
+		How could we translate from each of the ten languages into any of the other ten languages?</li>
+	<li>
+		Could we translate not just words, but entire sentences?</li>
+	<li>
+		Naturally, we could also write a nice UI application for this project.</li>
+</ul>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/linesOfCode" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/linesOfCode.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	LinesOfCode</h2>
+<p>
+	In the third semester we will learn about software metrics.&nbsp; The most popular one is Lines of Code (LoC): in earlier days programmers were paid per line of code.&nbsp; It is still a measure of productivity in some companies.&nbsp; So let&#39;s write a program that counts how many lines of code we have written.&nbsp;&nbsp; Basically, we have a counter that we increment after reading each line:</p>
+<pre style="margin-left: 40px;">
+function countLines(fileName) {
+&nbsp;&nbsp;&nbsp; // open file
+&nbsp;&nbsp;&nbsp; let fr = new Utils.FileReader(fileName);
+&nbsp;&nbsp;&nbsp; let lineCount = 0;
+
+&nbsp;&nbsp;&nbsp; // read from file, line by line
+&nbsp;&nbsp;&nbsp; while (true) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let line = fr.readLine();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (line == null)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lineCount++;
+&nbsp;&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; fr.close();
+&nbsp;&nbsp;&nbsp; print(fileName + &quot;: &quot; + lineCount + &quot;; &quot;);
+}</pre>
+<p>
+	But we can do even more.&nbsp; We can classify the different files according to their contents.&nbsp; For instance, the assume we are interested in the following keywords:</p>
+<pre style="margin-left: 40px;">
+const searchWords = [&quot;Console&quot;, &quot;Canvas&quot;, &quot;GUI&quot;,
+&nbsp;&nbsp;&nbsp; &quot;FileReader&quot;, &quot;FileWriter&quot;,
+&nbsp;&nbsp;&nbsp; &quot;ActionEvent&quot;, &quot;KeyEvent&quot;, &quot;MouseEvent&quot;, &quot;RandomGenerator&quot;,
+&nbsp;&nbsp;&nbsp; &quot;ArrayList&quot;, &quot;HashMap&quot;, &quot;StringTokenizer&quot;, &quot;Color&quot;];</pre>
+<p>
+	then the following function</p>
+<pre style="margin-left: 40px;">
+function checkImport(line) {
+&nbsp;&nbsp;&nbsp; for (const word of searchWords) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (line.includes(word)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; classification.add(word);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	allows us to tell what topics are covered in that particular file.</p>
+<p>
+	.</p>
+<h2>
+	Library</h2>
+<p>
+	When we were doing object-oriented analysis, we saw how to create a program from some textual description of what the program is supposed to do, i.e. the requirements.&nbsp; Let&#39;s practice this a little more with the university library example:</p>
+<p>
+	&quot;The university library has students and books. A student has a name, id and a list of books she has borrowed. A book has an author and a title. A student can borrow books and return books. We can list all books a student has borrowed. We can create new students and we can create new books.&quot;</p>
+<p>
+	The goal is to determine the classes, attributes and methods of the classes.&nbsp; In order for this to not just stay a theoretical exercise, we want to go one step further and really write the program.&nbsp; Maybe it makes sense to have a quick look at the project InteractiveMenuProgram from chapter 3.</p>
+<p>
+	.</p>
+<h2>
+	Mensa</h2>
+<p>
+	The same thing as above, can also be done for our canteen program:</p>
+<p>
+	&quot;The mensa has dishes and ingredients. A dish has a name, a price and a list of ingredients. An ingredient has a name, a price and calories. New dishes can be created and existing dishes can be deleted. We can list all the ingredients that go with a dish. We can create new ingredients and we can create new dishes.&quot;</p>
+<p>
+	As long as we keep on working for free, people will keep on asking us to write programs like these on a weekly basis.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/drawingEditor" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/drawingEditor2.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	DrawingEditor</h2>
+<p>
+	We want to write a simple drawing program.&nbsp; The idea is that we can choose with radio buttons between two shapes: rectangle and circle.&nbsp; We also want to be able to determine whether the shapes should be filled in or not, and we want to be able to pick the color of the shapes using a combo box. In addition, we also want to be able to save and load our works of art.</p>
+<p>
+	We start with the UI: that&#39;s easy because in the Swing chapter we have already written a UI for such a drawing editor.&nbsp; As a small modification, we move the selection of the shapes to the south, and in the north region we need to place two JSButtons for loading and saving.&nbsp; Since we want to listen to the JSButtons, an actionPerformed() function is required.</p>
+<p>
+	Since we want to save all our shapes (GObjects) later, we have to keep an eye on them.&nbsp; Fortunately, the JSCanvas allows us to do that:</p>
+<pre style="margin-left: 40px;">
+let canvas = new JSCanvas();
+...
+let objects = canvas.getAllGObjects();
+...
+canvas.add(gObj);</pre>
+<p>
+	When adding shapes, the user clicks on the canvas.&nbsp; As a consequence the canvasClicked() method is being called.&nbsp; But we need to know what shape is desired.&nbsp; So we ask the radio buttons:</p>
+<pre style="margin-left: 40px;">
+let obj;
+if (rBtnRect.isSelected()) {
+&nbsp;&nbsp; &nbsp;obj = new GRect(SIZE, SIZE);
+} else {
+&nbsp;&nbsp; &nbsp;obj = new GOval(SIZE, SIZE);
+}</pre>
+<p>
+	Then we ask the combo box for the color,</p>
+<pre style="margin-left: 40px;">
+const colors = [Color.RED, Color.GREEN, Color.BLUE];
+obj.setColor(colors[cBoxColorPicker.getSelectedIndex()]);</pre>
+<p>
+	and finally the checkbox tells us if the forms should be filled in or not:</p>
+<pre style="margin-left: 40px;">
+if (cBtnFilled.isSelected()) {
+&nbsp;&nbsp; &nbsp;obj.setFilled(true);
+}</pre>
+<p>
+	Now we can add the shape to the canvas:</p>
+<pre style="margin-left: 40px;">
+canvas.add(obj, _mouseX, _mouseY);</pre>
+<p>
+	With this the drawing part is done.</p>
+<p>
+	Let&#39;s worry about the storage of our works of art.&nbsp; Until now, when we saved data, it was always textual data.&nbsp; But what about objects?&nbsp; For this the JavaScript Object Notation (JSON) is really helpful, and in JavaScript there is a class called JSON, that does all the complicated work.&nbsp;</p>
+<p>
+	To save our works of art, we ask the canvas to give us a list of all the GObjects.&nbsp; This array we then pass into the <em>stringify</em>() method of the JSON class, and the resulting JSON string, we write to file:</p>
+<pre style="margin-left: 40px;">
+function saveFile(fileName) {
+&nbsp;&nbsp;&nbsp; let fw = new Utils.FileWriter(fileName);
+&nbsp;&nbsp;&nbsp; let objects = canvas.getAllGObjects();
+&nbsp;&nbsp;&nbsp; let json = <span style="color:#0000ff;">JSON.stringify(objects)</span>;
+&nbsp;&nbsp;&nbsp; fw.write(json);
+&nbsp;&nbsp;&nbsp; fw.close();
+&nbsp;&nbsp;&nbsp; canvas.removeAll();
+}</pre>
+<p>
+	Conversely, reading objects is also done with the JSON class.&nbsp; We first read the JSON string from file:</p>
+<pre style="margin-left: 40px;">
+function openFile(fileName) {
+&nbsp;&nbsp;&nbsp; canvas.removeAll();
+
+&nbsp;&nbsp;&nbsp; let fr = new Utils.FileReader(fileName);
+
+&nbsp;&nbsp;&nbsp; let json = &#39;&#39;;
+&nbsp;&nbsp;&nbsp; while (true) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let line = fr.readLine();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (line == null)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; json += line;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; deserialize(json);
+
+&nbsp;&nbsp;&nbsp; fr.close();
+}</pre>
+<p>
+	and pass it into the deserialize() function:</p>
+<pre style="margin-left: 40px;">
+function deserialize(json) {
+&nbsp;&nbsp;&nbsp; const jsObj = <span style="color:#0000ff;">JSON.parse(json)</span>;
+&nbsp;&nbsp;&nbsp; for (const el of jsObj) {
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // create raw GObject
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let gObj = undefined;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; switch (el.type) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case &#39;GOval&#39;:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gObj = new GOval();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case &#39;GRect&#39;:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gObj = new GRect();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; default:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print(&#39;deserialization: unknown type: &#39; + el.type);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gObj = undefined;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (gObj !== undefined) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // assign properties
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (const [key, value] of Object.entries(el)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // print(key + &#39;:&#39; + value);&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gObj[key] = value;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // add to objects and canvas
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; canvas.add(gObj);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	which then builds the GObjects again out of the JSON array.&nbsp; Since the JSON array is a bit stupid, we need to help it with a cast to get back our list of GObjects.&nbsp; Then we have to the resulting GObjects all their properties, and of course we have to add the new GObjects to our canvas.&nbsp; But that&#39;s all.&nbsp;</p>
+<p>
+	So what about this JSON string?&nbsp; Let&#39;s just take a look at it: when you open the text file &quot;drawingEditor.json&quot; it looks like this</p>
+<pre style="margin-left: 40px;">
+[
+&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;x&quot;: 147,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;y&quot;: 96,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;width&quot;: 20,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;height&quot;: 20,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;color&quot;: &quot;red&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;filled&quot;: false,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;fillColor&quot;: &quot;white&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;type&quot;: &quot;GRect&quot;
+&nbsp;&nbsp;&nbsp; },
+	...
+]
+</pre>
+<p>
+	You clearly recognize all the information needed to build a GRect is there.&nbsp; Also you see that arrays are denoted with square brackets and objects are denoted with curly brackets [10].&nbsp; Now I am not saying this is trivial, but it is definitely doable, and the result is quite sophisticated.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/stocksConsole" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/stocksConsole.png" style="width: 200px; height: 120px; display: block;" />Try it</a></div>
+<h2>
+	StockCharter</h2>
+<p>
+	Let&#39;s get to our last and final project: StockCharter.&nbsp; It&#39;s about showing stock prices graphically.&nbsp; In a first step we write a console program that has a JSLabel, a JSTextField and a JSButton in the southern region.&nbsp; If the user then enters a stock symbol in the text field (e.g. &quot;msft&quot;) and clicks on the &quot;Graph&quot; button, the data for the respective stock should be displayed in the console.</p>
+<h3>
+	1. Stock Prices</h3>
+<p>
+	Next, we need to get the data, the stock prices.&nbsp; It is surprisingly difficult to get free data for stock prices, but fortunately QuantQuote has provided historical prices for the Standard &amp; Poor&#39;s 500 (S&amp;P 500) stock index [7].&nbsp; This index includes companies such as Microsoft (msft), IBM (ibm), Ebay (ebay) and Netflix (nflx).&nbsp; The data can be found in the file &quot;SP500_HistoricalStockDataMonthly.csv&quot; and it looks like this:</p>
+<pre style="margin-left: 40px;">
+,20130801,20130703,20130605,20130507,20130409,20130311,20130208,...
+...
+msft,32.06,33.66,34.59,33.4157,28.5002,27.7355,26.9466,26.2568,...
+msi,55.07,57.11,56.9164,56.6377,63.0081,62.0605,59.6717,55.9545,...</pre>
+<p>
+	That is, it starts with the company symbol, followed by the prices, separated by commas.&nbsp; The first line of the file contains the respective dates.</p>
+<h3>
+	2. Database</h3>
+<p>
+	The next step is to read all the data from file.&nbsp; We do this in the StockDataBase class, which should also keep all the data, hence it is our database.&nbsp; We open the file &quot;SP500_HistoricalStockDataMonthly.csv&quot;:</p>
+<pre style="margin-left: 40px;">
+class StockDataBase {
+&nbsp;&nbsp;&nbsp; constructor(fileName) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.stockDB = new HashMap();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.dates = new ArrayList();
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // open file
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let fr = new Utils.FileReader(fileName);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // first line contains dates:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let line = fr.readLine();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.readDates(line);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // other lines contain data:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.readStockPrices(fr);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // close file
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fr.close();
+&nbsp;&nbsp;&nbsp; }
+	...
+}
+</pre>
+<p>
+	The first line contains the dates, we process it in the method readDates() and store it in the instance variable dates.&nbsp; Then we read the the stock prices line by line using the method readStockPrices().</p>
+<pre style="margin-left: 40px;">
+readStockPrices(br) {
+&nbsp;&nbsp; &nbsp;let line;
+&nbsp;&nbsp; &nbsp;while (true) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;line = br.readLine();
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (line == null)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;let entry = new StockEntry(line);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.stockDB.put(entry.getSymbol(), entry);
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	We turn each line into a StockEntry, and store it in our HashMap, which contains all stock prices.&nbsp;</p>
+<p>
+	A StockEntry contains all data belonging to one stock, and that is symbol and prices as instance variables.&nbsp; The class StockEntry needs a constructor that parses a line and initializes its instance variables:</p>
+<pre style="margin-left: 40px;">
+class StockEntry {
+&nbsp;&nbsp;&nbsp; constructor(line) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let sVals = line.split(&quot;,&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">this.symbol</span> = sVals[0];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">this.prices</span> = new ArrayList();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (let i = 1; i &lt; sVals.length; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (sVals[i] == &quot;null&quot;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.prices.add(-1.0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.prices.add(parseFloat(sVals[i]));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; ...
+}</pre>
+<p>
+	It also needs a getSymbol() and a getPrices() method, and a toString() method would be nice too.</p>
+<p>
+	Returning briefly to the StockDataBase class: two methods are missing: findEntry() and getDates().&nbsp; The first one searches for a given symbol (e.g. &quot;msft&quot;) and should return the corresponding StockEntry from the HashMap stockDB.&nbsp; The second one should simply return the list with all the dates.</p>
+<h3>
+	3. Console</h3>
+<p>
+	To test that our database works correctly, we write a short console program:</p>
+<pre style="margin-left: 40px;">
+async function setup() {
+&nbsp;&nbsp;&nbsp; createConsole();
+
+&nbsp;&nbsp;&nbsp; let db = new StockDataBase(&quot;Pr8_Stocks/SP500_HistoricalStockDataMonthly.csv&quot;);
+
+&nbsp;&nbsp;&nbsp; while (true) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let symbol = await readLine(&quot;Enter stock symbol (msft): &quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (symbol == &quot;&quot;)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let entry = db.findEntry(symbol);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (entry != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println(entry);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println(&quot;No entry found for: &quot; + symbol);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Of course we first have to initialize our database with.&nbsp; This should be enough to show that our database part is working.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr8_Stocks/stocks" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/stocks.png" style="width: 200px; height: 201px; display: block;" />Try it</a></div>
+<h3>
+	4. Graphics</h3>
+<p>
+	Let&#39;s get to the graphics part.&nbsp; In the first step, we turn the console program into a UI program.&nbsp; Since a Program does not have a canvas for drawing, we have to take care of that ourselves.&nbsp; So we add the instance variable <em>canvas</em> to our program:</p>
+<pre style="margin-left: 40px;">
+let canvas;</pre>
+<p>
+	and initialize it in the setup() method:</p>
+<pre style="margin-left: 40px;">
+canvas = new StockCanvas(db.getDates());
+canvas.addStyle(&#39;width: 97%&#39;);
+canvas.addStyle(&#39;height: 97%&#39;);
+addWidget(canvas, &#39;CENTER&#39;);</pre>
+<p>
+	i.e. the canvas gets a reference to the dates and we add the canvas to the CENTER area of our program.&nbsp; We also introduce the actionPerformed() function:</p>
+<pre style="margin-left: 40px;">
+function actionPerformed(e) {
+&nbsp;&nbsp;&nbsp; if (e.getActionCommand() == &quot;Clear&quot;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; canvas.clear();
+&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let entry = db.findEntry(tfSymbol.getText());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (entry != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; canvas.addEntry(entry);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Hence, we see three requirements for our StockCanvas class: The constructor gets a list of dates, and there must be the methods addEntry() and clear().</p>
+<pre style="margin-left: 40px;">
+class StockCanvas extends JSCanvas {
+&nbsp;&nbsp;&nbsp; constructor(dates) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.dates = dates;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.entries = new ArrayList();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; clear() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.entries = new ArrayList();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.update();
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; addEntry(entry) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.entries.add(entry);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.update();
+&nbsp;&nbsp;&nbsp; }
+	...
+}
+</pre>
+<p>
+	The actual drawing is done in the update() method:</p>
+<pre style="margin-left: 40px;">
+update() {
+&nbsp;&nbsp; &nbsp;this.removeAll();
+&nbsp;&nbsp; &nbsp;this.drawGrid();
+&nbsp;&nbsp; &nbsp;this.drawEntries();
+}</pre>
+<p>
+	First everything from the UI is deleted, then the background grid with the captions is to be drawn, and then the stock prices.&nbsp; Basically, these are &quot;just&quot; a few GLabels and GLines in the right places.</p>
+<p>
+	You may not realize that now, but the StockCharter project actually stands for a whole class of similar programs: you load some data from a file or database, have some user interaction, often do some searching, and then present the results in a graphical fashion.&nbsp; We have come a long way.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Questions</h1>
+<ol>
+	<li>
+		Write a method countLinesInFile(String fileName), which returns a number (int) containing the number of lines in the file named &quot;fileName&quot;. Use the classes BufferedReader and FileReader. You do not have to do any exception handling (try-catch).<br />
+		&nbsp;</li>
+	<li>
+		If we want to read from files we usually use the FileReader.&nbsp; When we write our code, the compiler always forces us to use a&#39;try-catch&#39; block around the problematic code.&nbsp; Why?<br />
+		&nbsp;</li>
+	<li>
+		What is this &quot;null&quot; thing all about?<br />
+		&nbsp;</li>
+	<li>
+		Give two examples of what a HashMap is better suited for than an ArrayList.<br />
+		&nbsp;</li>
+	<li>
+		A phone book is to be saved in the following HashMap:<br />
+		<span style="font-family:courier new,courier,monospace;">let phoneBook = new HashMap();</span><br />
+		Enter short code snippets that show<br />
+		a) how to insert a new phone number,<br />
+		b) how to access a person&#39;s phone number, and<br />
+		c) how to list all phone numbers.<br />
+		&nbsp;</li>
+	<li>
+		&nbsp;Requirements: In the lecture we analyzed the requirements of the Azamon shop.&nbsp; Use the same technique to analyze the requirements of the Journal for Applied Computer Science:<br />
+		<br />
+		&quot;The Journal has articles and issues.&nbsp; An article has an author, a title and a text.&nbsp; An issue has a title, an issue number and articles.&nbsp; We can list all articles, have all issues listed, as well as the articles for a specific issue number.&nbsp; We can create a new article and we can create new issues.&quot;<br />
+		<br />
+		Identify the necessary classes, instance variables, and methods.&nbsp; Also assign the instance variables and methods to the correct class.<br />
+		&nbsp;</li>
+	<li>
+		Is there a &#39;setFilled()&#39; method for the GLabel class?</li>
+</ol>
+<p>
+	.</p>
+<hr />
+<h1>
+	References</h1>
+<p>
+	The last chapter also draws on the references of the second chapter.&nbsp; Also a very nice book, which is now within reach, is that of Robert Sedgewick and Kevin Wayne [4].</p>
+<p>
+	[1] Design by contract, <a href="https://en.wikipedia.org/w/index.php?title=Design_by_contract&amp;oldid=700763992">https://en.wikipedia.org/w/index.php?title=Design_by_contract&amp;oldid=700763992</a> (last visited Feb. 25, 2016).</p>
+<p>
+	[2] Ulysses, <a href="https://en.wikipedia.org/wiki/Ulysses_(novel)">https://en.wikipedia.org/wiki/Ulysses_(novel)</a></p>
+<p>
+	[3] Latitude and longitude of cities, A-H, <a href="https://en.wikipedia.org/wiki/Latitude_and_longitude_of_cities,_A-H">https://en.wikipedia.org/wiki/Latitude_and_longitude_of_cities,_A-H</a></p>
+<p>
+	[4] Introduction to Programming in Java, von Robert Sedgewick und Kevin Wayne</p>
+<p>
+	[5] Real-World Data Sets, <a href="http://introcs.cs.princeton.edu/java/data/">introcs.cs.princeton.edu/java/data/</a></p>
+<p>
+	[6] Stoppwort, <a href="https://de.wikipedia.org/wiki/Stoppwort">https://de.wikipedia.org/wiki/Stoppwort</a></p>
+<p>
+	[7] QuantQuote Free Historical Stock Data, <a href="https://quantquote.com/historical-stock-data">https://quantquote.com/historical-stock-data</a></p>
+<p>
+	[8] CORS on Firefox: <a href="https://dev.to/dengel29/loading-local-files-in-firefox-and-chrome-m9f">https://dev.to/dengel29/loading-local-files-in-firefox-and-chrome-m9f</a></p>
+<p>
+	[9] Software portability, <a href="https://en.wikipedia.org/wiki/Software_portability">https://en.wikipedia.org/wiki/Software_portability</a></p>
+<p>
+	[10] Introducing JSON, <a href="https://www.json.org/json-en.html">https://www.json.org/json-en.html</a></p>
+<p>
+.</p>
+<p class="footer">
+Copyright &copy; 2016-2023 <a href="http://www.lano.de">Ralph P. Lano</a>. All rights reserved.
+</p>
+</div>
+</div>
+</center>
+</body>
+</html>

@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>JavaScript: AppB Libraries</title>
+<meta name="title" content="Variations on a Theme: JavaScript: AppB Libraries">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="UTF-8">
+<meta name="description" content="An object-oriented Introduction">
+<meta name="keywords" content="JavaScript,object orientation,introduction">
+<meta name="author" content="Ralph P. Lano">
+<meta name="robots" content="index,follow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="book.css">
+</head>
+
+<body>
+<center>
+<div id="wrap">
+<ul class="sidenav">
+<p><a href="../index.html">Variations on a Theme</a><a href="index.html">JavaScript</a></p>
+<li><a href="Ch1_Karel.html">Karel</a></li>
+<li><a href="Ch2_Graphics.html">Graphics</a></li>
+<li><a href="Ch3_Console.html">Console</a></li>
+<li><a href="Ch4_Agrar.html">Agrar</a></li>
+<li><a href="Ch5_MindReader.html">MindReader</a></li>
+<li><a href="Ch6_Swing.html">Swing</a></li>
+<li><a href="Ch7_Asteroids.html">Asteroids</a></li>
+<li><a href="Ch8_Stocks.html">Stocks</a></li>
+<li><a href="index.html"> </a></li>
+<li><a href="AppA_Primer.html">Primer</a></li>
+<li><a href="AppB_Libraries.html">Libraries</a></li>
+<li><a href="AppC_Ideas.html">Ideas</a></li>
+</ul>
+<div class="content">
+
+<h1>
+	Libraries</h1>
+	<p>
+		How does it all work?&nbsp; In this chapter we take a look behind the scenes.&nbsp; If you look at the tryItFrame.html file, you will notice the following imports in the head section:</p>
+<pre style="margin-left: 40px;">
+&lt;head&gt;
+&nbsp; ...
+&nbsp; &lt;!-- order is importent! --&gt;
+&nbsp; &lt;script src=&quot;./libraries/p5.min.js&quot;&gt;&lt;/script&gt;
+&nbsp; &lt;!-- &lt;script src=&quot;./libraries/p5.sound.min.js&quot;&gt;&lt;/script&gt; --&gt;
+&nbsp; &lt;script src=&quot;./libraries/<span style="color:#0000ff;">gui.js</span>&quot;&gt;&lt;/script&gt;
+&nbsp; &lt;script src=&quot;./libraries/<span style="color:#0000ff;">graphics.js</span>&quot;&gt;&lt;/script&gt;
+&nbsp; &lt;script src=&quot;./libraries/<span style="color:#0000ff;">console.js</span>&quot;&gt;&lt;/script&gt;
+&nbsp; &lt;script src=&quot;./libraries/<span style="color:#0000ff;">utils.js</span>&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+</pre>
+	<p>
+		The first library is the standard p5.js library from Processing.&nbsp; The other four are what we will explain on the pages below.</p>
+	<p>
+		.</p>
+<h2>
+	Console Programs</h2>
+<p>
+	A console program is an HTML text area widget that is used to display text. Console programs are very simple, and you can use the following commands</p>
+<ul>
+	<li>
+		print()</li>
+	<li>
+		println()</li>
+	<li>
+		readLine()</li>
+	<li>
+		readInt()</li>
+	<li>
+		readDouble()</li>
+	<li>
+		clear()</li>
+</ul>
+<p>
+	Using a text area widget for a console seems straight forward, but there are a few things that makes this tricky:</p>
+<ol>
+	<li>
+		the functions print() and clear() are already defined in p5.js</li>
+	<li>
+		there is no read() function, the only thing that allows user input is the prompt() function</li>
+</ol>
+<h3>
+	Example</h3>
+<p>
+	A simple example of our console program looks like this:</p>
+<pre style="margin-left: 40px;">
+<span style="color:#ff0000;">async</span> function setup() {
+&nbsp; <span style="color:#0000ff;">createConsole</span>();
+
+&nbsp; <span style="color:#0000ff;">println</span>(&#39;This program adds two numbers.&#39;);
+&nbsp; let n1 = <span style="color:#ff0000;">await</span> <span style="color:#0000ff;">readInt</span>(&#39;Enter number one: &#39;);
+&nbsp; let n2 = <span style="color:#ff0000;">await</span> <span style="color:#0000ff;">readInt</span>(&#39;Enter number two: &#39;);
+&nbsp; let sum = n1 + n2;
+&nbsp; <span style="color:#0000ff;">println</span>( &#39;The sum is: &#39; + sum ); &nbsp;
+}</pre>
+<p>
+	You may notice the somewhat unusual <em>async</em> and <em>await</em> keywords.&nbsp; More on this in a moment.</p>
+<h3>
+	print() and clear()</h3>
+<p>
+	Since both print() and clear() already exist, we need to redefine them.&nbsp; This is done in the createConsole() function:</p>
+<pre style="margin-left: 40px;">
+function createConsole(_ROWS, _COLS) {
+
+&nbsp;&nbsp;&nbsp; // redefine print():
+&nbsp;&nbsp;&nbsp; print = function (msg) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (msg === undefined) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; msg = &#39;&#39;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // textarea.append(msg);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; textarea.value += msg;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; // redefine clear():
+&nbsp;&nbsp;&nbsp; clear = function () {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; textarea.value = &#39;&#39;;
+&nbsp;&nbsp;&nbsp; }
+}
+</pre>
+<h3>
+	readLine()</h3>
+<p>
+	The hard part is reading from console.&nbsp; JavaScript only has the prompt to do that.&nbsp; And JavaScript does not have a pause().&nbsp; One elegant way to get the desired functionality is via promises.</p>
+<pre style="margin-left: 40px;">
+function readLine(msg) {
+&nbsp;&nbsp;&nbsp; if (msg === undefined) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; msg = &#39;&#39;;
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; textarea.value += msg;
+
+&nbsp;&nbsp;&nbsp; enterPressed = false;
+&nbsp;&nbsp;&nbsp; textEntered = &#39;&#39;;
+&nbsp;&nbsp;&nbsp; return new Promise((resolveOuter) =&gt; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; resolveOuter(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; new Promise((resolveInner) =&gt; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var check = function () {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (enterPressed) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // print(&#39;Enter&#39;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; textarea.value += &#39;\n&#39;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; resolveInner(textEntered);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // print(&#39;No Enter&#39;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setTimeout(check, 100); // check again in a second
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; check();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; })
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; );
+&nbsp;&nbsp;&nbsp; });
+}</pre>
+<p>
+	This is the reason why we have to use async and await when using any of the read function.</p>
+<p>
+	.</p>
+<h2>
+	Graphics Programs</h2>
+<p>
+	A graphics program uses the HTML canvas tag for drawing and animation.&nbsp; However, we do not use it directly, but instead use p5.js for most of the drawing.&nbsp; Our graphics library is basically a wrapper around p5.js.&nbsp; In our graphics programs you can use the following commands:</p>
+<ul>
+	<li>
+		add(obj, x, y)</li>
+	<li>
+		getElementAt(x, y)</li>
+	<li>
+		getElementsAt(x, y)</li>
+	<li>
+		removeAll()</li>
+	<li>
+		removeObj(obj)</li>
+	<li>
+		setBackground(color)</li>
+	<li>
+		update()</li>
+</ul>
+<h3>
+	p5.js</h3>
+<p>
+	p5.js comes from the Processing Foundation, that also created Processing for Java.&nbsp; The idea is very similar, make JavaScript as easy to use as possible.&nbsp; We use p5.js, because it is well developed and maintained, and it runs on most browsers, even the mobile ones.&nbsp; Also, a key feature is its support and abstraction for various hardware, such as webcam and microphone, but also playing videos and 3D drawing are made easy with p5.js.</p>
+<p>
+	Basically all p5.js programs have the same structure:</p>
+<pre style="margin-left: 40px;">
+function setup() {
+&nbsp;&nbsp;&nbsp; createCanvas(400, 400);
+&nbsp;&nbsp;&nbsp; frameRate(25);
+&nbsp;&nbsp;&nbsp; //noLoop();
+}
+
+function draw() {
+&nbsp;&nbsp;&nbsp; background(220);
+	ellipse(0, 0, 50, 50);
+}</pre>
+<p>
+	The <em>setup()</em> method is called once at the start of the program.&nbsp; In addition there is a <em>draw()</em> method that is called repeatedly, depending on what frame rate was chosen.&nbsp; It is also possible to not call the <em>draw()</em> method at all via the <em>noLoop()</em> command.&nbsp; The <em>ellipse()</em> function is one of p5.js many drawing functions.</p>
+<p>
+	If you save the above code in a file named <em>sketch.js</em>, then the following HTML is all that is needed to run it:</p>
+<pre style="margin-left: 40px;">
+&lt;html&gt;
+&nbsp; &lt;head&gt;
+&nbsp;&nbsp;&nbsp; &lt;script src=&quot;https://cdn.jsdelivr.net/npm/p5@1.6.0/lib/p5.js&quot;&gt;&lt;/script&gt;
+&nbsp;&nbsp;&nbsp; &lt;script src=&quot;sketch.js&quot;&gt;&lt;/script&gt;
+&nbsp; &lt;/head&gt;
+&nbsp; &lt;body&gt;
+&nbsp; &lt;/body&gt;
+&lt;/html&gt;</pre>
+<p>
+	Naturally, all the magic lies in the p5.js file.</p>
+<h3>
+	Graphics Objects</h3>
+<p>
+	Writing code in p5.js is not all that object oriented, or rather, there is a strong tendency to not write object oriented code when working with p5.js.&nbsp; For small projects that is perfectly allright.&nbsp; But as soon as things get a little more complicated and objects start interacting, like collisions, or a user clicking on them, things get rather tedious.&nbsp;</p>
+<p>
+	This is why we wrote wrapper graphics objects around the p5.js drawing functions, strongly inspired by the ACM graphics library for Java:</p>
+<ul>
+	<li>
+		GArc</li>
+	<li>
+		GCompound</li>
+	<li>
+		GImage</li>
+	<li>
+		GLabel</li>
+	<li>
+		GLine</li>
+	<li>
+		GObject</li>
+	<li>
+		GOval</li>
+	<li>
+		GPixel</li>
+	<li>
+		GPolygon</li>
+	<li>
+		GRect</li>
+	<li>
+		GVideo</li>
+	<li>
+		GVideoPreview</li>
+	<li>
+		GWebCam</li>
+	<li>
+		GWebCamPreview</li>
+</ul>
+<p>
+	Most graphics objects are quite simple, GImage and GCompound maybe a little more involved.</p>
+<h3>
+	Example</h3>
+<p>
+	Just to get an idea how the combination of p5.js and graphics objects work, consider the following example:</p>
+<pre style="margin-left: 40px;">
+function setup() {
+&nbsp; createCanvas(300, 150);
+&nbsp; frameRate(5);
+
+&nbsp; let fritz = new GRect(150, 100, 50, 50);
+&nbsp; fritz.setColor(color(&#39;blue&#39;));
+&nbsp; fritz.setFilled(true);
+&nbsp; fritz.setFillColor(color(&#39;yellow&#39;));
+&nbsp; <span style="color:#0000ff;">add(fritz)</span>;
+}
+
+function draw() {
+&nbsp; <span style="color:#0000ff;">update()</span>;
+}</pre>
+<p>
+	In the setup we create the canvas, set the frame rate, and then create a GRect object.&nbsp; In the <em>draw()</em> function we simply call the <em>update()</em> function.&nbsp; The <em>update()</em> function is very simple:</p>
+<pre style="margin-left: 40px;">
+function update() {
+&nbsp;&nbsp;&nbsp; background(backgroundColor);
+&nbsp;&nbsp;&nbsp; for (let i = 0; i &lt; gobjects.length; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gobjects[i].draw();
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	It iterates through all the gobjects and calls their respective <em>draw()</em> functions.&nbsp; The <em>add()</em> method above, adds graphics objects to the <em>gobjects</em> array.</p>
+<pre style="margin-left: 40px;">
+function add(obj, x, y) {
+&nbsp;&nbsp;&nbsp; if ((x !== undefined) &amp;&amp; (y !== undefined)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; obj.setLocation(x, y);
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; gobjects.push(obj);
+}</pre>
+<h3>
+	GObject</h3>
+<p>
+	The class GObject is the parent class of all other graphics objects:</p>
+<pre style="margin-left: 40px;">
+class GObject {
+
+&nbsp;&nbsp;&nbsp; constructor(x, y, width, height) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.x = x;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.y = y;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.width = width;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.height = height;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.color = &#39;black&#39;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.filled = false;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.fillColor = &#39;white&#39;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; contains(x, y) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; ...
+}</pre>
+<p>
+	Meaning every graphics object has a location and a size, a color, a fillColor and is either filled or not.&nbsp; GObject should be considered an abstract class, but JavaScript does not have that concept.</p>
+<p>
+	As a concrete implementation of GObject we will only consider GRect, all other graphics classes are very similar:</p>
+<pre style="margin-left: 40px;">
+class GRect extends GObject {
+
+&nbsp;&nbsp;&nbsp; constructor(x, y, width, height) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ((width === undefined) &amp;&amp; (height === undefined)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // new GRect(50,50) has width and height = 50, but x and y = 0!
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super(0, 0, x, y);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super(x, y, width, height);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; draw() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">noFill</span>();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">stroke</span>(this.color);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">rect</span>(this.x, this.y, this.width, this.height);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Here the functions <em>noFill()</em>, <em>stroke()</em>, and <em>rect()</em> are standard p5.js functions.</p>
+<h3>
+	GImage</h3>
+<p>
+	Of the graphics classes the GImage class is a little more complicated, because loading of images in p5.js happens asynchronously.&nbsp; p5.js has the <em>loadImage(path, [successCallback], [failureCallback])</em> function, which allows for a callback in case of success or failure.&nbsp; Per se, this is not a problem.&nbsp; However, if we want to access the pixels of the image via the <em>getPixelArray()</em> method, there could be a problem:&nbsp; assume it takes a little longer for the image to load, then the call to the <em>getPixelArray()</em> method might happen before the image is loaded.</p>
+<p>
+	To solve this, we need two steps:&nbsp; First, we introduce a property <em>imageLoaded</em>, which initially is set to false, and only after the image has been successfully loaded it will be true.&nbsp; But here comes another subtle problem: the <em>this</em> of the callback is different from the <em>this</em> of our GImage.&nbsp; The standard solution is to get a value on the GImage&#39;s <em>this</em> and call it <em>that</em>:</p>
+<pre style="margin-left: 40px;">
+...
+this.pixelArray1 = [];
+this.imageLoaded = false;
+<span style="color:#0000ff;">let that = this;</span>
+this.image = loadImage(imageName, img =&gt; {
+&nbsp;&nbsp;&nbsp; image(<span style="color:#0000ff;">that</span>.image, <span style="color:#0000ff;">that</span>.x, <span style="color:#0000ff;">that</span>.y);
+&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">that</span>.image.loadPixels();
+&nbsp;&nbsp;&nbsp; // remember pixels for modification
+&nbsp;&nbsp;&nbsp; for (let i = 0; i &lt; <span style="color:#0000ff;">that</span>.image.pixels.length; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">that</span>.pixelArray1[i] = <span style="color:#0000ff;">that</span>.image.pixels[i];
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">that</span>.image.updatePixels();
+&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">that</span>.imageLoaded = true;
+});
+...
+</pre>
+<p>
+	Second, before allowing usage of the <em>getPixelArray()</em> method, we need to make sure, that the image has loaded, i.e. we have to wait until&nbsp; <em>imageLoaded</em> is true.&nbsp; We can do that using a promise:</p>
+<pre style="margin-left: 40px;">
+getPixelArray() {
+&nbsp;&nbsp;&nbsp; return new Promise((resolveOuter) =&gt; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let that = this;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; resolveOuter(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; new Promise((resolveInner) =&gt; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var check = function () {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (<span style="color:#0000ff;">that.imageLoaded</span>) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; resolveInner(that.pixelArray1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setTimeout(check, 100); // check again in a second
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; check();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; })
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; );
+&nbsp;&nbsp;&nbsp; });
+}</pre>
+<p>
+	Subtle, also here we have to remember the <em>this</em> using <em>that</em>.&nbsp; As I said, it is a little tricky.</p>
+<p>
+	.</p>
+<h2>
+	UI Programs</h2>
+<p>
+	For writing UI programs, we use standard HTML widgets with thin JavaScript wrappers around them.&nbsp; A design challenge was: could you make the resulting code look almost like a Java Swing program?&nbsp; Turns out that very little has to be changed, for the standard HTML widgets to behave like their corresponding Swing counterparts.</p>
+<p>
+	In UI programs you can use the following commands:</p>
+<ul>
+	<li>
+		createGUI(width, height)</li>
+	<li>
+		addWidget(obj, where)</li>
+	<li>
+		removeWidget(obj, where)</li>
+	<li>
+		setLayout(_layout, _cols)</li>
+	<li>
+		addActionListener(obj)</li>
+	<li>
+		addChangeListener(obj)</li>
+</ul>
+<h3>
+	Example</h3>
+<p>
+	To see how a simple UI program is implemented with our UI library, consider the following example:</p>
+<pre style="margin-left: 40px;">
+let tf;
+
+function setup() {
+&nbsp;&nbsp; &nbsp;createGUI(300, 150);
+
+&nbsp;&nbsp; &nbsp;setLayout(&#39;border&#39;);
+
+&nbsp;&nbsp; &nbsp;let lbl = new JSLabel(&quot;Name: &quot;);
+&nbsp;&nbsp; &nbsp;addWidget(lbl, &#39;SOUTH&#39;);
+
+&nbsp;&nbsp; &nbsp;tf = new JSTextField(10);
+&nbsp;&nbsp; &nbsp;addWidget(tf, &#39;SOUTH&#39;);
+
+&nbsp;&nbsp; &nbsp;let btn = new JSButton(&quot;Login&quot;);
+&nbsp;&nbsp; &nbsp;addWidget(btn, &#39;SOUTH&#39;);
+}
+
+function actionPerformed(ev) {
+&nbsp;&nbsp; &nbsp;print(&quot;Name: &quot; + tf.getText());
+}</pre>
+<p>
+	If you are familiar with Swing, you will recognize the respective classes easily.</p>
+<h3>
+	UI Widgets</h3>
+<p>
+	Just for demonstration purposes we implemented a handful of the UI widgets:</p>
+<ul>
+	<li>
+		JSObject</li>
+	<li>
+		JSLabel</li>
+	<li>
+		JSTextField</li>
+	<li>
+		JSTextArea</li>
+	<li>
+		JSAbstractButton</li>
+	<li>
+		JSButton</li>
+	<li>
+		JSCheckBox</li>
+	<li>
+		JSRadioButton</li>
+	<li>
+		JSComboBox</li>
+	<li>
+		JSLink</li>
+	<li>
+		JSFileUpload</li>
+	<li>
+		JSOptionPane</li>
+	<li>
+		JSPanel</li>
+	<li>
+		JSCanvas</li>
+</ul>
+<p>
+	If desired you can add as many as you like.&nbsp; Most are really easy to implement, but somewhat trickier were the JSPanel and the JSCanvas.</p>
+<h3>
+	JSObject</h3>
+<p>
+	The class JSObject is the parent class of all other UI widgets:</p>
+<pre style="margin-left: 40px;">
+class JSObject {
+&nbsp;&nbsp;&nbsp; constructor() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.element = document.createElement(&#39;span&#39;);
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; setStyle(css) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.element.style = css;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; addStyle(css) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.element.style.cssText += css;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; getWidth() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return this.element.width;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; getHeight() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return this.element.height;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Every widget is based on an underlying HTML element, in case of the JSObject it is the &lt;span&gt; tag.&nbsp; Look and feel is changed via cascading style sheets.&nbsp; Being able to use CSS for styling is very convenient.&nbsp; Really, there is not much more to this.</p>
+<p>
+	As a second example, let&#39;s look at the JLabel:</p>
+<pre style="margin-left: 40px;">
+class JSLabel extends JSObject {
+&nbsp;&nbsp;&nbsp; constructor(text) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.element = document.createElement(&#39;span&#39;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.element.style.padding = DEFAULT_PADDING;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.element.style.margin = DEFAULT_MARGIN;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.element.innerHTML = text;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; getText() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return this.element.innerHTML;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; setText(text) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.element.innerHTML = text;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	I think you get the idea.&nbsp; A side note: if you have read Douglas Crockford&#39;s book, then you know that using <em>innerHTML</em> is not such a good idea.&nbsp; If you have not read Douglas Crockford&#39;s book, you should.</p>
+<h3>
+	Event Handling</h3>
+<p>
+	Again, we don&#39;t really have to do much.&nbsp; The standard HTML events will do just fine.&nbsp; Whenever we add a widget, we add an EventListener for it:</p>
+<pre style="margin-left: 40px;">
+function addActionListener(obj) {
+&nbsp;&nbsp;&nbsp; if (obj instanceof JSAbstractButton) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; obj.element.addEventListener(&#39;click&#39;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; function (ev) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let ae = new ActionEvent(ev.target.id, obj);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; window.actionPerformed(ae);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; );
+&nbsp;&nbsp;&nbsp; } else if (obj instanceof JSCanvas) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; obj.element.addEventListener(&#39;click&#39;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; function (ev) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const rect = obj.element.getBoundingClientRect();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; window.canvasClicked(ev.clientX - rect.left, ev.clientY - rect.top);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; );
+&nbsp;&nbsp;&nbsp; } else if (obj instanceof JSTextField) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; obj.element.addEventListener(&quot;keyup&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; function (ev) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (ev.key === &quot;Enter&quot;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let ae = new ActionEvent(ev.target.id, obj);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; window.actionPerformed(ae);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; );
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Adding an EventListener for every widget seems a little overkill, but we do not expect very large programs to be written with this library.</p>
+<p>
+	Just in case you are curious, the ActionEvent is a really thin wrapper around two instance variables, <em>command</em> and <em>source</em>:</p>
+<pre style="margin-left: 40px;">
+class ActionEvent {
+&nbsp;&nbsp;&nbsp; constructor(id, obj) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.command = &#39;&#39; + id;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.source = obj;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; getActionCommand() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return this.command;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; getSource() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return this.source;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<h3>
+	JSPanel</h3>
+<p>
+	Now the one class that is a really tricky is the JSPanel class.&nbsp; From an HTML point of view it is just a &lt;div&gt; tag.&nbsp; What makes it complicated are two things: first, it can have child widgets, including JSPanels.&nbsp; And second, it can have three different layouts: <em>flow</em>, <em>grid</em> and <em>border</em>.&nbsp;</p>
+<h4>
+	Layout</h4>
+<p>
+	Let&#39;s talk about the layouts first: <em>flow</em> and <em>grid</em> are simple, all we do we set the style of the &lt;div&gt; tag.&nbsp; In the case for <em>flow</em> it is one line,</p>
+<pre style="margin-left: 40px;">
+this.element.style.display = &#39;inline-block&#39;;</pre>
+<p>
+	in the case for <em>grid</em> it is four lines:</p>
+<pre style="margin-left: 40px;">
+this.element.style.display = &#39;inline-block&#39;;
+this.element.setAttribute(&#39;class&#39;, &#39;wrapper&#39;);
+this.element.style.display = &#39;grid&#39;;
+this.element.style.gridTemplateColumns = &#39;repeat(&#39; + _cols + &#39;, &#39; + Math.trunc(100 / _cols) + &#39;%)&#39;;
+</pre>
+<p>
+	If you know your CSS the above should make some sense.</p>
+<p>
+	The tricky one is the <em>border</em> layout.&nbsp; For this we use the <em>flex</em> layout.&nbsp; This can be horizontal or vertical.&nbsp; So we are not doing a real border layout, but more of a box layout.&nbsp; But if you combine a horizontal box layout and nest inside it a vertical box layout, you do have a border layout.&nbsp;</p>
+<p>
+	So the first thing we do, we dynamically add a style to an existing HTML page, by inserting it into the &lt;head&gt; tag:</p>
+<pre style="margin-left: 40px;">
+let stle = document.createElement(&quot;style&quot;);
+stle.innerHTML = &quot;.flexbox-parent { width: 100%; height: 100%; display: flex; flex-direction: column; 
+						justify-content: flex-start; align-items: stretch; align-content: stretch;}&quot;;
+stle.innerHTML += &quot;.flexbox-item-grow { flex: 1;}&quot;;
+stle.innerHTML += &quot;.fill-area-content { overflow: auto;}&quot;;
+document.getElementsByTagName(&quot;head&quot;)[0].appendChild(stle);</pre>
+<p>
+	Now, this is totally not needed, and I am sure will cause real problems if you had several of them, but I just thought this is so cool...</p>
+<p>
+	Anyways, once we have the style, we use it:</p>
+<pre style="margin-left: 40px;">
+this.element.style.display = &#39;&#39;;
+this.element.setAttribute(&#39;class&#39;, &#39;flexbox-parent&#39;);
+if (_cols == &#39;horizontal&#39;) {
+&nbsp;&nbsp;&nbsp; this.element.style.flexDirection = &#39;row&#39;;
+}
+
+this.north = new JSPanel(&#39;flow&#39;);
+this.north.element.setAttribute(&#39;class&#39;, &#39;flexbox-item header&#39;);
+this.north.element.setAttribute(&#39;align&#39;, &#39;center&#39;);
+this.element.appendChild(this.north.element);
+
+this.center = new JSPanel(&#39;flow&#39;);
+this.center.element.setAttribute(&#39;class&#39;, &#39;fill-area-content flexbox-item-grow&#39;);
+this.center.element.setAttribute(&#39;align&#39;, &#39;center&#39;);
+this.element.appendChild(this.center.element);
+
+this.south = new JSPanel(&#39;flow&#39;);
+this.south.element.setAttribute(&#39;class&#39;, &#39;flexbox-item footer&#39;);
+this.south.element.setAttribute(&#39;align&#39;, &#39;center&#39;);
+this.element.appendChild(this.south.element);
+</pre>
+<p>
+	Again, if you know your CSS, this is pretty straight forward.&nbsp; But you also see, why this is a little complicated, we introduce three new JSPanels, one for each region, <em>north</em>, <em>center</em>, and <em>south</em>.</p>
+<h4>
+	Child Widgets</h4>
+<p>
+	Adding the children is trivial for <em>flow</em>, and <em>grid</em>: you simply call <em>this.element.appendChild()</em>.&nbsp; For the <em>border</em> layout, we need to make sure we add it to the correct child:&nbsp;</p>
+<pre style="margin-left: 40px;">
+add(obj, where) {
+&nbsp;&nbsp;&nbsp; ...
+
+&nbsp;&nbsp;&nbsp; if (this.layout == &#39;border&#39;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (where.toLowerCase() == &#39;north&#39; || where.toLowerCase() == &#39;west&#39;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.north.add(obj);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else if (where.toLowerCase() == &#39;south&#39; || where.toLowerCase() == &#39;east&#39;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.south.add(obj);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.center.add(obj);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; } else if (this.layout == &#39;grid&#39;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.element.appendChild(obj.element);
+
+&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.element.appendChild(obj.element);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	&nbsp;</p>
+<p>
+	What we did not show, is code that adds the event listeners and treats the case where we add a JSPanel to a JSPanel, but you can look it up in the code.</p>
+<h3>
+	JSCanvas</h3>
+<p>
+	The other class I would not want to mess around with much, because I am happy that it kind of works, is the JSCanvas class.&nbsp; It allows us to draw graphics inside a UI application.&nbsp; For this it uses the canvas tag from p5.js:</p>
+<pre style="margin-left: 40px;">
+class JSCanvas extends JSObject {
+&nbsp;&nbsp;&nbsp; constructor() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super();
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // get the p5js canvas:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.element = document.getElementById(&quot;defaultCanvas0&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.element.style.padding = DEFAULT_PADDING;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.element.style.margin = DEFAULT_MARGIN;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.element.style = &#39;border: 1px solid green;&#39;;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.gobjects = [];
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; ...
+}</pre>
+<p>
+	&nbsp;</p>
+<p>
+	As you see it gets a handle on p5.js&#39;s canvas, which happens to be called &quot;defaultCanvas0&quot;.&nbsp; This is not really documented, and as soon as p5.js would change the name, this wouldn&#39;t work anymore.&nbsp; You also see the array of <em>gobjects</em>, and most of the methods are one-to-one equivalents to the graphics program functions.&nbsp; One things that is different, however, is the <em>updateJSCanvas()</em> function, take a look if you are interested.</p>
+<p>
+	.</p>
+<h2>
+	Util Library</h2>
+<p>
+	What is the point of the Util library?&nbsp; Well, as I stated before, I wanted to transfer my existing Java code to JavaScript with as little changes as possible.&nbsp; For the standard Java classes, I was first considering to use one of a transpiler like J2CL [1], JSweet [2], or the old GWT [3].&nbsp; But the JavaScript code these transpilers generate is ugly as hell, and humongous in size.&nbsp; Since I needed just a handful of classes, I decided to write them myself, as there are:</p>
+<ul>
+	<li>
+		RandomGenerator</li>
+	<li>
+		StringTokenizer</li>
+	<li>
+		ArrayList</li>
+	<li>
+		HashMap</li>
+	<li>
+		HashSet</li>
+	<li>
+		FileReader</li>
+	<li>
+		FileWriter</li>
+	<li>
+		StorageReader</li>
+	<li>
+		StorageWriter</li>
+	<li>
+		URLReader</li>
+</ul>
+<p>
+	The last three do not exist in Java, but lend themselves to the use in a browser.&nbsp; Again, here ES6 came in real handy, and what other people might call syntactic sugar, I call a life safer.</p>
+<p>
+	The classes are really trivial.&nbsp; The RandomGenerator is a wrapper around Math.random(), the StringTokenizer a wrapper around JavaScripts string functions, and ArrayList, HashMap, and HashSet wrap their corresponding JavaScripts classes Array, Map and Set.&nbsp;</p>
+<p>
+	Similarily, FileReader is a wrapper around an XMLHttpRequest, and FileWriter is an &lt;a&gt; tag, stupid as it may sound, but works.&nbsp; One word on the FileReader: in ES6, there exists a class with the name FileReader in the new file API, hence we had to call ours Utils.FileReader, which on the other hand allowed us to introduce the concept of what we call <em>namespace</em>.&nbsp; Actually, all the different libraries should be made namespaces, but that would reduce the simplicity of use of our libraries by quite a bit.</p>
+<h3>
+	include()</h3>
+<p>
+	I wanted to call it <em>import</em>, but that name was taken.&nbsp; The idea was to import JavaScript classes as you can in Java using the import statements at the top of a Java file.&nbsp; Usually to import another JavaScript file you have to do this in the HTML header:</p>
+<pre style="margin-left: 40px;">
+&lt;html&gt;
+&lt;head&gt;
+&nbsp; &lt;script src=&quot;./libraries/utils.js&quot;&gt;&lt;/script&gt;
+&nbsp; <span style="color:#0000ff;">&lt;script src=&quot;./ticTacToeLogic.js&quot;&gt;&lt;/script&gt;</span>
+&lt;/head&gt;
+...
+</pre>
+<p>
+	But I did not want to have to modify the HTML file everytime I wanted to just import a little class.&nbsp; As usual the internet has the answers to all your questions:</p>
+<pre style="margin-left: 40px;">
+/* https://www.educative.io/answers/how-to-dynamically-load-a-js-file-in-javascript */
+function include(file, async = false) {
+&nbsp;&nbsp; &nbsp;let script = document.createElement(&quot;script&quot;);
+
+&nbsp;&nbsp; &nbsp;script.setAttribute(&quot;src&quot;, file);
+&nbsp;&nbsp; &nbsp;script.setAttribute(&quot;type&quot;, &quot;text/javascript&quot;);
+&nbsp;&nbsp; &nbsp;script.setAttribute(&quot;async&quot;, async);
+
+&nbsp;&nbsp; &nbsp;document.body.appendChild(script);
+
+&nbsp;&nbsp; &nbsp;// success event
+&nbsp;&nbsp; &nbsp;script.addEventListener(&quot;load&quot;, () =&gt; {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;//console.log(&quot;File loaded&quot;)
+&nbsp;&nbsp; &nbsp;});
+&nbsp;&nbsp; &nbsp;// error event
+&nbsp;&nbsp; &nbsp;script.addEventListener(&quot;error&quot;, (ev) =&gt; {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;console.log(&quot;Error loading file&quot;, ev);
+&nbsp;&nbsp; &nbsp;});
+}
+</pre>
+<p>
+	Now all you have to do, add this line at the top of you code,</p>
+<pre style="margin-left: 40px;">
+include(&quot;Pr4_Agrar/ticTacToeLogic.js&quot;);</pre>
+<p>
+	and you can use your own handwritten classes.</p>
+<p>
+	.</p>
+<h2>
+	Karel Programs</h2>
+<p>
+	Last, but not least we come to Karel.&nbsp; It is how we start to learn programming, and hence you would think it is the easiest to implement, but quite the opposite.&nbsp;</p>
+<p>
+	The core problem is that you do not want the code to run through at once, but instead, you want one line to be executed, then wait a second, then go to the next line, wait a second, and so on.&nbsp; JavaScript does not have a pause() method.&nbsp; And while doing so, you want to see the actual state and position Karel is in.&nbsp; JavaScript is not multithreaded.&nbsp; And in addition you have if-conditions and for- and while-loops in the Karel code, which makes simulating it a difficult task.&nbsp; Here JavaScript does have a very attractive feature: the eval() function.&nbsp; So, how do you circumvent the problems, and use the features?</p>
+<p>
+	From our point of view Karel programs are simply graphics programs.&nbsp; Karel is represented by four GImages, one for each direction he can move to.&nbsp; The p5.js draw() function looks like this:</p>
+<pre style="margin-left: 40px;">
+function draw() {
+&nbsp;&nbsp; &nbsp;eval(codeLines[codePointer]);
+&nbsp;&nbsp; &nbsp;codePointer++;
+&nbsp;&nbsp; &nbsp;if (codePointer &gt;= codeLines.length) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;noLoop();
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;update();
+}</pre>
+<p>
+	We basically set the framerate to one frame per second, and every second we execute one line of Karel code, which has been parsed into an array.&nbsp; This actually solves our first and second problem.</p>
+<p>
+	For each of the Karel commands, like <em>move()</em> or <em>putBeeper()</em>, we have a function.&nbsp; For instance, for move it looks like this:</p>
+<pre style="margin-left: 40px;">
+function move() {
+&nbsp;&nbsp; &nbsp;if (karelIsAlive) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if (frontIsClear()) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;switch (karelDir) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;case 0:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// this.karel.x += SIZE;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;karel.move(SIZE, 0);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+...
+}
+</pre>
+<p>
+	That is what allows us to simply use JavaScript&#39;s eval() function.</p>
+<p>
+	The one problem that remains, are infinite loops.&nbsp; Hypothetically, one could just ignore the problem: it does not happen often, and when it does, you just restart the browser.&nbsp; But from a didactic point of view, and that is what Karel is all about, this is not very helpful.&nbsp;</p>
+<p>
+	However, one can tackle the problem.&nbsp; If we realize, that it is basically only the while-loops that can be problematic, we only need to look at those.&nbsp; One could try a static code analysis of while loops.&nbsp; To me, however, this looks quite a bit like the famous halting problem (I said Karel is tricky).&nbsp; Instead, we insert a little piece of code after every while we encounter.&nbsp; The following two lines of regular expression magic do that:</p>
+<pre style="margin-left: 40px;">
+const regex = /(while\s*)\(([ a-zA-Z\(\)]+)\)\s*\{/g;
+code = code.replaceAll(regex, &quot; $1 ( $2 ) { catchInfiniteLoops();&quot;);</pre>
+<p>
+	The <em>catchInfiniteLoops()</em> function is a simple counter:</p>
+<pre style="margin-left: 40px;">
+let infiniteLoopCounter = 0;
+function catchInfiniteLoops() {
+&nbsp;&nbsp; &nbsp;infiniteLoopCounter++;
+&nbsp;&nbsp; &nbsp;if (infiniteLoopCounter &gt; 200) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;throw new InfiniteLoopError(&quot;Most likely infinite loop!&quot;);
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	We simplify our halting problem: if this method has been called more than 200 times, we say we have an infinite loop and throw an error.&nbsp; Thus executing the code in a simulation run with eval(code), will always stop, even if there is an infinite loop.&nbsp; And we can tell our users that their code most likely has an infinite loop.</p>
+<p>
+	There are a few more code gems in Karel (or hacks as some might call them), but you have to discover them for yourself!</p>
+<p>
+	.</p>
+	<h1>
+		References</h1>
+<p>
+	[1] J2CL, https://github.com/google/j2cl</p>
+	<p>
+	[2] JSweet:&nbsp;http://www.jsweet.org/</p>
+	<p>
+	[3] GWT: https://padlet.com/lofidewanto/gwtintro</p>
+	<p>
+		.</p>
+<p class="footer">
+	Copyright &copy; 2016-2023 <a href="http://www.lano.de">Ralph P. Lano</a>. All rights reserved.
+</p>
+</div>
+</div>
+</center>
+</body>
+</html>

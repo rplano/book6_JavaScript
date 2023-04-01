@@ -1,24 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Sketch</title>
-  </head>
 
-  <body>
-    Table of Contents:<br/>
-    <ul>
-      <li><a href="Ch1_Karel.html">Ch1_Karel</a></li>
-      <li><a href="Ch2_Graphics.html">Ch2_Graphics</a></li>
-      <li><a href="Ch3_Console.html">Ch3_Console</a></li>
-      <li><a href="Ch4_Agrar.html">Ch4_Agrar</a></li>
-      <li><a href="Ch5_MindReader.html">Ch5_MindReader</a></li>
-      <li><a href="Ch6_Swing.html">Ch6_Swing</a></li>
-      <li><a href="Ch7_Asteroids.html">Ch7_Asteroids</a></li>
-      <li><a href="Ch8_Stocks.html">Ch8_Stocks</a></li>
-      <li><a href="ChX_Advanced.html">ChX_Advanced</a></li>
-    </ul>
-    <a href="src/Ch3_Console/helloWorld.html">Test</a>.
-    <a href="src/tryIt.html?name=Ch2_Graphics/house">Test2</a>.
-  </body>
+<head>
+  <title>Variations on a Theme: JavaScript</title>
+  <meta name="title" content="Variations on a Theme: JavaScript">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta charset="UTF-8">
+  <meta name="description" content="An object-oriented Introduction">
+  <meta name="keywords" content="JavaScript,object orientation,introduction">
+  <meta name="author" content="Ralph P. Lano">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="book.css">
+</head>
+
+<body>
+  <center>
+    <div id="wrap">
+      <ul class="sidenav">
+        <p><a href="../index.html">Variations on a Theme</a><a href="index.html">JavaScript</a></p>
+        <li><a href="Ch1_Karel.html">Karel</a></li>
+        <li><a href="Ch2_Graphics.html">Graphics</a></li>
+        <li><a href="Ch3_Console.html">Console</a></li>
+        <li><a href="Ch4_Agrar.html">Agrar</a></li>
+        <li><a href="Ch5_MindReader.html">MindReader</a></li>
+        <li><a href="Ch6_Swing.html">Swing</a></li>
+        <li><a href="Ch7_Asteroids.html">Asteroids</a></li>
+        <li><a href="Ch8_Stocks.html">Stocks</a></li>
+        <li><a href="index.html"> </a></li>
+        <li><a href="AppA_Primer.html">Primer</a></li>
+        <li><a href="AppB_Libraries.html">Libraries</a></li>
+        <li><a href="AppC_Ideas.html">Ideas</a></li>
+      </ul>
+      <div class="content">
+        <h1>Variations on a Theme:<br />
+          JavaScript<br />
+          An object-oriented Introduction</h1>
+        <p>
+          by Ralph P. Lano, 1. Edition</p>
+        <h3>
+          Why</h3>
+        <p>
+          this book?&nbsp; I have always been writing little bits and pieces of JavaScript, but my preferred language
+          always was Java, which is what I teach.&nbsp; What triggered this book, was a student with an iPad Pro, who
+          asked if he could use it for my class.&nbsp; Unfortunately, the answer was no.&nbsp; Times change, and so did
+          JavaScript.&nbsp; With the advent of ES6, some &quot;syntactic sugar&quot; was added to the language:
+          classes.&nbsp; And since I really like sugar, I set myself the challenge: could I rewrite my introductory Java
+          book in JavaScript?&nbsp; My main design criteria was to have as few changes as possible to convert Java
+          examples to JavaScript.&nbsp; And surprisingly, it worked really well.&nbsp; This may not really be a good
+          reason to write a book, but then, what is?</p>
+        <h3>
+          For whom</h3>
+        <p>
+          Well, obviously for the student with the iPad.&nbsp; Definitely, hardcore JavaScript folks will not like it,
+          and this is NOT a mainstream JavaScript book.&nbsp; This is a fun project.&nbsp; And if you have little or no
+          programming skills, maybe this book here will be a helpful introduction.&nbsp; If you like books with many
+          pictures, then also, this book may be for you.&nbsp; But don&#39;t be fooled by the number of pages: there is
+          a lot of work to be done.&nbsp; If a lot of work is not your thing, then this book probably is not for you.
+        </p>
+        <h3>
+          From whom</h3>
+        <p>
+          I have been teaching Java for roughly twenty years now, in different forms, courses and universities.&nbsp; So
+          naturally, this is JavaScript through the eyes of a Java developer.&nbsp; Since 2011, I have been Professor of
+          Internet Programming and Multimedia Applications in the MediaEngineering program at the Nuremberg Institute of
+          Technology.&nbsp; From 2003 to 2010 I was Professor of Software Engineering and Multimedia Applications at the
+          University of Applied Sciences&nbsp; Hof, and from 2010 to 2011 Professor of Media and Computing at HTW
+          Berlin.&nbsp; I received my doctorate in 1996 from the University of Iowa on the subject &#39;Quantum Gravity:
+          Variations on a Theme&#39;.&nbsp; From 1996 to 1997 I was Postdoctoral Research Associate at the Centre for
+          Theoretical Studies of the Indian Institute of Science.&nbsp; From 1997 to 2003 I worked at Pearson Education
+          and later at Siemens AG in software development and project management.</p>
+        <h3>
+          About what</h3>
+        <p>
+          It&#39;s getting a bit technical now, but some people want to know what they&#39;re getting into:&nbsp; In the
+          first chapter we take the first programming steps with Karel.&nbsp; We get to know functions, loops,
+          conditions and our first software engineering principles.&nbsp; Above all, the top-down principle is
+          introduced for the first time.&nbsp; The second chapter introduces graphics programming, we learn to use
+          objects using a JavaScript version of the ACM graphics library.&nbsp; This is followed by an introduction to
+          console programs.&nbsp; The point here is to get to know variables and operators, conditions and loops are
+          deepened, boolean variables are introduced and the &#39;Loop and a Half&#39; is shown.&nbsp; In the chapter
+          Agrar the top-down principle is deepened and functions are put on a new foundation.&nbsp; It is also shown how
+          animations and mouse events work, and the random generator is used for the first time.&nbsp; Chapter five
+          deals with strings and introduces classes.&nbsp; The Swing chapter introduces the basics of graphical user
+          interfaces and concretizes the concept of instance variables.&nbsp; The basics of object orientation,
+          inheritance and composition, will be discussed in detail in the following chapter and will be deepened by
+          numerous examples.&nbsp; Arrays and simple image processing are also introduced.&nbsp; Then we finish off the
+          main part with the introduction of the list and map data structures, and we conclude with interfaces and
+          loosely introduce the term polymorphism.</p>
+        <p>
+          The appendix starts with a primer on JavaScript and some of its new features.&nbsp; This is followed by a
+          brief description of each of the libraries we use in the main part.&nbsp; Especially the graphics libraries
+          are nothing but a thin wrapper around the p5.js library from the Processing Foundation [7].&nbsp; The final
+          chapter, is just a loose collection of idea, which is work in progress.</p>
+        <h3>
+          How</h3>
+        <p>
+          does one learn to play the piano?&nbsp; Not by watching or listening.&nbsp; It&#39;s the same with
+          programming: you have to practice a lot!&nbsp; And the more you practice, the better you become with
+          programming.&nbsp; We&#39;re not only learning programming here, but also actually taking our first steps in
+          software engineering.&nbsp; But as Johann Sebastian Bach so nicely said: &quot;All you have to do is hit the
+          right key at the right time.&quot;</p>
+        <p>
+          The course as I teach it, consists of three components: the lecture, the labs and homework.&nbsp; The lecture
+          is four hours per week and corresponds to the first part of each chapter in the book.&nbsp; We complete one
+          chapter in about one to two weeks.&nbsp; In the labs, which also last four hours a week, we then devote
+          ourselves to the projects.&nbsp; We manage between four and six of the projects per lab.&nbsp; In the labs,
+          the students work in teams, usually in pairs, to help each other.</p>
+        <p>
+          Homework is done on a weekly basis and takes about 8 to 10 hours per week.&nbsp; It is important that the
+          students work alone on their homework.&nbsp; I attach great importance to the fact that the students commit
+          themselves to follow the Stanford University honor code.&nbsp; The homework also doesn&#39;t have to be
+          complete or work perfectly.&nbsp; The homework is discussed individually in the labs, and almost all problems
+          related to the homework usually can be solved within five minutes.</p>
+        <h3>
+          Where</h3>
+        <p>
+          can I find the examples and the source code?&nbsp; You can find them on the website of the book: <a
+            href="https://github.com/rplano">https://github.com/rplano</a>.&nbsp; Also, the book in electronic form,
+          including updates, can be found there.&nbsp; The book in printed form is available on Amazon, in black and
+          white.</p>
+        <h3>
+          May I</h3>
+        <p>
+          use the examples, or copy the book?&nbsp; This material is licensed under Creative Commons Attribution -
+          Non-commercial - Distribution under Equal Terms 4.0 International (CC-BY-NC-SA 4.0).&nbsp; That is, you may
+          reproduce and redistribute the material in any format or medium, remix the material, modify it, and build upon
+          it.&nbsp; However, you must provide appropriate copyright and other proprietary notices, include a link to the
+          license, and indicate whether any changes have been made. This information may be provided in any reasonable
+          manner, but not in such a way as to create the impression that the Licensor is specifically endorsing you or
+          your use.&nbsp; You may not use the material for commercial purposes.&nbsp; And if you remix, modify, or
+          otherwise directly build upon the material, you may distribute your submissions only under the same license as
+          the original, and you may not use any additional clauses or technical procedures that legally prohibit others
+          from doing anything that the license permits.&nbsp; To view a copy of this license, visit
+          http://creativecommons.org/licenses/by-nc-sa/4.0/.</p>
+        <p>
+          The source code is available under the MIT License (http://choosealicense.com/licenses/mit/).</p>
+        <h3>
+          From where</h3>
+        <p>
+          come the ideas?&nbsp; Since this book is almost identical to my first book, the style, the pedagogical
+          structure and many of the examples are heavily inspired by Mehran Sahami&#39;s lecture [1], which in turn is
+          based on the book by Eric Roberts [2].&nbsp; I personally learned JavaScript from David Flanagan&#39;s book
+          [5].&nbsp; However, JavaScript has changed quite a bit over the years, and if you really want to understand
+          it, you must read Douglas Crockford&#39;s book [3].&nbsp; The tutorials on W3Schools [4] are really helpful
+          when you need a quick solution for a simple problem.&nbsp; Addy Osmani website [6] I really like, because it
+          shows that you can write really nice, clean code with JavaScript, just take a look for yourself.</p>
+        <h3>
+          References</h3>
+        <p>
+          [1] Programming Methodology, CS106A, von Mehran Sahami, https://see.stanford.edu/Course/CS106A<br />
+          [2] The Art and Science of Java, von Eric Roberts, Addison-Wesley, 2008<br />
+          [3] JavaScript: The Good Parts: Working with the Shallow Grain of JavaScript, Douglas Crockford, O&#39;Reilly,
+          2008<br />
+          [4] JavaScript Tutorial - W3Schools, <a href="http://www.w3schools.com/js/">www.w3schools.com/js/</a><br />
+          [5] JavaScript: The Definitive Guide, David Flanagan, O&#39;Reilly, 2012<br />
+          [6] Learning JavaScript Design Patterns, Addy Osmani, <a
+            href="https://www.patterns.dev/posts/classic-design-patterns/">https://www.patterns.dev/posts/classic-design-patterns/</a><br />
+          [7] p5.js, <a href="https://p5js.org/">https://p5js.org/</a></p>
+        <p>
+          .</p>
+        <p class="footer">
+          Copyright &copy; 2016-2023 <a href="http://www.lano.de">Ralph P. Lano</a>. All rights reserved.
+        </p>
+      </div>
+    </div>
+  </center>
+</body>
+
 </html>

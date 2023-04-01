@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>JavaScript: Ch7 Asteroids</title>
+<meta name="title" content="Variations on a Theme: JavaScript: Ch7 Asteroids">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="UTF-8">
+<meta name="description" content="An object-oriented Introduction">
+<meta name="keywords" content="JavaScript,object orientation,introduction">
+<meta name="author" content="Ralph P. Lano">
+<meta name="robots" content="index,follow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="book.css">
+</head>
+
+<body>
+<center>
+<div id="wrap">
+<ul class="sidenav">
+<p><a href="../index.html">Variations on a Theme</a><a href="index.html">JavaScript</a></p>
+<li><a href="Ch1_Karel.html">Karel</a></li>
+<li><a href="Ch2_Graphics.html">Graphics</a></li>
+<li><a href="Ch3_Console.html">Console</a></li>
+<li><a href="Ch4_Agrar.html">Agrar</a></li>
+<li><a href="Ch5_MindReader.html">MindReader</a></li>
+<li><a href="Ch6_Swing.html">Swing</a></li>
+<li><a href="Ch7_Asteroids.html">Asteroids</a></li>
+<li><a href="Ch8_Stocks.html">Stocks</a></li>
+<li><a href="index.html"> </a></li>
+<li><a href="AppA_Primer.html">Primer</a></li>
+<li><a href="AppB_Libraries.html">Libraries</a></li>
+<li><a href="AppC_Ideas.html">Ideas</a></li>
+</ul>
+<div class="content">
+<p>
+	<img alt="" src="img/e271affc-a756-4bfd-b50e-7429e71932e8.png" style="display: block; margin-left: auto;  margin-right: auto;width: 285px; height: 294px;" /></p>
+<h1>
+	Asteroids</h1>
+<p>
+	This chapter is again about graphics and games.&nbsp;&nbsp; But before we get started we first need to learn about arrays.&nbsp; This then allows us to manipulate images, which are nothing but two-dimensional arrays.&nbsp; Next we spend some more time on object orientation, namely inheritance and composition.&nbsp; And we will also learn how to work with key events.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="img/eierKarton.jpg" style="width: 316px; height: 256px; float: right;" />Arrays</h2>
+<p>
+	What are arrays?&nbsp; An egg carton is an array.&nbsp; It&#39;s an array for ten eggs.&nbsp; That does not necessarily mean that there are always ten eggs in there, sometimes there are only three eggs in it.</p>
+<p>
+	Obviously, arrays are quite practical and therefore we will take a closer look at arrays in JavaScript.&nbsp; Suppose we wanted to create an empty array, then we would write:</p>
+<pre style="margin-left: 40px;">
+let eggs = [];
+</pre>
+<p>
+	The square brackets say that we declared an empty array.&nbsp; We can also create an array that has stuff in it, like numbers:</p>
+<pre style="margin-left: 40px;">
+let eggs = [1, 2, 3, 4];</pre>
+<p>
+	In this case, the array has four numbers in it.&nbsp; We can create arrays of any data types, e.g. we could also create an array with four GOvals:</p>
+<pre style="margin-left: 40px;">
+let circles = [];
+circles[0] = new GOval(100, 66, 50, 50);
+circles[1] = new GOval(100, 116, 50, 50);
+circles[2] = new GOval(150, 66, 50, 50);
+circles[3] = new GOval(150, 116, 50, 50);</pre>
+<p>
+	Arrays have the important property that they are ordered, i.e. they are numbered consecutively starting with 0.</p>
+<p>
+	.</p>
+<h2>
+	Working with Arrays</h2>
+<p>
+	After we have declared and created an array, we have to fill it with values.&nbsp; We can do this by hand,</p>
+<pre style="margin-left: 40px;">
+let eggs = [];
+eggs[0] = 0;
+eggs[1] = 2;
+eggs[2] = 4;
+...
+eggs[9] = 18;</pre>
+<p>
+	Meaning we assign the first element in the array (element number 0) the value 0, the second element the value 2 etc.&nbsp; We can also do the assignment with a loop:</p>
+<pre style="margin-left: 40px;">
+let eggs = [];
+for (let i=0; i&lt;5; i++) {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp;&nbsp; eggs[i] = await readInt(&quot;?&quot;);
+}
+</pre>
+<p>
+	or as we have seen above:</p>
+<pre style="margin-left: 40px;">
+let eggs = [ 2, 4, 6, 8 ];
+</pre>
+<p>
+	If we want to access an element, we have to enter its house number. So we access the third element with:</p>
+<pre style="margin-left: 40px;">
+println( eggs[2] );</pre>
+<p>
+	If we want to output all elements, it is best done with a loop:</p>
+<pre style="margin-left: 40px;">
+for (let i=0; i&lt;eggs.length; i++) {
+	&nbsp;&nbsp; println( eggs[i] );
+} 
+</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch7_Asteroids/monthName" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/monthName.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	Exercise: MonthName</h2>
+<p>
+	A useful example is the conversion of the month as a number, e.g. 12, into the months name, e.g. December.&nbsp; You could do this with a lengthy if or switch condition, but you can also do it very elegantly with arrays:</p>
+<pre style="margin-left: 40px;">
+const monthName = [&quot;January&quot;, &quot;February&quot;, &quot;March&quot;, &quot;April&quot;,
+&nbsp;&nbsp;&nbsp; &quot;May&quot;, &quot;June&quot;, &quot;July&quot;, &quot;August&quot;, &quot;September&quot;, &quot;October&quot;,
+&nbsp;&nbsp;&nbsp; &quot;November&quot;, &quot;December&quot;];
+
+async function setup() {
+&nbsp;&nbsp;&nbsp; createConsole();
+
+&nbsp;&nbsp;&nbsp; let monthNr = await readInt(&quot;Enter number of month (1=January): &quot;);
+&nbsp;&nbsp;&nbsp; println(monthName[monthNr - 1]);
+}</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch7_Asteroids/fourGOvals" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/fourGOvals.png" style="width: 200px; height: 201px; display: block;" />Try it</a></div>
+<h2>
+	Exercise: Array of Objects</h2>
+<p>
+	Arrays are not only useful with numbers and strings, but also with objects.&nbsp; Let&#39;s say we want to create an array with four ovals in it, The following code would do that:</p>
+<pre style="margin-left: 40px;">
+function setup() {
+&nbsp;&nbsp;&nbsp; createCanvas(300, 300);
+&nbsp;&nbsp;&nbsp; frameRate(5);
+
+&nbsp;&nbsp;&nbsp; let circles = [];
+&nbsp;&nbsp;&nbsp; circles[0] = new GOval(100, 66, 50, 50);
+&nbsp;&nbsp;&nbsp; circles[1] = new GOval(100, 116, 50, 50);
+&nbsp;&nbsp;&nbsp; circles[2] = new GOval(150, 66, 50, 50);
+&nbsp;&nbsp;&nbsp; circles[3] = new GOval(150, 116, 50, 50);
+&nbsp;&nbsp;&nbsp; add(circles[0]);
+&nbsp;&nbsp;&nbsp; add(circles[1]);
+&nbsp;&nbsp;&nbsp; add(circles[2]);
+&nbsp;&nbsp;&nbsp; add(circles[3]);
+}
+
+function draw() {
+&nbsp;&nbsp;&nbsp; update();
+}
+</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch7_Asteroids/chess" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/chess.png" style="width: 200px; height: 158px; display: block;" />Try it</a></div>
+<h2>
+	Multidimensional Arrays</h2>
+<p>
+	One-dimensional arrays are fun and save us a lot of paperwork.&nbsp; But two-dimensional arrays are even cooler.&nbsp; We start quite simple with the game of chess, which can be represented by an 8 by 8 array of chars:</p>
+<pre style="margin-left: 40px;">
+const chess = [
+&nbsp;&nbsp;&nbsp; [&#39;r&#39;, &#39;n&#39;, &#39;b&#39;, &#39;q&#39;, &#39;k&#39;, &#39;b&#39;, &#39;n&#39;, &#39;r&#39;],
+&nbsp;&nbsp;&nbsp; [&#39;p&#39;, &#39;p&#39;, &#39;p&#39;, &#39;p&#39;, &#39;p&#39;, &#39;p&#39;, &#39;p&#39;, &#39;p&#39;],
+&nbsp;&nbsp;&nbsp; [&#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;],
+&nbsp;&nbsp;&nbsp; [&#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;],
+&nbsp;&nbsp;&nbsp; [&#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;],
+&nbsp;&nbsp;&nbsp; [&#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;, &#39; &#39;],
+&nbsp;&nbsp;&nbsp; [&#39;P&#39;, &#39;P&#39;, &#39;P&#39;, &#39;P&#39;, &#39;P&#39;, &#39;P&#39;, &#39;P&#39;, &#39;P&#39;],
+&nbsp;&nbsp;&nbsp; [&#39;R&#39;, &#39;N&#39;, &#39;B&#39;, &#39;Q&#39;, &#39;K&#39;, &#39;B&#39;, &#39;N&#39;, &#39;R&#39;]];
+</pre>
+<p>
+	Lowercase letters stand for black, and uppercase letters for white.&nbsp; If we want to display the playing field, then we could do that with two nested for loops:</p>
+<pre style="margin-left: 40px;">
+function printChessBoard() {
+&nbsp;&nbsp;&nbsp; for (let i = 0; i &lt; 8; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (let j = 0; j &lt; 8; j++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print(chess[i][j]);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println();
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch7_Asteroids/grayImage" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/grayImage.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	Exercise: GrayImage</h2>
+<p>
+	Images are just two-dimensional arrays.&nbsp; As a little exercise we want to convert a color image into a gray image.&nbsp; First we load the image using the GImage class:</p>
+<pre style="margin-left: 40px;">
+let image = new GImage(&quot;Ch7_Asteroids/Taj_Mahal_(Edited).jpeg&quot;);</pre>
+<p>
+	Next, we need to get to the pixels.&nbsp; This can be done with the method <em>getPixelArray()</em> of the class GImage:</p>
+<pre style="margin-left: 40px;">
+let pixels = <span style="color:#0000ff;">await</span> image.getPixelArray();
+let width = image.width;
+let height = image.height;</pre>
+<p>
+	This gives us a two-dimensional array of numbers.&nbsp; Notice the <em>await</em>, which is neccessary because sometimes it takes a little longer for an image to load, and we should not access the pixels of an image before it is loaded.</p>
+<p>
+	One pixel consists of four numbers: the first for the red color, second for the green color, third blue color and the fourth is the alpha value of a pixel, that is its transparency.&nbsp; Let&#39;s say we want to access a pixel at position x=5 and y=22, then the following formula gives us the position of that pixel:</p>
+<pre style="margin-left: 40px;">
+let i = (y * width + x) * 4;</pre>
+<p>
+	&nbsp;</p>
+<p>
+	To get to the color values, we use this index:</p>
+<pre style="margin-left: 40px;">
+let red = pixels[i + 0];
+let green = pixels[i + 1];
+let blue = pixels[i + 2];
+let alpha = pixels[i + 3];</pre>
+<p>
+	This is how we read the pixels.&nbsp; But we want to create a new gray image.&nbsp; Hence, first we need to create a new empty pixel array:</p>
+<pre style="margin-left: 40px;">
+let pixelsGray = [];</pre>
+<p>
+	Then we use the formula that Gimp uses to calculate the gray value of a pixel [2]:</p>
+<pre style="margin-left: 40px;">
+let lum = Math.trunc(0.21 * red + 0.72 * green + 0.07 * blue);</pre>
+<p>
+	and then we put these values into the new pixel array:</p>
+<pre style="margin-left: 40px;">
+pixelsGray[i + 0] = lum;
+pixelsGray[i + 1] = lum;
+pixelsGray[i + 2] = lum;
+pixelsGray[i + 3] = alpha;</pre>
+<p>
+	This we do for all the pixels in the array using a nested for-loop:</p>
+<pre style="margin-left: 40px;">
+for (let y = 0; y &lt; height; y++) {
+&nbsp;&nbsp; &nbsp;for (let x = 0; x &lt; width; x++) {
+		...
+	}
+}
+</pre>
+<p>
+	Finally, we turn this array back into a new GImage:</p>
+<pre style="margin-left: 40px;">
+let gray = new GImage(width, height);
+gray.setPixelArray(pixelsGray);
+add(gray, 200, 0);</pre>
+<p>
+	.</p>
+<h2>
+	Object Orientation</h2>
+<p>
+	In the second part of this chapter we want to deepen our understanding with regards to object orientation.&nbsp; The two big themes are inheritance (&quot;is a&quot; relationship) and composition (&quot;has a&quot; relationship).&nbsp; We start with a little game, the MarsLander.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch7_Asteroids/marsLander" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/marsLander.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	Exercise: MarsLander</h2>
+<p>
+	In the next decade, Elon Musk wants to send the first humans to Mars.&nbsp; Karel volunteered and needs to practice landing.&nbsp; For this purpose, we need to write a MarsLander simulator.&nbsp; It&#39;s about landing a spaceship safely on Mars.&nbsp; The plan is to use the arrow keys (up and down) to slow down or accelerate our spaceship.&nbsp; If the touchdown speed is to high, Karel dies.</p>
+<p>
+	We will use the top-down approach, starting with the draw() method:</p>
+<pre style="margin-left: 40px;">
+function draw() {
+&nbsp;&nbsp;&nbsp; if (spaceShip != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; moveSpaceShip();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; checkForCollision();
+&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; displayGameOver();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; noLoop();
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; update();
+}</pre>
+<p>
+	As usual, there is also a setup() that creates the spaceship.&nbsp; The game loop looks exactly like our last animation, billiards.&nbsp; What&#39;s interesting now is that we no longer have an infinite loop, but a loop with the abort criterion: namely if there is no more SpaceShip, i.e. spaceShip == null, then the game should stop.&nbsp; The <em>noLoop()</em> statement stops the looping.</p>
+<p>
+	We have three instance variables,</p>
+<pre style="margin-left: 40px;">
+let spaceShip;
+let vy = 0;
+let vx = 0;</pre>
+<p>
+	i.e. the spaceShip, together with its velocities vx and vy.</p>
+<p>
+	In the setup() the spaceShip is initialized.&nbsp; The code is identical to the one from the exercise in chapter two, nothing new here,</p>
+<pre style="margin-left: 40px;">
+function setup() {
+&nbsp;&nbsp;&nbsp; createCanvas(APP_WIDTH, APP_HEIGHT);
+&nbsp;&nbsp;&nbsp; frameRate(5);
+
+&nbsp;&nbsp;&nbsp; spaceShip = new GPolygon();
+&nbsp;&nbsp;&nbsp; spaceShip.addVertex(0, -SPACE_SHIP_SIZE);
+&nbsp;&nbsp;&nbsp; spaceShip.addVertex(-2 * SPACE_SHIP_SIZE / 3, SPACE_SHIP_SIZE);
+&nbsp;&nbsp;&nbsp; spaceShip.addVertex(0, SPACE_SHIP_SIZE / 2);
+&nbsp;&nbsp;&nbsp; spaceShip.addVertex(2 * SPACE_SHIP_SIZE / 3, SPACE_SHIP_SIZE);
+&nbsp;&nbsp;&nbsp; add(spaceShip, (APP_WIDTH - SPACE_SHIP_SIZE) / 2, SPACE_SHIP_SIZE);
+}</pre>
+<p>
+	The moveSpaceShip() method is absolutely trivial:</p>
+<pre style="margin-left: 40px;">
+function moveSpaceShip() {
+&nbsp;&nbsp;&nbsp; vy += GRAVITY;
+&nbsp;&nbsp;&nbsp; spaceShip.move(vx, vy);
+}</pre>
+<p>
+	The speed of our space ship increases with every step by the GRAVITY of Mars, and it is moved by its velocities.</p>
+<p>
+	In the checkForCollision() method we check if we have already reached the surface of Mars:</p>
+<pre style="margin-left: 40px;">
+function checkForCollision() {
+&nbsp;&nbsp;&nbsp; let y = spaceShip.getY();
+&nbsp;&nbsp;&nbsp; if (y &gt; (APP_HEIGHT - SPACE_SHIP_SIZE)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; spaceShip = null;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	If so, we simply set the spaceShip to null.&nbsp; Here &quot;null&quot; means: &quot;not initialized&quot; or &quot;there is none&quot; or &quot;does not exist&quot;.&nbsp; We can set objects explicitly to null, which means that we delete the object.&nbsp; In our example, we use this to end our game loop.</p>
+<p>
+	What remains are the key events: similar to the mousePressed() method, there is a keyPressed() method:</p>
+<pre style="margin-left: 40px;">
+function keyPressed() {
+&nbsp;&nbsp;&nbsp; switch (keyCode) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 38: // up
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vy--;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 40: // down
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vy++;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Of course we want to know which key was pressed and this we get from the keyCode.&nbsp; Each key has its own key code, and for the up key this is 38 and for the down key this is 40.</p>
+<p>
+	Now we can play or rather train for our Mars mission.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch7_Asteroids/marsLander2" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/marsLander.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	Inheritance</h2>
+<p>
+	What does MarsLander have to do with inheritance?&nbsp; Not much yet.&nbsp; But let&#39;s look at the code.&nbsp; What should bother us a little bit are the following three lines,</p>
+<pre style="margin-left: 40px;">
+let spaceShip;
+let vy = 0;
+let vx = 0;</pre>
+<p>
+	because vx and vy are the speed of the spaceShip, meaning they actually belong to the spaceShip.&nbsp; Suppose we had several spaceShips, or we had a lot of asteroids moving around, then we would have a lot of vx&#39;s and vy&#39;s.&nbsp; And it&#39;s going to be very confusing and ugly.</p>
+<p>
+	To prevent this we do the following: we declare a new class called GSpaceShip and we put everything that has to do with the spaceShip into this class:</p>
+<pre style="margin-left: 40px;">
+class GSpaceShip <span style="color:#0000ff;">extends GPolygon</span> {
+
+&nbsp;&nbsp;&nbsp; constructor(x, y) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">super(x, y);</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super.addVertex(0, -SPACE_SHIP_SIZE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super.addVertex(-2 * SPACE_SHIP_SIZE / 3, SPACE_SHIP_SIZE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super.addVertex(0, SPACE_SHIP_SIZE / 2);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super.addVertex(2 * SPACE_SHIP_SIZE / 3, SPACE_SHIP_SIZE);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.vy = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.vx = 0;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; move() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.vy += GRAVITY;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super.move(this.vx, this.vy);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	First, we see that GSpaceShip is a GPolygon, because it says &quot;GSpaceShip extends GPolygon&quot;.&nbsp; This means that GSpaceShip inherits all properties and methods from GPolygon.&nbsp; That is why inheritance is also said to be an &quot;is a&quot; relationship.</p>
+<p>
+	Second, we see that the global variables vx and vy are now instance variables of the spaceShip, so they are where they belong.</p>
+<p>
+	Third, we take a look at the constructor: there we see a &quot;super()&quot; in the first line.&nbsp; The method super() does nothing else but call the constructor of the superclass, the parent class.&nbsp; In our case, the GPolygon().&nbsp; Then we see how we add vertices to ourselves (we are now a GPolygon).&nbsp; So in the constructor we create our spaceship appearance.</p>
+<p>
+	Finally, we see that we have added a new method called move().&nbsp; Since GSpaceShip now knows its own speed, it can also move itself.</p>
+<p>
+	Inheritance therefore has many advantages: above all, it leads to classes becoming more independent and having fewer dependencies. It is also said that the class takes responsibility for its own attributes (variables) and behavior (methods).&nbsp; These lesser dependencies also lead to a smaller coupling, which makes our code less complicated.</p>
+<p>
+	Let&#39;s have a look at the simplifications in MarsLander2.&nbsp; First, we only need one instance variable:</p>
+<pre style="margin-left: 40px;">
+let spaceShip;</pre>
+<p>
+	and also the setup() and moveSpaceShip() methods become much cleaner:</p>
+<pre style="margin-left: 40px;">
+function setup() {
+&nbsp;&nbsp;&nbsp; createCanvas(APP_WIDTH, APP_HEIGHT);
+&nbsp;&nbsp;&nbsp; frameRate(5);
+
+&nbsp;&nbsp;&nbsp; spaceShip = new GSpaceShip();
+&nbsp;&nbsp;&nbsp; add(spaceShip, (APP_WIDTH - SPACE_SHIP_SIZE) / 2, SPACE_SHIP_SIZE);
+}
+
+function moveSpaceShip() {
+&nbsp;&nbsp;&nbsp; spaceShip.move();
+}</pre>
+<p>
+	This is pretty cool.&nbsp; We will really come to appreciate these simplifications when it comes to programming the Asteroids game.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch7_Asteroids/marsLander3" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/marsLander3.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	Composition</h2>
+<p>
+	The second important concept of object orientation is composition.&nbsp; As we have seen, you can create new classes (GSpaceShip) by inheritance from an existing class (GPolygon).&nbsp; But we can also create new classes by composing them from several existing classes.&nbsp;</p>
+<p>
+	As an example we write a class GSmiley.</p>
+<pre style="margin-left: 40px;">
+class GSmiley extends GCompound {
+
+&nbsp;&nbsp;&nbsp; constructor(SIZE) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super();
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let face = new GOval(SIZE, SIZE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; face.setFilled(true);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; face.setFillColor(Color.YELLOW);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.add(face);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let leftEye = new GOval(SIZE / 10, SIZE / 10);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; leftEye.setColor(Color.GREEN);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.add(leftEye, SIZE / 4, SIZE / 4);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let rightEye = new GOval(SIZE / 10, SIZE / 10);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rightEye.setColor(Color.RED);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.add(rightEye, 3 * SIZE / 4, SIZE / 4);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let mouth = new GArc(SIZE / 2, SIZE / 2, 225, 90);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.add(mouth, 0.3 * SIZE, 0.3 * SIZE);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Our GSmiley consists of different components, so it has a face, a leftEye, a rightEye and a mouth.&nbsp; In the constructor we create a new object from several old objects.&nbsp; That&#39;s composition.&nbsp; That&#39;s also why we say that composition is a &quot;has a&quot; relationship, because GSmiley has a face, a leftEye, a rightEye and a mouth.</p>
+<p>
+	.</p>
+<h2>
+	GCompound</h2>
+<p>
+	We can also mix inheritance and composition.&nbsp; If we add &quot;extends GCompound&quot; to the class declaration for the GSmiley example, then we can also use GSmiley in our MarsLander.&nbsp; If we simply replace &quot;GPolygon&quot; with &quot;GSmiley&quot; in our first version of the MarsLander, the program works like before, only our spaceship now looks like a smiley.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="img/8aff1c4e-4764-43d9-9651-6f407d47f9fe.png" style="width: 150px; height: 121px; float: right;" />Inheritance vs Composition</h2>
+<p>
+	When should we use inheritance and when composition?&nbsp; A rule of thumb is, if possible, use composition.&nbsp; This has to do with the fact that there is no multiple inheritance in JavaScript.&nbsp; So a class can&#39;t have two parents.&nbsp; This restriction does not apply to composition, in principle a class can consist of any number of components.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	<img alt="" src="img/9a6ee258-1e5b-4941-a675-2be6f1216447.png" style="width: 136px; height: 155px; float: right;" />A small note: by multiple inheritance we mean that a class has several parent classes.&nbsp; That&#39;s not allowed.&nbsp; But it is quite possible that a class has a parent class, and this parent class again has a parent class, so to speak the grandparent class of the original.&nbsp; For example, GObject is the grandparent class of the GSpaceShip class.&nbsp; That&#39;s allowed.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Review</h1>
+<p>
+	With the principles of inheritance and composition we have reached and cracked the core of object orientation.&nbsp; We have learned how to give an existing class additional properties through inheritance.&nbsp; A GPolygon cannot move independently because it has no speed.&nbsp; The class GSpaceShip, which is actually also a GPolygon, knows its own speed and can move by itself.&nbsp; We have also seen that we can assemble a new class from several existing classes via composition.&nbsp; Both are very useful, as we will see.</p>
+<p>
+	In addition, we have learned a few other useful things, such as</p>
+<ul>
+	<li>
+		arrays,</li>
+	<li>
+		multidimensional arrays,</li>
+	<li>
+		image processing,</li>
+	<li>
+		key events,</li>
+	<li>
+		and we used the class GCompound.</li>
+</ul>
+<p>
+	.</p>
+<hr />
+<h1>
+	Projects</h1>
+<p>
+	The projects in this chapter are fun projects.&nbsp; Here we go.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/swap" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/swap.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	Swap</h2>
+<p>
+	In this project we want to swap two elements in an array.&nbsp; In the array</p>
+<pre style="margin-left: 40px;">
+let arr = [0, 2, 4, 6];</pre>
+<p>
+	we want to swap the element at the second position (the &quot;2&quot;) with the element at the third position (the &quot;4&quot;).&nbsp; We want to do this with a method <em>swap(arr)</em>, which has an array as parameter.</p>
+<p>
+	Two things we want to learn in this exercise: First, in arrays we always start counting from 0.&nbsp; Second, arrays are passed as reference, i.e. if we pass an array as a parameter to a method, then we pass the original, not a copy.&nbsp; All changes we make to it in the method are permanent, i.e. change the original array.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/examStatistics" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/examStatistics.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	ExamStatistics</h2>
+<p>
+	As another example for the use of arrays let us store the grades of an exam in an array.&nbsp; Since we do not yet know exactly how many students will take the exam, but it is very unlikely that there will be more than 100, we will create an array for 100 grades:</p>
+<pre style="margin-left: 40px;">
+let scores = [];</pre>
+<p>
+	Then we ask the user to enter the grades.&nbsp; For this the loop-and-a-half is ideally suited.&nbsp; To know when we are done, we agree that entering a &quot;-1&quot; (the sentinel) means that all grades have been entered.&nbsp;</p>
+<p>
+	Once we have all the grades in the array, we want to calculate some statistical data about the grades like total number of students who took the exam, the average grade, the lowest grade and the highest grade.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/pianoConsole" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/pianoConsole.png" style="width: 200px; height: 113px; display: block;" />Try it</a></div>
+<h2>
+	PianoConsole</h2>
+<p>
+	As our first application for arrays we write a small music program.&nbsp; Before being able to play sound, we need to load a library that allows us to do that.&nbsp; Therefore, at the beginning of your code, place the following include() statement:</p>
+<pre style="margin-left: 40px;">
+include(&quot;./libraries/p5.sound.min.js&quot;);</pre>
+<p>
+	(Also, sound may not work on mobile devices, I had problems with an iPad playing any sound.)</p>
+<p>
+	Once we have that, we can start by storing our melody in an array,</p>
+<pre style="margin-left: 40px;">
+const tune = [0, 1, 2, 3, 4, 4, 5, 5, 5, 5, 4];</pre>
+<p>
+	where 0 refers to C4, 1 to D4, etc.&nbsp; But before playing, we must load the sound files.&nbsp; Those must be preloaded:</p>
+<pre style="margin-left: 40px;">
+const songFileNames = &quot;CDEFGAB&quot;;
+function preload() {
+&nbsp;&nbsp;&nbsp; for (let i = 0; i &lt; songFileNames.length; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let soundName = songFileNames.charAt(i) + &#39;4&#39;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let fileName = &#39;Pr7_Asteroids/music/&#39; + soundName + &#39;.wav&#39;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; soundFiles[i] = loadSound(fileName);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Preloading is neccessary, because sometimes the internet is a little slow, and we want to make certain that our program only starts after all the sound files have loaded.</p>
+<p>
+	Next we initialize our program.&nbsp; Since console programs usually have no loop, we must turn the loop on, and we also declare and initialize the <em>currentSong</em> variable.</p>
+<pre style="margin-left: 40px;">
+let currentSong;
+function setup() {
+&nbsp;&nbsp;&nbsp; createConsole();
+&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">loop();</span>
+&nbsp;&nbsp;&nbsp; frameRate(5);
+
+&nbsp;&nbsp;&nbsp; currentSong = soundFiles[0];
+}</pre>
+<p>
+	Now we are ready to play our tune:</p>
+<pre style="margin-left: 40px;">
+function draw() {
+&nbsp;&nbsp;&nbsp; if (!currentSong.isPlaying() &amp;&amp; counter &lt; tune.length) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let tun = tune[counter];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print(songFileNames.charAt(tun) + &quot;,&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; currentSong = soundFiles[tun];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; currentSong.play();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; counter++;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	We wait until a sound file has finished playing, before we move to the next.&nbsp; Our counter helps us to keep track on which sound to play.&nbsp; Obviously, you can play other melodies, add different and more sound files, etc.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/piano" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/piano.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	Piano</h2>
+<p>
+	Console applications are always a little more boring, and honestly, who would spend any money on them?&nbsp; But we already wrote a UI for our piano in the second chapter.&nbsp; Of course we want to control our piano with the mouse.</p>
+<p>
+	The question that arises is how do we know which key was pressed?&nbsp; Interestingly, we can use the getElementAt() method for this:</p>
+<pre style="margin-left: 40px;">
+function mousePressed() {
+&nbsp;&nbsp;&nbsp; let x = mouseX;
+&nbsp;&nbsp;&nbsp; let y = mouseY;
+&nbsp;&nbsp;&nbsp; let obj = getElementAt(x, y);
+&nbsp;&nbsp;&nbsp; if (obj !== undefined) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	This gives us the GRect that was pressed.&nbsp; Now there are three alternatives to go on:</p>
+<ol>
+	<li>
+		If the GRect had a name, then we would know which tone to play.&nbsp; We can do this with inheritance: we define a new class GKey, which is a GRect and has an additional attribute for the name.</li>
+	<li>
+		We memorize somewhere the x-coordinate of the keys.&nbsp; With obj.getX() we can get it, and viola we know which key was pressed.</li>
+	<li>
+		Or we keep references to all keys in an array.</li>
+</ol>
+<p>
+	Let us take a closer look at this third possibility.&nbsp; For this we need an array as global variable:</p>
+<pre style="margin-left: 40px;">
+let keys = [];</pre>
+<p>
+	When we create the keys, we store them in our global array:</p>
+<pre style="margin-left: 40px;">
+let keyCounter = 0;
+// draw 8 white keys
+for (let i = 0; i &lt; 7; i++) {
+&nbsp;&nbsp; &nbsp;<span style="color:#0000ff;">keys[keyCounter]</span> = new GRect(WIDTH / 7, HEIGHT - HEIGHT_OFFSET);
+&nbsp;&nbsp; &nbsp;add(keys[keyCounter], i * WIDTH / 7, 0);
+&nbsp;&nbsp; &nbsp;keyCounter++;
+}
+</pre>
+<p>
+	And now we can simply test for equality in our mousePressed() method:</p>
+<pre style="margin-left: 40px;">
+function mousePressed() {
+&nbsp;&nbsp;&nbsp; let x = mouseX;
+&nbsp;&nbsp;&nbsp; let y = mouseY;
+&nbsp;&nbsp;&nbsp; let obj = getElementAt(x, y);
+&nbsp;&nbsp;&nbsp; if (obj !== undefined) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (let i = 0; i &lt; songFileNames.length; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (obj == keys[i]) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print(songFileNames.charAt(i) + &quot;,&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; currentSong = soundFiles[i];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; currentSong.play();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	If we could get this program to work on our mobile phones, we&#39;d be rich! (Next year...)</p>
+<p>
+	BTW, only worry about the white keys.&nbsp; The black keys are a little tricky, in a little while we learn even simpler ways to do this.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/flippedImage" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/flippedImage.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	FlippedImage</h2>
+<p>
+	When manipulating images we usually use arrays.&nbsp; We have already seen&nbsp; how we can access the pixels of an image.&nbsp; In this example we want to mirror a given image.&nbsp; This can be done horizontally or vertically.&nbsp; To do this, we create a new array for the pixels</p>
+<pre style="margin-left: 40px;">
+let pixelsFlipped = [];</pre>
+<p>
+	and use two nested loops</p>
+<pre style="margin-left: 40px;">
+for (let y = 0; y &lt; height; y++) {
+&nbsp;&nbsp; &nbsp;for (let x = 0; x &lt; width; x++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;let i = (y * width + x) * 4;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;let j = ((height - y) * width + x) * 4;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;pixelsFlipped[j + 0] = pixels[i + 0];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;pixelsFlipped[j + 1] = pixels[i + 1];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;pixelsFlipped[j + 2] = pixels[i + 2];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;pixelsFlipped[j + 3] = pixels[i + 3];
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	to swap the pixels.&nbsp; From the new array we create a new image via</p>
+<pre style="margin-left: 40px;">
+let flipped = new GImage(width, height);
+flipped.setPixelArray(pixelsFlipped);
+return flipped;</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/grayImageXOR" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/grayImageXOR.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	GrayImageXOR</h2>
+<p>
+	Steganography is the art of hidden transmission of information [3].&nbsp; It is interesting that this can be done quite simply with the XOR function, i.e. the Exclusive Or.&nbsp; How do we do that?&nbsp; Let&#39;s assume we have two images and their pixel arrays:</p>
+<pre style="margin-left: 40px;">
+let pixels1 = await grayImage1.getPixelArray();
+let pixels2 = await grayImage2.getPixelArray();</pre>
+<p>
+	then we get the red value for each pixel, for example:</p>
+<pre style="margin-left: 40px;">
+let i1 = pixels1[i];
+let i2 = pixels2[i];</pre>
+<p>
+	And just as we could add these two values, we could also use the XOR function:</p>
+<pre style="margin-left: 40px;">
+let xr = i1 ^ i2;</pre>
+<p>
+	We make a bit-wise XOR of the bits of r1 with those of r2.&nbsp; To test this, we take the Taj and the Mona Lisa as images, and &#39;XOR&#39; them.&nbsp; The result is a funny mixture, where you can recognize neither one nor the other, or both depending.&nbsp; The interesting thing happens, when we take the pixels of that mixed image and let the XOR function run over it again: then the original image appears again.&nbsp; Interestingly, exactly the opposite.&nbsp; This can also be used for encryption.</p>
+<p>
+	The RAID-5 system is based on the same principle and is used to provide failure safety for hard disks [4].</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/colorImage" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/colorImage.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	ColorImage</h2>
+<p>
+	A common use of image manipulation is to reduce the number of colors in an image.&nbsp; This is a nice application for rounding to integers.</p>
+<pre style="margin-left: 40px;">
+let r = pixels[i + 0];
+r = Math.trunc(r / FACTOR) * FACTOR;</pre>
+<p>
+	Originally r can take values between 0 and 255.&nbsp; If we divide this number by let&#39;s say 64, then we only have values between 0 and 3. If we multiply this again by 64, we only have the values 0, 64, 128 and 192. So there are only four red values left.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/imageFilterSimple" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/imageFilterSimple.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	ImageFilterSimple</h2>
+<p>
+	You can also perform many other image manipulations.&nbsp; For example, you can simply subtract adjacent pixels:</p>
+<pre style="margin-left: 40px;">
+let n = (y * w + x - 1) * 4;
+r[0][1] = pixels[n + 0];
+n = (y * w + x) * 4;
+r[1][1] = pixels[n + 0];
+...
+let xx = r[1][1] - r[0][1];
+xx *= 10;
+...
+let nn = (y * w + x) * 4;
+pixelsGray[nn + 0] = xx;</pre>
+<p>
+	The result corresponds to a simple edge detection.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/imageFilterMatrix" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/imageFilterMatrix.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	ImageFilterMatrix</h2>
+<p>
+	Much more interesting image manipulations become possible if we realize that arrays are also matrices.&nbsp; You may want to keep this to yourself, or you might get burned [6].&nbsp; But once you know that, you can do cool things with images.&nbsp; The filters sharpen, blur, edgeEnhance, edgeDetect, or emboss, as they are known from any image processing program, are actually only the application of a convolution matrix on an given image [5].&nbsp; For example, to sharpen an image, the following matrix will do the trick:</p>
+<pre style="margin-left: 40px;">
+let currentFilter = [
+	[0, -1, 0], 
+	[-1, 5, -1], 
+	[0, -1, 0] 
+];
+let currentFactor = 1;</pre>
+<p>
+	Executing matrix multiplication (that is, applying the filter to the image) is performed in the following method:</p>
+<pre style="margin-left: 40px;">
+function applyFilterToPixel(x, y, width) {
+&nbsp;&nbsp;&nbsp; let r = 0;
+&nbsp;&nbsp;&nbsp; let g = 0;
+&nbsp;&nbsp;&nbsp; let b = 0;
+&nbsp;&nbsp;&nbsp; for (let i = 0; i &lt;= 2; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (let j = 0; j &lt;= 2; j++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let n = ((x + i) * width + (y + j)) * 4;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; r += array[n + 0] * currentFilter[j][i];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g += array[n + 1] * currentFilter[j][i];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b += array[n + 2] * currentFilter[j][i];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; let nn = (x * width + y) * 4;
+&nbsp;&nbsp;&nbsp; array2[nn + 0] = checkBounds(r / currentFactor);
+&nbsp;&nbsp;&nbsp; array2[nn + 1] = checkBounds(g / currentFactor);
+&nbsp;&nbsp;&nbsp; array2[nn + 2] = checkBounds(b / currentFactor);
+&nbsp;&nbsp;&nbsp; array2[nn + 3] = 255;
+}</pre>
+<p>
+	This must be called for each pixel of the original image.&nbsp; Notice, that we made the two pixel arrays global variables:</p>
+<pre style="margin-left: 40px;">
+let array = [];
+let array2 = [];</pre>
+<p>
+	This is actually a pretty advanced program.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr6_Swing/calculator" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/calculatorGUI.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	Calculator</h2>
+<p>
+	Applications for arrays are really diverse.&nbsp; Very often they save you from having to write a lot of code.&nbsp; A nice example is the calculator from the last chapter.&nbsp; You can of course create the buttons, i.e. JSButtons, all individually, but you can also make it a bit more effective:</p>
+<pre style="margin-left: 40px;">
+const btnNames = [&quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;/&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;*&quot;,
+&nbsp;&nbsp;&nbsp; &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;-&quot;, &quot;.&quot;, &quot;0&quot;, &quot;=&quot;, &quot;+&quot;];
+
+function setup() {
+&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; let pnl = new JSPanel(&#39;grid&#39;, 4);
+&nbsp;&nbsp;&nbsp; addWidget(pnl, &#39;CENTER&#39;);
+&nbsp;&nbsp;&nbsp; for (let i = 0; i &lt; btnNames.length; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let btn = new JSButton(btnNames[i]);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pnl.add(btn);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/ticTacToe" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/ticTacToe.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	TicTacToeLogic</h2>
+<p>
+	Arrays can also be useful for games.&nbsp; In the fourth chapter we already wrote the UI for the TicTacToe game.&nbsp; Now we are ready to understand the logic part.&nbsp; The playing field can be understood as a two-dimensional array, which is an instance variable that we initialize in the constructor:</p>
+<pre style="margin-left: 40px;">
+class TicTacToeLogic {
+
+&nbsp;&nbsp;&nbsp; constructor() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.board = [[0,0,0],[0,0,0],[0,0,0]];
+&nbsp;&nbsp;&nbsp; }
+	...
+}
+</pre>
+<p>
+	Originally all values of the playing field are set to 0.&nbsp; If we now mark the squares that player one has occupied with a 1 and the squares that player two has occupied with a 2, then this is a perfect description of the current state of the game.</p>
+<p>
+	If we want to test if a certain move is allowed, then we only have to check if the value of the playing field at that position is 0:</p>
+<pre style="margin-left: 40px;">
+isMoveAllowed(player, i, j) {
+&nbsp;&nbsp; &nbsp;if (this.board[i][j] == 0) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.board[i][j] = player;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return true;
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return false;
+}</pre>
+<p>
+	If we want to test if a player has won, we have to check if one of the players has occupied a whole vertical, horizontal or diagonal row.&nbsp; For the vertical rows the following will do the trick:</p>
+<pre style="margin-left: 40px;">
+checkVerticals() {
+&nbsp;&nbsp; &nbsp;for (let i = 0; i &lt; 3; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if ((this.board[i][0] == 1) &amp;&amp; (this.board[i][1] == 1) 
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;                            &amp;&amp; (this.board[i][2] == 1)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return true;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;for (let i = 0; i &lt; 3; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if ((this.board[i][0] == 2) &amp;&amp; (this.board[i][1] == 2) 
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;                            &amp;&amp; (this.board[i][2] == 2)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return true;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return false;
+}</pre>
+<p>
+	We just go through one column after the other (for-loop) and check if all three values are set to 1 (for player 1) or 2 (for player 2).</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/battleShip" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/battleShip.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	BattleShip</h2>
+<p>
+	Battleship [7] is another classic game for which arrays are very useful.&nbsp; Our BattleShip game should become a game human versus computer, that means the computer distributes its boats on the playing field and we have to find them.</p>
+<p>
+	Just like TicTacToe, we use an array of integers for the playing field:</p>
+<pre style="margin-left: 40px;">
+let board = makeArray(BOARD_SIZE, BOARD_SIZE);</pre>
+<p>
+	where we dynamically create the array with the makeArray() function:</p>
+<pre style="margin-left: 40px;">
+function makeArray(d1, d2) {
+&nbsp;&nbsp;&nbsp; var arr = [];
+&nbsp;&nbsp;&nbsp; for (let i = 0; i &lt; d2; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; arr.push(new Array(d1));
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; return arr;
+}</pre>
+<p>
+	The ships themselves are represented by numbers: 5 stands for an AircraftCarrier, 4 for a Battleship, 3 for a Submarine or a Destroyer and 2 for a PatrolBoat.&nbsp; To determine how many of each type of ship there are, we can use another array:</p>
+<pre style="margin-left: 40px;">
+const SHIP_SIZES = [5, 4, 3, 3, 2];</pre>
+<p>
+	That means, if we want to have some more PatrolBoats, just add some more 2&#39;s.</p>
+<p>
+	In the setup() method,</p>
+<pre style="margin-left: 40px;">
+function setup() {
+&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; drawLines();
+&nbsp;&nbsp;&nbsp; initBoard();
+}</pre>
+<p>
+	we draw the playing field and initialize the boats.&nbsp; In the initBoard() method we go through the list of ships (SHIP_SIZES) and add one by one using the placeShip(int shipNr, int shipSize) method.&nbsp; This method can be quite simple, if we place the ships just next to each other. However, then the game becomes boring quickly.&nbsp; On the other hand, we can also place the ships randomly, then things get quite complicated, because the ships are not supposed to &#39;collide&#39;.&nbsp; For us the simple version is fine.</p>
+<p>
+	What remains to be implemented is the mousePressed().&nbsp; We&#39;ll use our integer division trick again:</p>
+<pre style="margin-left: 40px;">
+function mousePressed() {
+&nbsp;&nbsp;&nbsp; let i = Math.trunc(mouseX / STEP);
+&nbsp;&nbsp;&nbsp; let j = Math.trunc(mouseY / STEP);
+&nbsp;&nbsp;&nbsp; showLabelAt(i, j);
+}</pre>
+<p>
+	Next, we implement the showLabelAt(int i, int j) method:&nbsp; it checks the board array to see if there is a ship at the location the user selected:</p>
+<pre style="margin-left: 40px;">
+function showLabelAt(i, j) {
+&nbsp;&nbsp;&nbsp; let lbl = new GLabel(&quot;&quot; + board[i][j]);
+&nbsp;&nbsp;&nbsp; if (board[i][j] === undefined) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lbl = new GLabel(&quot;.&quot;);
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; lbl.setFont(&quot;SansSerif-bold-24&quot;);
+&nbsp;&nbsp;&nbsp; let x = i * STEP + 7;
+&nbsp;&nbsp;&nbsp; let y = j * STEP + 24;
+&nbsp;&nbsp;&nbsp; add(lbl, x, y);
+}</pre>
+<p>
+	This is another trick that can save you lots of unnecessary code.&nbsp; What&#39;s left to do is to draw the label at the position where the mouse was clicked.&nbsp; And that&#39;s it.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/cityAtNight" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/cityAtNight.png" style="width: 200px; height: 150px; display: block;" />Try it</a></div>
+<h2>
+	CityAtNight</h2>
+<p>
+	Reuse is a very central concept of object orientation.&nbsp; This can be achieved with inheritance as well as with composition.&nbsp; Let&#39;s start with an example for composition.&nbsp; Let&#39;s remember chapter 2, where we programmed a skyscraper.&nbsp; If we want to draw a whole city now, it would be very practical if we could reuse our skyscrapers:</p>
+<pre style="margin-left: 40px;">
+const rgen = new RandomGenerator();
+function setup() {
+&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; for (let i = 0; i &lt; 8; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let cols = rgen.nextInt(4, 6);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let rows = rgen.nextInt(4, 8);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let x = rgen.nextInt(-40, APP_WIDTH - 40); // 120
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let y = rgen.nextInt(APP_HEIGHT / 4, APP_HEIGHT / 2); // 30
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let h = <span style="color:#0000ff;">new GSkyscraper(rows, cols);</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; add(h, x, y);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	So we would need a class GSkyscraper to draw a skyscraper.&nbsp; Since a skyscraper consists of several GRects, it makes sense, analogous to the GSmiley, to use a GCompound:</p>
+<pre style="margin-left: 40px;">
+class GSkyscraper extends <span style="color:#0000ff;">GCompound</span> {
+	...
+}</pre>
+<p>
+	As with any class, we need a constructor</p>
+<pre style="margin-left: 40px;">
+constructor(rows, cols) { {
+	...
+}</pre>
+<p>
+	in which we pass the number of window rows and columns we want the skyscraper to have.&nbsp; Depending on whether all skyscrapers should look the same or differently we have to add some randomness to the addWindow() method.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/sevenSegmentDisplayProgram" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/sevenSegmentDisplayProgram.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	SevenSegmentDisplay</h2>
+<p>
+	Another nice example of reuse by means of composition is the seven-segment display. Let&#39;s remember chapter 2, where we programmed a seven-segment display.&nbsp; If we now need several of these seven-segment displays, e.g. for a counter, a calculator or a clock, then it would be practical if there was a SevenSegmentDisplay class that we could simply use several times, similar to a GRect.</p>
+<p>
+	Since a seven-segment display consists of several GRects, it makes sense, similar to the GSmiley, to again use a GCompound:</p>
+<pre style="margin-left: 40px;">
+class SevenSegmentDisplay extends <span style="color:#0000ff;">GCompound</span> {
+	...
+}</pre>
+<p>
+	As with any class, we need a constructor</p>
+<pre style="margin-left: 40px;">
+constructor(width, height, ledWidth) {
+	...
+}</pre>
+<p>
+	in which we ideally specify the width and height of the display, as well as the width of the LEDs.&nbsp; The constructor should then construct the display from GRects.</p>
+<p>
+	Really practical would be a displayNumber(char c) method,</p>
+<pre style="margin-left: 40px;">
+displayNumber(c) {
+&nbsp;&nbsp; &nbsp;c = &#39;&#39; + c;
+&nbsp;&nbsp; &nbsp;this.turnAllSegmentsOff();
+&nbsp;&nbsp; &nbsp;switch (c) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;case &#39;0&#39;:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;const code0 = [1, 1, 1, 1, 1, 0, 1];
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.turnSegmentsOn(code0);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;case &#39;1&#39;:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;...
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	to which you simply pass a number, and which then displays it.&nbsp; The turnSegmentsOn() method could look like this:</p>
+<pre style="margin-left: 40px;">
+turnSegmentsOn(code) {
+&nbsp;&nbsp; &nbsp;if (code[0] == 1) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.upperFrontVertical.setColor(this.colorOn);
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;...
+}</pre>
+<p>
+	The SevenSegmentDisplay can then be easily used in a graphics program:</p>
+<pre style="margin-left: 40px;">
+function setup() {
+&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; ssd1 = new SevenSegmentDisplay(40, 80, LED_WIDTH);
+&nbsp;&nbsp;&nbsp; add(ssd1, X_OFFSET + LED_WIDTH, LED_WIDTH);
+&nbsp;&nbsp;&nbsp; ssd2 = new SevenSegmentDisplay(40, 80, LED_WIDTH);
+&nbsp;&nbsp;&nbsp; add(ssd2);
+&nbsp;&nbsp;&nbsp; ssd2.move(X_OFFSET + 40 + 3 * LED_WIDTH, LED_WIDTH);
+}</pre>
+<p>
+	Extension: Instead of the JSTextField you could also use the SevenSegmentDisplay for the Calculator.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/birdFlocking" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/birdFlocking.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	BirdFlocking</h2>
+<p>
+	Swarming behavior can be observed in fish, birds and many other animals.&nbsp; Interestingly, swarm behavior can be simulated relatively easily. The individuals in a swarm, sometimes called boids, only have to follow three simple rules [11]:</p>
+<ul>
+	<li>
+		Separation: keep some distance from your neighbors if you get too close (short range repulsion).</li>
+	<li>
+		Alignment: move roughly in the direction of your neighbors.</li>
+	<li>
+		Cohesion: move roughly towards the common center of your neighbors (long range attraction).</li>
+</ul>
+<p>
+	The simulation is similar to the Planets project (later in this chapter), with the subtle difference that instead of Newton&#39;s gravity, the boid rules apply.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/gameOfLife" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/gameOfLife.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	GameOfLife</h2>
+<p>
+	The greatest genius of the last century, John von Neumann, tried to construct a hypothetical machine that could make copies of itself.&nbsp; He succeeded in doing so, but the mathematical model of his machine had very complicated rules.&nbsp; The British mathematician John Horton Conway succeeded in drastically simplifying Neumann&#39;s ideas in the early 1970s, now known as Conway&#39;s Game of Life [8].</p>
+<p>
+	The universe of the Game of Life is a two-dimensional grid of square cells (GRects), each of which can be in one of two possible states: alive (black) or dead (white).&nbsp; Each cell has eight neighbors, and depending on the state of the neighbors, the state in the next round is decided according to the following rules:</p>
+<ul>
+	<li>
+		every living cell with less than two living neighbors dies (sub-population),</li>
+	<li>
+		every living cell with two or three living neighbors lives,</li>
+	<li>
+		every living cell with more than three living neighbors dies (overpopulation), and</li>
+	<li>
+		every dead cell with exactly three living neighbors becomes a living cell (reproduction).</li>
+</ul>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/mandelbrot" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/mandelbrot.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	Mandelbrot</h2>
+<p>
+	The Mandelbrot set is named after the French mathematician Benoît Mandelbrot.&nbsp; This set is a so-called fractal, but most people just find it pretty [9]. The mathematical equation behind the Mandelbrot set is very simple:</p>
+<pre style="margin-left: 40px;">
+z_n+1 = z_n * z_n + c</pre>
+<p>
+	where z and c are complex numbers.&nbsp; This equation is an iteration, i.e. if we know z_n, then we can calculate z_n+1.&nbsp; The initial conditions are that z_0 should be zero and c is the point in the complex plane for which the color is to be calculated.&nbsp; So if we think in x- and y-coordinates, then</p>
+<pre style="margin-left: 40px;">
+c = x + i y</pre>
+<p>
+	is the initial condition.&nbsp; All that is needed is the abort criterion, when should we stop the iteration?&nbsp; Either if z*z &gt;= 4 or if the number of iterations is greater than a maximum value:</p>
+<pre style="margin-left: 40px;">
+while (x * x + y * y &lt; 4 &amp;&amp; iteration &lt; MAX_ITERATION) {
+&nbsp;&nbsp; &nbsp;...
+&nbsp;&nbsp; &nbsp;iteration++;
+}</pre>
+<p>
+	To make the whole thing look nice, we take the number of iterations and encode them in color:</p>
+<pre style="margin-left: 40px;">
+let color = RAINBOW_COLORS[iteration % RAINBOW_NR_OF_COLORS];</pre>
+<p>
+	RAINBOW_COLORS is a color array that we can initialize at will.&nbsp; Last but not least we need a setPixel() method, which does not exist in the ACM Graphics library.&nbsp; We simply draw little GRects:</p>
+<pre style="margin-left: 40px;">
+function setPixel(x, y, color) {
+&nbsp;&nbsp;&nbsp; let i = (int)(((x - xMin) * WIDTH) / (xMax - xMin));
+&nbsp;&nbsp;&nbsp; let j = (int)(((y - yMin) * HEIGHT) / (yMax - yMin));
+&nbsp;&nbsp;&nbsp; let r = new GRect(1, 1);
+&nbsp;&nbsp;&nbsp; r.setColor(color);
+&nbsp;&nbsp;&nbsp; add(r, i, j);
+}
+</pre>
+<p>
+	This is not the fastest and most effective way, but it works.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Challenges</h1>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/planets" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/planets.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	Planets</h2>
+<p>
+	A nice example for reuse by inheritance is a small simulation of the sun-earth-moon system.&nbsp; Visually, planets are nothing more than GOvals.&nbsp; But planets move, i.e. they have a speed.&nbsp; GOvals have no velocity.&nbsp; So we need a GOval with velocity.&nbsp; This is exactly what inheritance can do for us:</p>
+<pre style="margin-left: 40px;">
+class GPlanet extends GOval {
+&nbsp;&nbsp;&nbsp; constructor(size) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">super(size, size);</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.vx = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.vy = 0;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; move() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super.move(this.vx, this.vy);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	GPlanet is a GOval, but has an additional velocity, i.e., vx and vy.&nbsp; In the constructor we simply call the constructor of the superclass, the constructor of GOval, which creates a GOval with a given height and width.&nbsp; Otherwise we just need a move() method to move our planet.</p>
+<p>
+	In our Planets GraphicsProgram we create three planets in the setup(), so</p>
+<pre style="margin-left: 40px;">
+function setup() {
+&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; // create sun
+&nbsp;&nbsp;&nbsp; sun = new GPlanet(SUN_MASS);
+&nbsp;&nbsp;&nbsp; sun.setFilled(true);
+&nbsp;&nbsp;&nbsp; sun.setColor(Color.YELLOW);
+&nbsp;&nbsp;&nbsp; sun.vy = SUN_SPEED;
+&nbsp;&nbsp;&nbsp; add(sun, (SIZE - SUN_MASS) / 2, (SIZE - SUN_MASS) / 2);
+
+&nbsp;&nbsp;&nbsp; // create earth
+&nbsp;&nbsp;&nbsp; ...
+
+&nbsp;&nbsp;&nbsp; // create moon
+&nbsp;&nbsp;&nbsp; ...
+}</pre>
+<p>
+	Here we set the radius of the sun equal to the mass of the sun.&nbsp; That&#39;s not entirely true, but not too bad for the simulation.&nbsp; Next we look at the game loop:</p>
+<pre style="margin-left: 40px;">
+function draw() {
+&nbsp;&nbsp;&nbsp; sun.move();
+&nbsp;&nbsp;&nbsp; earth.move();
+&nbsp;&nbsp;&nbsp; moon.move();
+&nbsp;&nbsp;&nbsp; calculateNewVelocities(sun, earth);
+&nbsp;&nbsp;&nbsp; calculateNewVelocities(sun, moon);
+&nbsp;&nbsp;&nbsp; calculateNewVelocities(earth, moon);
+&nbsp;&nbsp;&nbsp; update();
+}</pre>
+<p>
+	As usual in the game loop, we first move the individual planets and then calculate the new velocities.&nbsp; The calculateNewVelocities() method looks a bit complicated, but is nothing else than Newton&#39;s law of gravity.</p>
+<p>
+	This example shows very nicely that simulations are a little tricky: after the second orbit around the sun, our moon leaves us forever... hasta la vista.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/angryCanon" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/angryCanon.png" style="width: 200px; height: 133px; display: block;" />Try it</a></div>
+<h2>
+	AngryCanon</h2>
+<p>
+	Our next project was inspired by a popular game with birds and pigs.&nbsp; As usual, we need to simplify things a little.&nbsp; The target is a blue GRect, which we should hit with a bullet (green GOval).&nbsp; The bullet is shot by a cannon.</p>
+<p>
+	The most difficult thing about this game is the cannon: because we want to be able to change its direction, we need to be able to turn it.&nbsp; However, only the GPolygon offers this functionality, meaning it has a rotate() method. Thus our cannon needs to be a GPolygon.&nbsp; In order for this to look a little more pleasing, we hide part of the cannon behind a red GOval.</p>
+<p>
+	In the setup() method we create the cannon and the target.</p>
+<p>
+	Next we write the keyPressed() method: here we want to rotate the cannon either left or right depending on the KeyCode,</p>
+<pre style="margin-left: 40px;">
+function keyPressed() {
+&nbsp;&nbsp;&nbsp; switch (keyCode) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case LEFT_ARROW:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; angle += 5;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; canon.rotate(5);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case RIGHT_ARROW:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; angle -= 5;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; canon.rotate(-5);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 32:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fireBullet();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	If the player presses the space bar we want to fire the bullet.&nbsp; We need the angle angle as an instance variable so that we can set the initial velocity of the bullet when firing:</p>
+<pre style="margin-left: 40px;">
+function fireBullet() {
+&nbsp;&nbsp;&nbsp; if (bullet == null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vx = -Math.sin(angle * Math.PI / 180) * BULLET_SPEED;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vy = -Math.cos(angle * Math.PI / 180) * BULLET_SPEED;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bullet = new GOval(BULLET_SIZE, BULLET_SIZE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bullet.setColor(Color.GREEN);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bullet.setFilled(true);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; add(bullet, 50 - BULLET_SIZE / 2, APP_HEIGHT - 30 - BULLET_SIZE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">sendToBack(bullet);</span>
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Notice the sendToBack() function, that we call after adding the bullet to the canvas.&nbsp; It changes the z-order of the objects, and makes sure that the collision detection works properly.</p>
+<p>
+	The movement of the bullet itself is then calculated in the game loop:</p>
+<pre style="margin-left: 40px;">
+function draw() {
+&nbsp;&nbsp;&nbsp; if (bullet != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; moveBullet();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; collisionWithWalls();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; collisionWithTarget();
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; update();
+}</pre>
+<p>
+	In moveBullet() we move the bullet and let gravity do its work:</p>
+<pre style="margin-left: 40px;">
+function moveBullet() {
+&nbsp;&nbsp;&nbsp; bullet.move(vx, vy);
+&nbsp;&nbsp;&nbsp; vy += GRAVITY;
+}</pre>
+<p>
+	If there are collisions with the walls (i.e. up, right, left or down), the bullet simply disappears:</p>
+<pre style="margin-left: 40px;">
+removeObj(bullet);
+bullet = null;</pre>
+<p>
+	If there are collisions with the blue target, the bullet and the target disappear, and the game is over.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/flappyBall" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/flappyBall.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	FlappyBall</h2>
+<p>
+	This project is inspired by a game with a bird.&nbsp; However, our bird is just a GOval.&nbsp; We can control the bird with the keyboard, more precisely the space bar.&nbsp; And the bird has to fly through an obstacle, two moving GRects.</p>
+<p>
+	For the game we need a bird (ball) and a two-part wall as instance variables:</p>
+<pre style="margin-left: 40px;">
+let ball;
+let upperWall;
+let lowerWall;</pre>
+<p>
+	In setup() we initialize them:&nbsp; The ball is placed in the middle, the two rectangles to the right edge.&nbsp; The position of the gap should be random, but the width of the gap should be twice the diameter of the ball.</p>
+<p>
+	Next follows the game loop:</p>
+<pre style="margin-left: 40px;">
+if (alive) {
+&nbsp;&nbsp; &nbsp;moveBall();
+&nbsp;&nbsp; &nbsp;moveWall();
+&nbsp;&nbsp; &nbsp;checkForCollision();
+&nbsp;&nbsp; &nbsp;update();
+}</pre>
+<p>
+	The ball only moves up or down.&nbsp; Normally gravity acts on it, so it usually falls down.&nbsp; The wall moves with constant speed from right to left.&nbsp; When it reaches the left edge of the screen, it simply disappears and a new wall appears on the right edge.</p>
+<p>
+	As far as collisions are concerned, we have to check for collisions with the walls: if there is one, the game is over.&nbsp; In case of collisions with the ground, it makes sense to simply set the ball speed to 0 and position the ball at the bottom of the screen.</p>
+<p>
+	Still thinking about what to do when the space bar is pressed?&nbsp; This is surprisingly simple:</p>
+<pre style="margin-left: 40px;">
+function keyPressed() {
+&nbsp;&nbsp;&nbsp; ballVel = -3.0;
+}</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/speedRace" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/speedRace.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	SpeedRace</h2>
+<p>
+	The first version of Speed Race appeared in 1974 written by Tomohiro Nishikado, the author of Space Invaders [10].&nbsp; In a nutshell, it is GTA 0.1, a car racing game of the first generation.&nbsp; It&#39;s interesting how easy it is to outsmart the brain: just a few white rectangles that move from top to bottom, and you think you&#39;re driving on a road!</p>
+<p>
+	The game actually consists of a whole lot of rectangles.&nbsp; The first is the road: it consists of two parts: a large black rectangle that does nothing and the middle lane that consists of several (five) white rectangles that move at a constant speed from top to bottom.</p>
+<p>
+	This is followed by your own car: a red rectangle that can only be steered to the left and right.&nbsp; And finally the other cars (otherCars): they are only colored rectangles, which also move from top to bottom through the screen.&nbsp; In setup() all the rectangles are created, notice that the order they are added makes a difference in appearance.</p>
+<p>
+	The code for the game loop is also limited:</p>
+<pre style="margin-left: 40px;">
+function draw() {
+&nbsp;&nbsp;&nbsp; moveRoad();
+&nbsp;&nbsp;&nbsp; moveCars();
+&nbsp;&nbsp;&nbsp; checkForCollisionCarsWithWall();
+&nbsp;&nbsp;&nbsp; update();
+}</pre>
+<p>
+	First we move the road.&nbsp; This is actually totally trivial if we remember our friend the remainder operator:</p>
+<pre style="margin-left: 40px;">
+function moveRoad() {
+&nbsp;&nbsp;&nbsp; for (let i = 0; i &lt; NR_OF_LANES; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; middleLane[i].move(0, CAR_SPEED);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let x = middleLane[i].getX();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let y = middleLane[i].getY() + LANE_LENGTH;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; middleLane[i].setLocation(x, y % SIZE - LANE_LENGTH);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	No need for an if-else.&nbsp; Even easier is moveCars(), we simply move one car after the other.&nbsp; In checkForCollisionCarsWithWall() we just want to find out if one of the otherCars has left the screen below: then we simply send it to the top again, but at a different, random x-position.</p>
+<p>
+	Remains the keyPressed() method: if the player presses the left arrow key (keyCode = 37), then we simply move the car to the left by 5 pixels, if he presses the right arrow key (keyCode = 39), we move it to the right by 5 pixels.&nbsp; Could have been more complicated.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/geometryRun" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/geometryRun.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	GeometryRun</h2>
+<p>
+	Most of us have suffered permanent brain damage from math lessons at school, so in general we avoid geometric objects like the plague.&nbsp; The point of this game is that we (a green GOval) must avoid colliding (using the space bar) with the incoming geometric objects (GRects) at all cost.</p>
+<p>
+	As usual, we first consider which instance variables are necessary:</p>
+<pre style="margin-left: 40px;">
+let obstacles = [];
+let runner;</pre>
+<p>
+	The Geometry class is simply a GOval, the GeometryObstacle is a GRect.&nbsp; Both have their own velocity:</p>
+<pre style="margin-left: 40px;">
+class GeometryObstacle extends GRect {
+
+&nbsp;&nbsp;&nbsp; constructor() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super(OBSTACLES_SIZE, OBSTACLES_SIZE);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.vx = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.vy = 0;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; move() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; super.move(this.vx, this.vy);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Let&#39;s continue with our game, we start with the setup(): we initialize the runner and the obstacles.&nbsp; We place the runner in the middle and the obstacles at the bottom of the screen, at a random x-positions.&nbsp; And we must not forget to add the KeyListener.&nbsp;</p>
+<p>
+	The game loop is very simple again:</p>
+<pre style="margin-left: 40px;">
+function draw() {
+&nbsp;&nbsp;&nbsp; moveObstacles();
+&nbsp;&nbsp;&nbsp; moveDash();
+&nbsp;&nbsp;&nbsp; checkForCollision();
+&nbsp;&nbsp;&nbsp; update();
+}</pre>
+<p>
+	The obstacles move with constant speed from right to left, and on the runner only gravity acts.&nbsp; The checkForCollision() method must ensure that obstacles that disappear on the left, appear on the right again, and it should also detect collisions between our runner and the obstacles.</p>
+<p>
+	Remains the keyPressed() method: whenever the spacebar is pressed, the y-speed of the runner should get a small push:</p>
+<pre style="margin-left: 40px;">
+function keyPressed() {
+&nbsp;&nbsp;&nbsp; if (keyCode == 32) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; runner.vy -= DASH_JUMP;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; runner.move();
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	That&#39;s it.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/jumpAndRun" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/jumpAndRun.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	JumpAndRun</h2>
+<p>
+	GeometryRun is a typical jump-and-run game.&nbsp; Donkey Kong [13] was one of the first known games of this genre, also known as &quot;platform game&quot; [12].&nbsp; What makes jump and run games different is that there are different types of objects and that there are different levels.</p>
+<p>
+	In our JumpAndRun project we need the following global variables:</p>
+<pre style="margin-left: 40px;">
+let ball;
+let movingObject = new Array(Math.trunc(400 / BALL_DIAM + 1));</pre>
+<p>
+	We have a ball for the player and the movingObjects are an array of GObjects.&nbsp; These could be GOvals, GRects, or any other GObjects.&nbsp; We determine the GObject from the string world:</p>
+<pre style="margin-left: 40px;">
+let world = &quot;&nbsp; RRRR&nbsp; O&nbsp;&nbsp; RO&nbsp; OOO&nbsp; R&quot;;</pre>
+<p>
+	If the string contains an &#39;R&#39;, a GRect is to be created at the position, a GOval for an &#39;O&#39;, and a space is nothing.&nbsp; That means we can describe different levels with different world strings.&nbsp; And a level editor would do nothing else but edit this string.</p>
+<p>
+	What does the setup() method do?&nbsp; It creates the ball and creates the world. Here the createNewObjects() method may be helpful:</p>
+<pre style="margin-left: 40px;">
+function createNewObjects() {
+&nbsp;&nbsp; &nbsp;for (let i = 0; i &lt; movingObject.length; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;switch (world.charAt(i)) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;case &#39;R&#39;:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;let rect = new GRect(APP_WIDTH + i * BALL_DIAM, Y_START, BALL_DIAM, BALL_DIAM);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;rect.setColor(rgen.nextColor());
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;rect.setFilled(true);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;rect.setFillColor(rgen.nextColor());
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;movingObject[i] = rect;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;add(movingObject[i]);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;case &#39;O&#39;:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;...
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;default:
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;movingObject[i] = null;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<p>
+	The game loop is identical to the one in the last project.&nbsp; What is different is the checkForCollisionWithObjects() method:</p>
+<pre style="margin-left: 40px;">
+function checkForCollisionWithObjects() {
+&nbsp;&nbsp;&nbsp; let obj = getElementAt(ball.getX() + BALL_DIAM / 2, ball.getY()
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + BALL_DIAM + 1);
+&nbsp;&nbsp;&nbsp; if ((obj != null)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (obj instanceof GRect) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ballVel = 0.0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ball.setLocation(X_START, APP_HEIGHT - 2*BALL_DIAM - BALL_OFFSET);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; alive = false;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	because depending on the type of object, different things should happen: we can stand on GRects, but when we come in contact with GOvals, we die.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/minesClone" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/minesClone.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	MinesClone</h2>
+<p>
+	We&#39;ve all played MineSweeper (or Mines) before.&nbsp; The game is about finding hidden mines without detonating them [14].</p>
+<h3>
+	1. Playing Field</h3>
+<p>
+	The first question we have to ask ourselves: how do we want to represent the playing field?&nbsp; One possibility is a two-dimensional array:</p>
+<pre style="margin-left: 40px;">
+let field = makeArray(FIELD_SIZE, FIELD_SIZE);</pre>
+<p>
+	where we use the following function to create the array, basically it is an array of arrays:</p>
+<pre style="margin-left: 40px;">
+function makeArray(d1, d2) {
+&nbsp;&nbsp; &nbsp;var arr = [];
+&nbsp;&nbsp; &nbsp;for (let i = 0; i &lt; d2; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;arr.push(new Array(d1));
+&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;return arr;
+}</pre>
+<p>
+	In the <em>initialzeField()</em> method we initialize this array with strings representing the content of each cell.&nbsp; For instance, an &#39;M&#39; could represent a mine and a space &#39; &#39; means that the cell is empty:</p>
+<pre style="margin-left: 40px;">
+function initialzeField() {
+&nbsp;&nbsp; &nbsp;let rgen = new RandomGenerator();
+&nbsp;&nbsp; &nbsp;for (let i = 0; i &lt; MinesConstant.NUMBER_OF_MINES; i++) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;let x = rgen.nextInt(0, MinesConstant.FIELD_SIZE - 1);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;let y = rgen.nextInt(0, MinesConstant.FIELD_SIZE - 1);
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;field[x][y] = &#39;M&#39;;
+&nbsp;&nbsp; &nbsp;}
+}</pre>
+<h3>
+	2. Mines in the Area</h3>
+<p>
+	After we have hidden the mines, we have to count how many mines are in the respective environment of a cell.&nbsp; Of course we can do that ourselves, but we may also use the following method:</p>
+<pre style="margin-left: 40px;">
+MinesHelper.countMines(field);</pre>
+<p>
+	This method takes our field array as parameter and modifies it.&nbsp; This is possible because arrays are passed by references, i.e. in the original.&nbsp; Each cell (except mines) then contains the number corresponding to the number of adjacent mines:</p>
+<table align="center" border="0" cellpadding="10" cellspacing="10" style="width: 100%;">
+	<tbody>
+		<tr>
+			<td style="text-align: center; vertical-align: middle;">
+				<p style="margin-left: 40px;">
+					<img alt="" src="img/mines_array_initial.png" style="width: 153px; height: 160px;" /><br />
+					prior</p>
+			</td>
+			<td style="text-align: center; vertical-align: middle;">
+				<p>
+					<img alt="" src="img/mines_array_modified.png" style="width: 171px; height: 160px;" /><br />
+					after</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	&nbsp;</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/minesClone" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/minesClone1.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h3>
+	3. Display Playing Field</h3>
+<p>
+	Now that our data structure (the array) is in place, we continue with the graphical part.&nbsp; First, we write the drawInitialField() method.&nbsp; Since in the beginning all cells are still hidden, this is quite simple, we simply draw 8 * 8 &quot;initial.png&quot; images.&nbsp; For this we use the GImage class:</p>
+<pre style="margin-left: 40px;">
+img = new GImage(&quot;Pr7_Asteroids/initial.png&quot;);
+add(img, i * PIXEL_PER_TILE, j * PIXEL_PER_TILE);</pre>
+<p>
+	Our game looks already quite similar to the original.</p>
+<h3>
+	4. MouseEvents</h3>
+<p>
+	To be able to react to mouse clicks we need to implement the mouseClicked() method. When the mouse is clicked, the first step is to find out which cell the player clicked on.&nbsp; Here our old friend integer division helps us:</p>
+<pre style="margin-left: 40px;">
+let x = Math.trunc(mouseX / MinesConstant.PIXEL_PER_TILE);
+let y = Math.trunc(mouseY / MinesConstant.PIXEL_PER_TILE);</pre>
+<p>
+	With these coordinates we can check in our array field[x][y] what is there:</p>
+<pre style="margin-left: 40px;">
+if (field[x][y] == &#39;M&#39;) {
+&nbsp;&nbsp; &nbsp;...
+} else if (field[x][y] == &#39;0&#39;) {
+&nbsp;&nbsp; &nbsp;...
+} else {
+&nbsp;&nbsp; &nbsp;...
+}</pre>
+<p>
+	If the player clicked on a mine, the game is over.&nbsp; In this case you could write a method drawWholeField() that exposes the entire playing field.&nbsp; Otherwise, we should call the drawOneTile(x, y) method, which draws the correct image for this cell at x,y, i.e. the image of a mine (&quot;mine.png&quot;), if it is a mine, or the image for the empty field (&quot;empty.png&quot;) superimposed with a GLabel indicating the number of adjacent mines. If you want, you could also give the GLabel the matching color from the LABEL_COLORS[] array.</p>
+<h3>
+	5. Marking of Cells</h3>
+<p>
+	One important aspect is still missing in our MinesClone: the marking of cells as potential mines.&nbsp; In the original this can be done with the right mouse button.&nbsp; This is actually quite simple, because the MouseEvent contains the information which of the mouse buttons was pressed:</p>
+<pre style="margin-left: 40px;">
+if (mouseButton === CENTER) {  ...  }</pre>
+<p>
+	If the player has pressed the third mouse button, i.e. the right one, then the image &quot;marked.png&quot; should be drawn at the corresponding position. As with the previous example, also in MinesClone we want to use an interface (MinesConstant) to store all our constants.</p>
+<h3>
+	Extensions</h3>
+<p>
+	You could write a method discoverEmtpyTiles(): if the player clicks on an empty tile, then all empty surrounding tiles could be uncovered.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr7_Asteroids/asteroids" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/asteroids.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+	<h2>
+	Asteroids</h2>
+<p>
+	According to Wikipedia &quot;Asteroids is one of the greatest successes of all time in the history of computer games&quot; [15].&nbsp; This should not deter us from developing our own version of Asteroids.&nbsp; The game is about flying through an asteroid field with a spaceship.&nbsp; And of course it&#39;s about not colliding with the asteroids.</p>
+<h3>
+	1. Pre-existing Classes</h3>
+<p>
+	If we want to develop the game in a reasonable amount of time, we may want to use some pre-existing classes:</p>
+<ul>
+	<li>
+		<strong>GAsteroid:</strong>&nbsp; is a GRect with speeds vx and vy, as well as a move() method.</li>
+	<li>
+		<strong>GBullet:</strong>&nbsp; is a GOval, otherwise identical to GAsteroid.</li>
+	<li>
+		<strong>GSpaceShip:</strong>&nbsp; is a GPolygon, just like GAsteroid it has speeds vx and vy, as well as a move() method.&nbsp; Additionally it can spin, rotate(), and accelerate via startEngine().</li>
+</ul>
+<p>
+	If we take a closer look at the MarsLander project, then these classes are really nothing new.&nbsp; We include them at the top of our code:</p>
+<pre style="margin-left: 40px;">
+include(&quot;Pr7_Asteroids/GAsteroid.js&quot;);
+include(&quot;Pr7_Asteroids/GBullet.js&quot;);
+include(&quot;Pr7_Asteroids/GSpaceShip.js&quot;);</pre>
+<p>
+	We also need to declare several constants:</p>
+<pre style="margin-left: 40px;">
+const FPS = 25;
+const APP_WIDTH = 400;
+const APP_HEIGHT = 400;
+const NR_OF_ASTEROIDS = 10;
+const ASTEROID_SIZE = 40;
+const ASTEROID_MAX_SPEED = 5;
+const SPACE_SHIP_SIZE = 20;
+const SPACE_SHIP_SPEED = 3;
+const BULLET_SIZE = 4;
+const BULLET_SPEED = 10;</pre>
+<p>
+	In the setup() method we initialize the ship and the asteroids.&nbsp; The ship launches from the center of the screen.&nbsp; As for the asteroids, there are supposed to be ten of them, they are blue and randomly distributed.&nbsp; Their speeds should be random:</p>
+<pre style="margin-left: 40px;">
+function createAsteroids() {
+&nbsp; for (let i = 0; i &lt; NR_OF_ASTEROIDS; i++) {
+&nbsp;&nbsp;&nbsp; asteroids[i] = new GAsteroid(rgen.nextInt(APP_WIDTH),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rgen.nextInt(APP_HEIGHT));
+&nbsp;&nbsp;&nbsp; asteroids[i].vx = rgen.nextInt(-ASTEROID_MAX_SPEED,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ASTEROID_MAX_SPEED);
+&nbsp;&nbsp;&nbsp; asteroids[i].vy = rgen.nextInt(-ASTEROID_MAX_SPEED,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ASTEROID_MAX_SPEED);
+&nbsp;&nbsp;&nbsp; asteroids[i].setColor(Color.BLUE);
+&nbsp;&nbsp;&nbsp; // asteroid.setFilled(true);
+&nbsp;&nbsp;&nbsp; add(asteroids[i]);
+&nbsp; }
+}</pre>
+<h3>
+	2. Game Loop</h3>
+<p>
+	The game loop for Asteroids is only slightly more complicated than our other projects:</p>
+<pre style="margin-left: 40px;">
+function draw() {
+&nbsp; if (spaceShip !== undefined) {
+&nbsp;&nbsp;&nbsp; moveSpaceShip();
+&nbsp;&nbsp;&nbsp; moveAsteroids();
+&nbsp;&nbsp;&nbsp; moveBullet();
+&nbsp;&nbsp;&nbsp; checkForCollisions();
+&nbsp; }
+&nbsp; update();
+}</pre>
+<p>
+	In the game loop in each iteration we first move the spaceship, then the asteroids, followed by the bullet, if one is fired.&nbsp; And of course we have to check all possible collisions, more about that later.</p>
+<h3>
+	3. Key Events</h3>
+<p>
+	The spaceship is controlled by the keyboard, so we have to implement the keyPressed() method:</p>
+<pre style="margin-left: 40px;">
+function keyPressed() {
+&nbsp; switch (keyCode) {
+&nbsp;&nbsp;&nbsp; case UP_ARROW:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; spaceShip.startEngine();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp; case 32:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+&nbsp; }
+}</pre>
+<p>
+	If the player presses the up key (38), then the spaceship should accelerate (startEngine()), if she presses the left key (37), the spaceship should turn 10 degrees to the left, if she presses the right key (39), then the spaceship should turn 10 degrees to the right, that is -10 degrees.</p>
+<p>
+	So far so good.&nbsp; If we test our game now, the asteroids should fly around, and our spaceship should be able to spin and accelerate.</p>
+<p>
+	What&#39;s still missing is our self-defense: if we press the spacebar, the spaceship should fire a bullet.&nbsp; So we need another entry in the keyPressed() method: if the player presses the spacebar, then the method fireBullet() should be called.&nbsp; In fireBullet() we create a new GBullet at the position of the spaceship, and with the following velocities:</p>
+<pre style="margin-left: 40px;">
+function fireBullet() {
+&nbsp; if (bullet === undefined) {
+&nbsp;&nbsp;&nbsp; bullet = new GBullet(spaceShip.getX(), spaceShip.getY());
+&nbsp;&nbsp;&nbsp; bullet.vx = Math.sin(spaceShip.angle) * BULLET_SPEED;
+&nbsp;&nbsp;&nbsp; bullet.vy = -Math.cos(spaceShip.angle) * BULLET_SPEED;
+&nbsp;&nbsp;&nbsp; add(bullet);
+&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">sendToBack(bullet);</span>
+&nbsp; }
+}</pre>
+<p>
+	A little test should verify that we can fire bullets now.&nbsp; Notice the sendToBack(), that makes sure collision detection works properly.</p>
+<h3>
+	4. Collisions</h3>
+<p>
+	The collisions make the game interesting.&nbsp; All in all, there are five different ones:</p>
+<pre style="margin-left: 40px;">
+function checkForCollisions() {
+&nbsp; checkForCollisionAsteroidsWithWall();
+&nbsp; checkForCollisionSpaceShipWithWall();
+&nbsp; checkForCollisionBulletWithWall();
+&nbsp; checkForCollisionBulletWithAsteroid();
+&nbsp; checkForCollisionAsteroidWithSpaceShip();
+}</pre>
+<p>
+	The collisions with the wall are the easiest.&nbsp; Both the spaceship and the asteroids should simply reappear on the opposite side of the screen when they leave the screen.&nbsp; If the ball leaves the screen, it should simply disappear:</p>
+<pre style="margin-left: 40px;">
+removeObj(bullet);
+bullet = undefined;</pre>
+<p>
+	To detect collisions between the bullet and an asteroid, we use the getElementAt() method: if there is a GObject where the bullet is, then that must be an asteroid.&nbsp; We then remove the asteroid and the bullet:</p>
+<pre style="margin-left: 40px;">
+removeObj(obj);
+removeObj(bullet);
+bullet = undefined;</pre>
+<p>
+	Very important, we do not set obj to undefined (why?)!</p>
+<p>
+	There are still collisions between spaceship and asteroids: for the spaceship they are catastrophic, because they lead to the end of the game.&nbsp; We&#39;ll just set the spaceship to null,</p>
+<pre style="margin-left: 40px;">
+removeObj(obj);
+removeObj(spaceShip);
+spaceShip = undefined;</pre>
+<p>
+	and that ends the game loop.</p>
+<h3>
+	Extensions</h3>
+<p>
+	We can think of a lot of extensions to our Asteroids game:</p>
+<ul>
+	<li>
+		Game over:&nbsp; we could write a method displayGameOver() that displays a big text (SansSerif-36) in the middle of the screen.</li>
+	<li>
+		Hyperspace:&nbsp; the player can also send the spaceship into hyperspace: it then simply reappears at a random location on the screen. Of course, there is a risk of self-destruction if it reappears within an asteroid.</li>
+	<li>
+		Prettier asteroids:&nbsp; in the real game, the asteroids are not just GRects, but pretty GPolygons.&nbsp; All we have to do is modify the GAsteroid class so that the asteroids look like those in the real game.</li>
+	<li>
+		Splitting asteroids (hard): in the real game the asteroids do not just disappear when they are hit by a bullet, but they halve themselves.&nbsp; The smaller parts then move at different speeds in different directions.&nbsp; This is very hard to do with an arrays, but if you use an ArrayList (next chapter), it is actually not that hard.</li>
+</ul>
+<p>
+	.</p>
+<hr />
+<h1>
+	Questions</h1>
+<ol>
+	<li>
+		Name two characteristics of an object-oriented language.<br />
+		&nbsp;</li>
+	<li>
+		Give an example for inheritance<br />
+		&nbsp;</li>
+	<li>
+		Declare an array of numbers with five elements containing the numbers from 1 to 5.</li>
+</ol>
+<p>
+	.</p>
+<hr />
+<h1>
+	References</h1>
+<p>
+	References from Chapter 2 also form the basis of this chapter.&nbsp; Further details on many of the projects can be found in Wikipedia.</p>
+<p>
+	[1] Taj Mahal, Wikipedia, <a href="https://en.wikipedia.org/wiki/File:Taj_Mahal_(Edited).jpeg">https://en.wikipedia.org/wiki/File:Taj_Mahal_(Edited).jpeg</a>, Author: Yann; edited by Jim Carter, License: Creative Commons Attribution-Share Alike 4.0</p>
+<p>
+	[2] Three algorithms for converting color to grayscale, <a href="http://www.johndcook.com/blog/2009/08/24/algorithms-convert-color-grayscale/">www.johndcook.com/blog/2009/08/24/algorithms-convert-color-grayscale/</a></p>
+<p>
+	[3] Steganographie, <a href="https://de.wikipedia.org/wiki/Steganographie">https://de.wikipedia.org/wiki/Steganographie</a></p>
+<p>
+	[4] RAID, <a href="https://de.wikipedia.org/wiki/RAID">https://de.wikipedia.org/wiki/RAID</a></p>
+<p>
+	[5] GNU Image Manipulation Program, Faltungsmatrix, <a href="http://docs.gimp.org/de/plug-in-convmatrix.html">http://docs.gimp.org/de/plug-in-convmatrix.html</a></p>
+<p>
+	[6] Giordano Bruno, <a href="https://de.wikipedia.org/wiki/Giordano_Bruno">https://de.wikipedia.org/wiki/Giordano_Bruno</a></p>
+<p>
+	[7] Schiffe versenken, <a href="https://de.wikipedia.org/wiki/Schiffe_versenken">https://de.wikipedia.org/wiki/Schiffe_versenken</a></p>
+<p>
+	[8] Conways Spiel des Lebens, <a href="https://de.wikipedia.org/wiki/Conways_Spiel_des_Lebens">https://de.wikipedia.org/wiki/Conways_Spiel_des_Lebens</a></p>
+<p>
+	[9] Mandelbrot-Menge, <a href="https://de.wikipedia.org/wiki/Mandelbrot-Menge">https://de.wikipedia.org/wiki/Mandelbrot-Menge</a></p>
+<p>
+	[10] Tomohiro Nishikado, Speed Race, <a href="https://en.wikipedia.org/wiki/Tomohiro_Nishikado#Speed_Race">https://en.wikipedia.org/wiki/Tomohiro_Nishikado#Speed_Race</a></p>
+<p>
+	[11] Flocking (behavior), <a href="https://en.wikipedia.org/wiki/Flocking_(behavior)#Flocking_rules">https://en.wikipedia.org/wiki/Flocking_(behavior)#Flocking_rules</a></p>
+<p>
+	[12] Platform game, <a href="https://en.wikipedia.org/wiki/Platform_game">https://en.wikipedia.org/wiki/Platform_game</a></p>
+<p>
+	[13] Donkey Kong (Arcade), <a href="https://de.wikipedia.org/wiki/Donkey_Kong_(Arcade)">https://de.wikipedia.org/wiki/Donkey_Kong_(Arcade)</a></p>
+<p>
+	[14] Minesweeper, <a href="https://de.wikipedia.org/wiki/Minesweeper">https://de.wikipedia.org/wiki/Minesweeper</a></p>
+<p>
+	[15] Asteroids, <a href="https://de.wikipedia.org/wiki/Asteroids">https://de.wikipedia.org/wiki/Asteroids</a></p>
+<p>
+	.</p>
+<p class="footer">
+Copyright &copy; 2016-2023 <a href="http://www.lano.de">Ralph P. Lano</a>. All rights reserved.
+</p>
+</div>
+</div>
+</center>
+</body>
+</html>

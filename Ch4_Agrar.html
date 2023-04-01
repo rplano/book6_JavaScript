@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>JavaScript: Ch4 Agrar</title>
+<meta name="title" content="Variations on a Theme: JavaScript: Ch4 Agrar">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="UTF-8">
+<meta name="description" content="An object-oriented Introduction">
+<meta name="keywords" content="JavaScript,object orientation,introduction">
+<meta name="author" content="Ralph P. Lano">
+<meta name="robots" content="index,follow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="book.css">
+</head>
+
+<body>
+<center>
+<div id="wrap">
+<ul class="sidenav">
+<p><a href="../index.html">Variations on a Theme</a><a href="index.html">JavaScript</a></p>
+<li><a href="Ch1_Karel.html">Karel</a></li>
+<li><a href="Ch2_Graphics.html">Graphics</a></li>
+<li><a href="Ch3_Console.html">Console</a></li>
+<li><a href="Ch4_Agrar.html">Agrar</a></li>
+<li><a href="Ch5_MindReader.html">MindReader</a></li>
+<li><a href="Ch6_Swing.html">Swing</a></li>
+<li><a href="Ch7_Asteroids.html">Asteroids</a></li>
+<li><a href="Ch8_Stocks.html">Stocks</a></li>
+<li><a href="index.html"> </a></li>
+<li><a href="AppA_Primer.html">Primer</a></li>
+<li><a href="AppB_Libraries.html">Libraries</a></li>
+<li><a href="AppC_Ideas.html">Ideas</a></li>
+</ul>
+<div class="content">
+<p>
+	<img alt="" src="img/8380f6ab-e1dc-4095-96f6-e3aa733122d7.png" style="display: block; margin-left: auto;  margin-right: auto; width: 233px; height: 223px;" /></p>
+<h1>
+	Agrar</h1>
+<p>
+	In the last chapter we have neglected the top-down approach at the expense of variables, but in this chapter we will see how to get back to the top-down approach with functions.&nbsp; And we will write our first animations and games.&nbsp; It promises to get interesting.</p>
+<p>
+	.</p>
+<h2>
+	Functions</h2>
+<p>
+	We have known functions for a quite a some time now. With Karel we called them commands, e.g. move(), turnLeft() and frontIsClear().&nbsp; Also in graphics programs we used them, at that time we called them messages that we send to a GRect, e.g. setColor() and setFilled().&nbsp; Even with console programs we had them, e.g. readInt() and println().&nbsp; So nothing new.</p>
+<p>
+	With Karel there was the cool possibility to create new commands, like turnRight() or moveToWall().&nbsp; That&#39;s what we did back then:</p>
+<pre style="margin-left: 40px;">
+function turnRight() {
+&nbsp;&nbsp;&nbsp; turnLeft();
+&nbsp;&nbsp;&nbsp; turnLeft();
+&nbsp;&nbsp;&nbsp; turnLeft();
+}
+</pre>
+<p>
+	Wouldn&#39;t it have been cool if we could have had the following new command in our Archery program?</p>
+<pre style="margin-left: 40px;">
+function drawCircle( radius, color ) {
+	... 
+}
+</pre>
+<p>
+	Or for our Wall program, a function like the following would have been quite practical:</p>
+<pre style="margin-left: 40px;">
+function drawRowOfNBricks( numberOfBricks ) {
+	... 
+}
+</pre>
+<p>
+	Well, the nice thing is, this actually is possible!</p>
+<p>
+	<strong>SEP: Functions always do something, they convey an action, so functions should always be verbs.</strong></p>
+<p>
+	.</p>
+<h2>
+	Defining Functions</h2>
+<p>
+	Creating a new function is as easy as teaching Karel new commands.&nbsp; The general syntax of a function declaration is as follows:</p>
+<pre style="margin-left: 40px;">
+function name( parameters ) {
+	... body...
+}</pre>
+<p>
+	where we mean by</p>
+<ul>
+	<li>
+		<strong>name:</strong>&nbsp; the name of the function, here the same rules apply as for variables and function names should always be written in lower case,</li>
+	<li>
+		<strong>parameters:</strong>&nbsp; parameters are new, they did not exist with Karel, but they are very practical as we will see soon.</li>
+</ul>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch4_Agrar/archery" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/archery.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	Exercise: Archery</h2>
+<p>
+	Let&#39;s take another look at our Archery program.&nbsp; But now we try using the drawCircle(radius, color) function.&nbsp; We will find that the code becomes much shorter and also more readable.</p>
+<pre style="margin-left: 40px;">
+function drawCircle(radius, color) {
+&nbsp;   let ring = new GOval(2 * radius, 2 * radius);
+&nbsp;   ring.setColor(color);
+&nbsp;   ring.setFilled(true);
+&nbsp;   let x = 50 + 72 - radius;
+&nbsp;   add(ring, x + 25, x - 48);
+}</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch4_Agrar/wall" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/wall.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	Exercise: Wall</h2>
+<p>
+	Let&#39;s try the Wall program again, using the help of functions.&nbsp; We want to build a wall consisting of 15 bricks (GRect).&nbsp; However, we want to use the function</p>
+<pre style="margin-left: 40px;">
+function drawRowOfNBricks(j) {
+&nbsp;&nbsp;&nbsp; let x = 70; // beginning x position of wall
+&nbsp;&nbsp;&nbsp; let y = 108 + j * 15; // beginning y position of wall
+&nbsp;&nbsp;&nbsp; for (let i = 0; i &lt; 5; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let brick = new GRect(30, 15);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; add(brick, x, y);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x = x + 30;
+&nbsp;&nbsp;&nbsp; }
+}
+</pre>
+<p>
+	Question: Does the function above contain magic numbers?&nbsp; Can we change that?</p>
+<p>
+	.</p>
+<h2>
+	Return Value</h2>
+<p>
+	So far we have only seen functions that return nothing.&nbsp; But there are also functions that give something back.&nbsp; Most of the time the functions calculate something and return the result as a return value.&nbsp; A nice example is the following function that returns how many inches there are in a given number of feet:</p>
+<pre style="margin-left: 40px;">
+function feetToInches(feet) {
+&nbsp;&nbsp;&nbsp; let inches = 12 * feet;
+&nbsp;&nbsp;&nbsp; return inches;
+}</pre>
+<p>
+	We can use this function in a console program.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch4_Agrar/convertFeetToInches" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/convertFeetToInches.png" style="width: 220px; display: block; height: 124px;" />Try it</a></div>
+<h2>
+	Exercise: ConvertFeetToInches</h2>
+<p>
+	We want to write a small console program that converts feet to inches.&nbsp; It asks the user for the number of feet using readDouble() and then calls our feetToInches() function and returns the result in the console window.</p>
+<pre style="margin-left: 40px;">
+let feet = await readDouble(&quot;Enter feet: &quot;);
+let inches = <span style="color:#0000ff;">feetToInches</span>(feet);
+println(feet + &quot; feet are &quot; + inches + &quot; inches.&quot;);
+</pre>
+<p>
+	If we look closely, we see that we use the feetToInches() function in the same way as the readInt() or println() functions.&nbsp; The only difference is that we wrote it ourselves.</p>
+<p>
+	.</p>
+<h2>
+	Objects as Return Value</h2>
+<p>
+	We can not only return numbers, but every possible data type, including GOvals for instance.&nbsp; The following function generates a colored filled circle with a given radius r at positions x and y:</p>
+<pre style="margin-left: 40px;">
+function createFilledCircle(x, y, r, color) {
+&nbsp;&nbsp;&nbsp; let circle = new GOval(x-r, y-r, 2*r, 2*r);
+&nbsp;&nbsp;&nbsp; circle.setColor(color);
+&nbsp;&nbsp;&nbsp; circle.setFilled(true);
+&nbsp;&nbsp;&nbsp; return circle;
+}</pre>
+<p>
+	All we have to do now is add it to our Archery program.</p>
+<p>
+	.</p>
+<h2>
+	Local Variables</h2>
+<p>
+	The variables we have been dealing with so far are called local variables.&nbsp; Local with respect to a function.&nbsp; This means that variables are only visible inside the function in which they were declared, outside, that is, in other functions they are not visible or accessible.&nbsp; Let&#39;s look at an example:</p>
+<pre style="margin-left: 40px;">
+async function setup() {
+&nbsp;&nbsp;&nbsp; createConsole();
+
+&nbsp;&nbsp;&nbsp; let feet = await readDouble(&quot;Enter feet: &quot;);
+&nbsp;&nbsp;&nbsp; println(feet);
+}
+
+function feetToInches() {
+&nbsp;&nbsp;&nbsp; let inches = 42;
+&nbsp;&nbsp;&nbsp; println(inches);
+}</pre>
+<p>
+	In this example there is a variable called feet that exists inside the function setup() and a variable inches that exists in the function feetToInches().&nbsp; If we try to access the variable feet in the function feetToInches(), then this is not possible.&nbsp; The same applies the other way round.&nbsp; The variables are therefore only visible locally in their respective functions.</p>
+<p>
+	How can we pass variables from one function to another function? That&#39;s what parameters are for:</p>
+<pre style="margin-left: 40px;">
+function feetToInches(feet) {
+&nbsp;&nbsp;&nbsp; let inches = 12 * feet;
+&nbsp;&nbsp;&nbsp; println(inches);
+}</pre>
+<p>
+	We pass variables from one function to another using these parameters.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch4_Agrar/localVariables" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/localVariables.png" style="width: 220px; height: 130px; display: block;" />Try it</a></div>
+<p>
+	However, only a copy of the variable is passed.&nbsp; To see this, let&#39;s have a quick look at the following program:</p>
+<pre style="margin-left: 40px;">
+async function setup() {
+&nbsp;&nbsp;&nbsp; createConsole();
+
+&nbsp;&nbsp;&nbsp; let <span style="color:#0000ff;">feet</span> = await readDouble(&quot;Enter feet: &quot;);
+&nbsp;&nbsp;&nbsp; feetToInches(<span style="color:#0000ff;">feet</span>);
+&nbsp;&nbsp;&nbsp; println(<span style="color:#0000ff;">feet</span>);
+}
+
+function feetToInches(<span style="color:#ff0000;">feet</span>) {
+&nbsp;&nbsp;&nbsp; <span style="color:#ff0000;">feet</span> = 42;
+}
+</pre>
+<p>
+	First we ask the user to give us a value, e.g. &#39;12&#39;.&nbsp; We pass this value to the feetToInches() function.&nbsp; Now inside that function, we reassign feet to a new value, say feet = 42.&nbsp; But this reassignment only applies to the copy, the original remains unchanged, as we see when we look at what is displayed in the console window.&nbsp; The original feet still has the value &#39;12&#39;, i.e., it was not changed.</p>
+<p>
+	That&#39;s why it doesn&#39;t really matter whether we call the red feet also feet or give it another name:</p>
+<pre style="margin-left: 40px;">
+async function setup() {
+&nbsp;&nbsp;&nbsp; createConsole();
+
+&nbsp;&nbsp;&nbsp; let <span style="color:#0000ff;">feet</span> = await readDouble(&quot;Enter feet: &quot;);
+&nbsp;&nbsp;&nbsp; feetToInches(<span style="color:#0000ff;">feet</span>);
+&nbsp;&nbsp;&nbsp; println(<span style="color:#0000ff;">feet</span>);
+}
+
+function feetToInches(<span style="color:#ff0000;">fritz</span>) {
+&nbsp;&nbsp;&nbsp; <span style="color:#ff0000;">fritz</span> = 42;
+}</pre>
+<p>
+	This will hopefully make clear why we need return values.&nbsp; Because if something is calculated in the function feetToInches(), then this is only visible locally inside that function.&nbsp; To get it back out into the calling function, we need the return value.</p>
+<p>
+	As a note, a function can have several parameters, but it can only have one return value.</p>
+<p>
+	.</p>
+<h2>
+	Animation</h2>
+<p>
+	Now we have functions in our toolbox.&nbsp; That&#39;s great, because we can start doing really cool things with them, namely animations and games.&nbsp; We&#39;ll start with animations.&nbsp; But for that we need one more thing.</p>
+<p>
+	.</p>
+<h2>
+	GObject</h2>
+<p>
+	Let&#39;s remember the graphics classes we know already: GRect, GOval, GLine, GImage, GLabel, GArc and GPolygon.&nbsp; These classes are not completely independent of each other, they even have something in common: they are all GObjects.</p>
+<p>
+	<img alt="" src="img/ACM_Hierarchy.png" style="margin-left: 10px; margin-right: 10px; width: 438px; height: 100px;" /></p>
+<p>
+	The class GObject is also called a parent class.&nbsp; We say that the child classes such as GRect and GOval inherit from their parent class.&nbsp; What do they inherit?&nbsp; The functions of the parent class.&nbsp; That&#39;s super convenient, as we&#39;ll see.&nbsp; But first let&#39;s take a look at those inherited functions:</p>
+<ul>
+	<li>
+		<strong>setLocation(x, y):</strong>&nbsp; move the GObject to the position x, y.</li>
+	<li>
+		<strong>move(dx, dy):</strong>&nbsp; move the GObject by dx and dy.</li>
+	<li>
+		<strong>getX():</strong>&nbsp; returns the x coordinate of the GObject.</li>
+	<li>
+		<strong>getY():</strong>&nbsp; returns the y coordinate of the GObject.</li>
+	<li>
+		<strong>getWidth():</strong>&nbsp; returns the width of the GObject.</li>
+	<li>
+		<strong>getHeight():</strong>&nbsp; returns the height of the GObject.</li>
+	<li>
+		<strong>setColor(col):</strong>&nbsp; changes the color of the GObject.</li>
+</ul>
+<p>
+	All the graphic classes we&#39;ve seen so far have these functions.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch4_Agrar/billiards" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/billiards.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	Animations using the Game Loop</h2>
+<p>
+	For our first animation we choose billiard: We want a black ball to move across a green table and bounce back from the sides.</p>
+<p>
+	Every animation has a game loop.&nbsp; The game loop is our <em>draw()</em> function, which we have been ignoring up to this point:</p>
+<pre style="margin-left: 40px;">
+<span style="color:#ff0000;">let ball;</span>
+
+function setup() {
+&nbsp;&nbsp;&nbsp; createCanvas(300, 300);
+&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">frameRate(25)</span>;
+&nbsp;&nbsp;&nbsp; setBackground(Color.GREEN);
+
+&nbsp;&nbsp;&nbsp; ball = new GOval(20, 20);
+&nbsp;&nbsp;&nbsp; ball.setFilled(true);
+&nbsp;&nbsp;&nbsp; add(ball, 150, 150);
+}
+
+function <span style="color:#0000ff;">draw()</span> {
+&nbsp;&nbsp;&nbsp; ball.move(4, -3);
+&nbsp;&nbsp;&nbsp; update();
+}</pre>
+<p>
+	Everything that has to do with the setup and initialization goes in the setup() function.&nbsp; Then the game loop starts: if we set the frame rate to 25, then the draw() function is called 25 times per second, or every 40 ms.&nbsp;</p>
+<p>
+	Let us go through the functions in detail.&nbsp; In the setup() function we set the size of the window, then we set the framerate to 25 and the background color to green.&nbsp; Finally, we create a ball:</p>
+<pre style="margin-left: 40px;">
+function setup() {
+&nbsp;&nbsp;&nbsp; createCanvas(300, 300);
+&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">frameRate(25)</span>;
+&nbsp;&nbsp;&nbsp; setBackground(Color.GREEN);
+
+&nbsp;&nbsp;&nbsp; ball = new GOval(20, 20);
+&nbsp;&nbsp;&nbsp; ball.setFilled(true);
+&nbsp;&nbsp;&nbsp; add(ball, 150, 150);
+}</pre>
+<p>
+	What should stand out here is that it is &quot;ball =&quot; and not &quot;let ball =&quot;.&nbsp; More on that in a moment.&nbsp; The next function is the draw() function:</p>
+<pre style="margin-left: 40px;">
+function draw() {
+&nbsp;&nbsp;&nbsp; ball.move(4, -3);
+&nbsp;&nbsp;&nbsp; update();
+}</pre>
+<p>
+	We simply tell the ball to move.&nbsp; And the update() we need for the drawing to happen.</p>
+<p>
+	So what is the problem with the ball?&nbsp; Well, remember local variables: a variable declared inside a function is only valid in that function.&nbsp; So if we declare ball inside setup(), then it is only available inside setup(), but not draw().&nbsp; If we declare it in draw(), then we create 25 balls per second, because draw() is called 25 time per second.&nbsp; But we do not need 25 or more balls, we need only one.&nbsp; We need one that is shared by both functions, or that can be accessed from within both functions.&nbsp; The solution is simple: just declare the ball outside the functions.&nbsp; This is what we call a <em>global</em> variable.</p>
+<p>
+	.</p>
+<h2>
+	Exercise: Billiards</h2>
+<p>
+	Once we know about global variables, we might as well us them.&nbsp; We need a ball and its velocities, hence we declare them as global variables:</p>
+<pre style="margin-left: 40px;">
+// global variables
+let ball;
+let vx = 4;
+let vy = -3;</pre>
+<p>
+	The setup() function stays the same as above.&nbsp; But we want to change the draw() function a little.&nbsp; First, we want to return to our top-down approach:</p>
+<pre style="margin-left: 40px;">
+function draw() {
+&nbsp;&nbsp;&nbsp; moveBall();
+&nbsp;&nbsp;&nbsp; checkForCollisionsWithWall();
+&nbsp;&nbsp;&nbsp; update();
+}</pre>
+<p>
+	Meaning we introduce two functions, called moveBall() and checkForCollisionsWithWall().&nbsp; The first one is easy:</p>
+<pre style="margin-left: 40px;">
+function moveBall() {
+&nbsp;&nbsp;&nbsp; ball.move(vx, vy);
+}</pre>
+<p>
+	The second one is a little more complicated:</p>
+<pre style="margin-left: 40px;">
+function checkForCollisionsWithWall() {
+&nbsp;&nbsp;&nbsp; let x = ball.getX();
+&nbsp;&nbsp;&nbsp; let y = ball.getY();
+&nbsp;&nbsp;&nbsp; if ((x &lt; 0) || (x &gt; WIDTH)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vx = -vx;
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; if ((y &lt; 0) || (y &gt; HEIGHT)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vy = -vy;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	We get the current x- and y-position of the ball and test if it is inside the playing field.&nbsp; If not, we change the sign of the speed, i.e., the ball turns around.&nbsp; If you want, you could reduce the speed a little with every collision, but we don&#39;t.</p>
+<p>
+	Let&#39;s talk a little more about ball, vx and vy.&nbsp; So far we only know about local variables.&nbsp; The problem with local variables is that they are only valid within one function.&nbsp; In our billiard example, however, we need the ball in three functions: the setup(), the moveBall(), and the checkForCollisionsWithWall() functions.&nbsp; Obviously we cannot use a local variable for the ball (and also vx and vy).&nbsp; Instead, we use a global variable.&nbsp; Global variables are declared at the beginning of a class, before the setup() function, and most importantly, outside the setup() function (or any other function).&nbsp; The advantage of global variables is that they are accessible in any function.&nbsp; However, global variables are a little dangerous, as we will see later, hence the following SEP.</p>
+<p>
+	<strong>SEP: When possible try to use local variables.</strong></p>
+<p>
+	.</p>
+<h2>
+	Events</h2>
+<p>
+	So animations are not really that difficult.&nbsp; Let&#39;s move on to games: our games should be controllable with the mouse.&nbsp; To do this, we have to tell our program that we are interested in mouse events such as whether the mouse button was pressed or the mouse was moved.&nbsp; In code all we have to do add the mousePressed() function to our program:</p>
+<pre style="margin-left: 40px;">
+function mousePressed() {
+&nbsp;&nbsp;&nbsp; let x = mouseX;
+&nbsp;&nbsp;&nbsp; let y = mouseY;
+&nbsp;&nbsp;&nbsp; ...
+}</pre>
+<p>
+	The variables mouseX and mouseY contain the x- and y-position of the mouse.&nbsp; Similarily, if we want to find out if the mouse has moved, we implement the mouseMoved() function.&nbsp; Of course we can also use both.&nbsp; On mobile devices, like Android or iPad, the corresponding functions are called touchPressed() or touchMoved().</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch4_Agrar/builder" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/builder.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	Exercise: Builder</h2>
+<p>
+	Builder is inspired by Lego: we have small blocks and we can place them anywhere on the screen by clicking with the mouse on the position where the block should go.&nbsp; The program code for this is totally simple.&nbsp; The setup() and draw() functions do not really do anything:</p>
+<pre style="margin-left: 40px;">
+function setup() {
+&nbsp;&nbsp;&nbsp; createCanvas(WIDTH, HEIGHT);
+&nbsp;&nbsp;&nbsp; frameRate(5);
+}
+
+function draw() {
+&nbsp;&nbsp;&nbsp; update();
+}</pre>
+<p>
+	But in the mousePressed() function all the action happens:</p>
+<pre style="margin-left: 40px;">
+function mousePressed() {
+&nbsp;&nbsp;&nbsp; let x = mouseX;
+&nbsp;&nbsp;&nbsp; let y = mouseY;
+&nbsp;&nbsp;&nbsp; x = Math.trunc(x / BLOCK_SIZE) * BLOCK_SIZE;
+&nbsp;&nbsp;&nbsp; y = Math.trunc(y / BLOCK_SIZE) * BLOCK_SIZE;
+
+&nbsp;&nbsp;&nbsp; let block = new GRect(BLOCK_SIZE, BLOCK_SIZE);
+&nbsp;&nbsp;&nbsp; block.setColor(Color.RED);
+&nbsp;&nbsp;&nbsp; block.setFilled(true);
+&nbsp;&nbsp;&nbsp; block.setFillColor(Color.YELLOW);
+&nbsp;&nbsp;&nbsp; add(block, x, y);
+}</pre>
+<p>
+	To get the x- and y-position of the mouse we use the mouseX and mouseY variables.&nbsp; Once we have those, we create a new GRect and place it at the current mouse position.</p>
+<p>
+	With a little trick, we can &quot;quantize&quot; the position of the blocks:</p>
+<pre style="margin-left: 40px;">
+x = Math.trunc(x / BLOCK_SIZE) * BLOCK_SIZE;</pre>
+<p>
+	This is a trick you will see again and again.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch4_Agrar/mouseTracker" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/mouseTracker.png" style="width: 200px; height: 133px; display: block;" />Try it</a></div>
+<h2>
+	Exercise: MouseTracker</h2>
+<p>
+	Next we want to track the mouse movement.&nbsp; We start again with the setup() function:</p>
+<pre style="margin-left: 40px;">
+// global variables
+let lbl;
+
+function setup() {
+&nbsp;&nbsp;&nbsp; createCanvas(300, 200);
+&nbsp;&nbsp;&nbsp; frameRate(25);
+
+&nbsp;&nbsp;&nbsp; lbl = new GLabel(&quot;&quot;);
+&nbsp;&nbsp;&nbsp; lbl.setFont(&#39;Arial&#39;);
+&nbsp;&nbsp;&nbsp; lbl.setFontSize(20);
+&nbsp;&nbsp;&nbsp; add(lbl, 0, 0);
+}</pre>
+<p>
+	To display the position of the mouse we want to use a GLabel called lbl.&nbsp; It is an global variable and must be initialized and added to our canvas.&nbsp; After that we tell our program again that we want to listen to mouse events.&nbsp; In this example we want to know if the mouse has moved, so we overwrite the mouseMoved() function:</p>
+<pre style="margin-left: 40px;">
+function mouseMoved() {
+&nbsp;&nbsp;&nbsp; let x = mouseX;
+&nbsp;&nbsp;&nbsp; let y = mouseY;
+&nbsp;&nbsp;&nbsp; lbl.setLabel(&quot;x=&quot; + x + &quot;,y=&quot; + y);
+&nbsp;&nbsp;&nbsp; lbl.setLocation(x, y);
+}</pre>
+<p>
+	We get the x and y position of the mouse, change the text of the label with the setLabel() function, and move the label to the mouse position with the setLocation() function.&nbsp; And that&#39;s it.</p>
+<p>
+	.</p>
+<h2>
+	RandomGenerator</h2>
+<p>
+	For many games we need random numbers.&nbsp; To get random numbers we use the class RandomGenerator.&nbsp; This class does not only generate random numbers, but it can also generate random colors.&nbsp; The code</p>
+<pre style="margin-left: 40px;">
+let rgen = new RandomGenerator();
+...
+let width = rgen.nextDouble(0, 150);
+let col = rgen.nextColor()
+</pre>
+<p>
+	shows how to generate random numbers and random colors.&nbsp; Two other useful functions are <em>nextInt(low,high)</em> and <em>nextBoolean()</em>.</p>
+<p>
+	.</p>
+<h2>
+	Canvas</h2>
+<p>
+	At this point it makes sense to talk a little more about our canvas.&nbsp; We have been using it all the time, when we were adding our GObjects to our programs, like</p>
+<pre style="margin-left: 40px;">
+add(lisa, 70, 50);</pre>
+<p>
+	The question we should have asked ourselves back then was: where to do we add those GRects and GOvals?&nbsp; The answer is of course: to the canvas.&nbsp; The canvas is our felt board from kindergarten.&nbsp; If we can add something, the next question is, can we also remove something?&nbsp; Or are there other things we can do with the canvas?&nbsp; Well, the following lists the things we can do with and to the canvas:</p>
+<ul>
+	<li>
+		<strong>add(object):</strong>&nbsp; add a GObject to the canvas.</li>
+	<li>
+		<strong>add(object, x, y):</strong>&nbsp; add a GObject to the canvas at position x, y.</li>
+	<li>
+		<strong>addAtEnd(object, x, y):</strong>&nbsp; add a GObject to the canvas at position x, y.</li>
+	<li>
+		<strong>remove(object):</strong>&nbsp; remove the GObject from the canvas.</li>
+	<li>
+		<strong>removeAll():</strong>&nbsp; remove all GObjects from the canvas.</li>
+	<li>
+		<strong>sendToFront():</strong>&nbsp; bring the GObject to the front (z-order).</li>
+	<li>
+		<strong>sendToBack():</strong>&nbsp; send the GObject to the back (z-order).</li>
+	<li>
+		<strong>getElementAt(x, y):</strong>&nbsp; return the first GObject at the position x, y, if there is one.</li>
+	<li>
+		<strong>getElementsAt(x, y):</strong>&nbsp; return all GObjects at the position x, y, if there is any.</li>
+	<li>
+		<strong>setBackground(c):</strong>&nbsp; change the background color of the canvas.</li>
+</ul>
+<p>
+	.</p>
+<hr />
+<h1>
+	Review</h1>
+<p>
+	It may seem that we didn&#39;t do all that much in this chapter.&nbsp; But that&#39;s not true at all: as we will see in the projects, we can already program really cool things.&nbsp; We now know what</p>
+<ul>
+	<li>
+		functions,</li>
+	<li>
+		parameters,</li>
+	<li>
+		return values,</li>
+	<li>
+		and local variables</li>
+</ul>
+<p>
+	are.&nbsp; In addition, we learned more about</p>
+<ul>
+	<li>
+		GObjects,</li>
+	<li>
+		the canvas,</li>
+	<li>
+		and the RandomGenerator.</li>
+</ul>
+<p>
+	The most important thing in this chapter however was that we can do animations using the game loop and listen to mouse events.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Projects</h1>
+<p>
+	The projects in this chapter are real fun.&nbsp; Let&#39;s get started.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/stairs" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/stairs.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	Stairs</h2>
+<p>
+	Our first project is a small staircase.&nbsp; The problem is very similar to the Wall problem.&nbsp; Therefore, it makes sense to adopt the top-down approach here as well - write a function called drawRowOfNBricks( n ).&nbsp; We should also be careful not to use magic numbers, only constants.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/pyramid" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/pyramid.png" style="width: 200px; height: 133px; display: block;" />Try it</a></div>
+<h2>
+	Pyramid</h2>
+<p>
+	The pyramid is almost identical to the stairs.&nbsp; The only difference is that the steps are always offset by half a stone.&nbsp; The pyramid should have nine stones in the bottom row.&nbsp; For this, we need to change the code from the last example only slightly.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/chessBoard" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/chessBoard.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	ChessBoard</h2>
+<p>
+	Let&#39;s get back to our chessboard.&nbsp; But this time we want to use the top-down approach.&nbsp; There are several approaches, but one would be to declare a function called drawOneRow().&nbsp; Here you have to consider exactly which parameters you pass to the function.&nbsp; You could also have two functions, one for even lines and one for odd lines.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/rgbColor" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/rgbColor.png" style="width: 200px; height: 133px; display: block;" />Try it</a></div>
+<h2>
+	RGBColor</h2>
+<p>
+	We have already drawn the rainbow, but still rather &quot;manually&quot;.&nbsp; Now we want to draw the HSV color palette [5].&nbsp; In JavaScript you can create any color using</p>
+<pre style="margin-left: 40px;">
+let col = color(r, g, b);</pre>
+<p>
+	where the variables r, g, and b each represent the red, green and blue components.&nbsp; These must have values between 0 and 255.&nbsp; So for instance, red color can be made like this</p>
+<pre style="margin-left: 40px;">
+let colRed = color(255, 0, 0);</pre>
+<p>
+	If we look closely at the colors in the HSV color palette, we notice that it starts with red, then yellow, green, cyan, blue, magenta, returning to red.&nbsp; Hence, there are a total of six color transitions.&nbsp; The first transition from red to yellow could be reached with the following lines:</p>
+<pre style="margin-left: 40px;">
+for (int x = 0; x &lt; 255; x++) {
+&nbsp;&nbsp; &nbsp;let col = color(255, x, 0);
+&nbsp;&nbsp; &nbsp;let line = new GLine(x, 0, x, HEIGHT);
+&nbsp;&nbsp; &nbsp;line.setColor(col);
+&nbsp;&nbsp; &nbsp;add(line);
+}</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/moire" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/moire.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	Moire</h2>
+<p>
+	The Moiré effect [6] is usually rather undesirable, but it can also be quite pretty.&nbsp; First we divide the length and width into equal parts, e.g. eleven parts. Then we draw a line from each point above to each point below and the same from left to right.&nbsp; To get a feeling for how this works, take a piece of paper and try to draw it by hand.&nbsp; It comes down to two nested for loops.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/randomSquares" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/randomSquares.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	RandomSquares</h2>
+<p>
+	Let&#39;s continue our artistic activities.&nbsp; We want to draw rectangles of different colors of random size and position.&nbsp; Of course we use the random generator.&nbsp; First we set a random width and height for a GRect.&nbsp; Width and height should perhaps not be too large or too small.&nbsp; Then we give the rectangle a random color with</p>
+<pre style="margin-left: 40px;">
+rect.setFillColor(rgen.nextColor());</pre>
+<p>
+	Finally, we place the GRect at a random x and y position.&nbsp; We place this code in the draw() function and maybe change the frame rate to 10 or less.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/twinkleTwinkle" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/twinkleTwinkle.png" style="width: 200px; height: 134px; display: block;" />Try it</a></div>
+<h2>
+	TwinkleTwinkle</h2>
+<p>
+	TwinkleTwinkle is about generating a random night sky.&nbsp; The stars are GOvals with a random size between 1 and 4 pixels.&nbsp; They&#39;re distributed randomly on the canvas.&nbsp; It makes sense to first set the background to black using</p>
+<pre style="margin-left: 40px;">
+setBackground(Color.BLACK);</pre>
+<p>
+	The whole thing then comes into the game loop and we wait perhaps 500 ms until we draw the next star.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/confetti" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/confetti.png" style="width: 200px; height: 133px; display: block;" />Try it</a></div>
+<h2>
+	Confetti</h2>
+<p>
+	We all love confetti.&nbsp; They are very easy to make, either with a hole punch or with GOvals.&nbsp; The confetti can all be the same size (e.g. 20 pixels), but do not have to be.&nbsp; They have different colors, again a case for the random generator.&nbsp; And of course the position of the confetti should be random, and&nbsp; the whole thing again runs in the game loop, that is the draw() function.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/animatedPacman" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/animatedPacman.png" style="width: 200px; height: 133px; display: block;" />Try it</a></div>
+<h2>
+	AnimatedPacman</h2>
+<p>
+	We painted our first PacMan two chapters ago.&nbsp; But it was quite static.&nbsp; We want to animate PacMan now.&nbsp; It is useful to know that GArcs have the following two commands:</p>
+<pre style="margin-left: 40px;">
+pacman.setStartAngle(angle);
+pacman.setSweepAngle(360 - 2 * angle);</pre>
+<p>
+	If we now let the angle variable vary between 0 and 40, and do this every 50 ms, then it appears as if PacMan is animated.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/trafficLight" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/trafficLight2.png" style="width: 200px; height: 133px; display: block;" />Try it</a></div>
+<h2>
+	TrafficLight</h2>
+<p>
+	We also drew the traffic light two chapters ago.&nbsp; Now let&#39;s animate the traffic light.&nbsp; The traffic light starts with red, then turns to red-yellow, followed by green.&nbsp; Finally it goes via yellow back to red.&nbsp; The transition should take a second.&nbsp; For example, you could have global variables for the lights, and then use</p>
+<pre style="margin-left: 40px;">
+if (currentLight == 0) {
+&nbsp;&nbsp; &nbsp;redLight.setFillColor(Color.RED);
+&nbsp;&nbsp; &nbsp;yellowLight.setFillColor(Color.BLACK);
+&nbsp;&nbsp; &nbsp;greenLight.setFillColor(Color.BLACK);
+} ...
+</pre>
+<p>
+	to turn the lights on and off.&nbsp; Next you have to think about how to switch between the different states.&nbsp; This can be done very cleverly with the remainder operator %:</p>
+<pre style="margin-left: 40px;">
+currentLight++;
+currentLight = currentLight % 3;</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/analogClock" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/analogClock.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	AnalogClock</h2>
+<p>
+	For our clock, we use a GOval for the face and GLabels for the digits.&nbsp; We do this in the setup() function.&nbsp; We could set the GLabels by hand, or calculate their position by means of sine and cosine.&nbsp; Both take about the same time, but the second requires a little more brains.</p>
+<p>
+	However, when it comes to drawing the hands, we can no longer ignore sine and cosine [7].</p>
+<pre style="margin-left: 40px;">
+function drawSeconds(seconds) {
+&nbsp;&nbsp;&nbsp; let radians = 2 * Math.PI * seconds / 60;
+&nbsp;&nbsp;&nbsp; let lengthSecondHand = 250;
+&nbsp;&nbsp;&nbsp; let x = SIZE / 2 + Math.sin(radians) * lengthSecondHand / 2;
+&nbsp;&nbsp;&nbsp; let y = SIZE / 2 - Math.cos(radians) * lengthSecondHand / 2;
+&nbsp;&nbsp;&nbsp; secondsHand.setEndPoint(x, y);
+}</pre>
+<p>
+	here the hand for the seconds turns out to be a Gline,</p>
+<pre style="margin-left: 40px;">
+secondsHand = new GLine(SIZE / 2, SIZE / 2, SIZE / 2, SIZE / 2);</pre>
+<p>
+	which has been declared as an global variable.&nbsp; How to get hours, minutes and seconds we have already seen in the project &quot;Time&quot; in the last chapter.&nbsp; Since the clock should be animated, we need to place the code in the draw() function, with a frame rate one per second, or maybe only half a second.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/drunkenWalk" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/drunkenWalk.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	DrunkenWalk</h2>
+<p>
+	Once in a while Karel meets with a couple of friends in his favorite bar.&nbsp; On his way home, he no longer walks in straight lines.&nbsp; In this example, Karel starts in the middle.&nbsp; Once per second he takes one step, a random distance in a random direction.&nbsp; We connect the steps with GLines.&nbsp; The next morning, we show Karel his serpentines to let him know that next time he better take a taxi.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/tree" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/tree.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	Tree*</h2>
+<p>
+	Drawing trees turns out to be relatively difficult.&nbsp; A popular technique to solve this problem is recursion.&nbsp; Since we haven&#39;t heard anything about recursion yet, we try to draw a tree without recursion.&nbsp; After this experience, we may be more motivated to learn the secrets of recursion in the next semester.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/asteroidCreator" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/asteroidCreator.png" style="width: 200px; height: 133px; display: block;" />Try it</a></div>
+<h2>
+	AsteroidCreator</h2>
+<p>
+	The arcade game &#39;AsteroidCreator&reg;&#39; was an absolute hit in the late 80s. The objective of the game is to draw an asteroid at the location where the user clicks with the mouse.&nbsp; Asteroids are simply GRects of different, random sizes with a black border.&nbsp; For this we have to implement the mousePressed() function, where we simply draw a rectangle at the position where the user clicked with the mouse.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/connectTheClicks" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/connectTheClicks.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	ConnectTheClicks</h2>
+<p>
+	Similar to the previous game, &#39;ConnectTheClicks&reg;&#39; was very popular in the late 1970s.&nbsp; This is a game in which the user clicks with the mouse on a point, which is then connected to the previous point.&nbsp; What makes the game a little more complicated is that we have to remember where the user clicked before.&nbsp; To do this, we simply use two global variables:</p>
+<pre style="margin-left: 40px;">
+let x0 = -1;
+let y0 = -1;</pre>
+<p>
+	If we initialize these variables with the value &quot;-1&quot;, we can use this to determine whether this is the first click.&nbsp; Because then we shouldn&#39;t draw a line.&nbsp; Otherwise, we simply draw a line (GLine) with each click from the old position to the new mouse position.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/ticTacToe" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/ticTacToe.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<p>
+	&nbsp;</p>
+<h2>
+	TicTacToe</h2>
+<p>
+	Everyone knows TicTacToe from kindergarten or school, if you don&#39;t, you can read the following about it in the Wikipedia [9]:</p>
+<p>
+	&quot;TicTacToe is a pencil-and-paper game for two players, X and O, who take turns marking the spaces in a 3&times;3 grid. The X player usually goes first. The player who succeeds in placing three respective marks in a horizontal, vertical, or diagonal row wins the game.&quot;</p>
+<p>
+	In the setup() we draw the background.&nbsp; The easiest way is as an image, but we can also draw lines.&nbsp; Also, we have to add the mousePressed() function.&nbsp; There we simply have to draw an &quot;X&quot; or an &quot;O&quot; alternately, depending on who&#39;s turn it is.&nbsp; How do you know who&#39;s turn it is?&nbsp; This can be done using an global variable, for example:</p>
+<pre style="margin-left: 40px;">
+let currentPlayer = 1;</pre>
+<p>
+	This variable can have two values, &#39;1&#39; for player one and &#39;2&#39; for player two.&nbsp; Switching between the two players is then very easy:</p>
+<pre style="margin-left: 40px;">
+if (currentPlayer == 1) {
+&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; currentPlayer = 2;
+} else {
+&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; currentPlayer = 1;
+}</pre>
+<p>
+	A little thing that is very practical: you can of course simply paint the &quot;X&quot; and &quot;O&quot; where the user clicked.&nbsp; That looks a bit squeaky.&nbsp; A little trick uses Math.trunc() for positioning the &quot;X&quot; and &quot;O&quot;:</p>
+<pre style="margin-left: 40px;">
+function mousePressed() {
+&nbsp;&nbsp;&nbsp; let x = mouseX;
+&nbsp;&nbsp;&nbsp; let y = mouseY;
+&nbsp;&nbsp;&nbsp; let i = Math.trunc(x / CELL_WIDTH);
+&nbsp;&nbsp;&nbsp; let j = Math.trunc(y / CELL_WIDTH);
+&nbsp;&nbsp;&nbsp; ...
+}</pre>
+<p>
+	.</p>
+<hr />
+<h1>
+	Challenges</h1>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/agrar" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/agrar.png" style="width: 200px; height: 184px; display: block;" />Try it</a></div>
+<h2>
+	Agrar</h2>
+<p>
+	Agrar is inspired by the online game Agar.io, which according to Wikipedia [10] is about</p>
+<p>
+	&quot;... navigating a cell that grows by eating pellets and other cells. However, it must not be eaten by larger cells itself.&quot;</p>
+<p>
+	Our version of the game is a bit simpler, there is only one cell, and it can only eat pellets.&nbsp; But that is already something.</p>
+<p>
+	First, we need an global variable for the cell:</p>
+<pre style="margin-left: 40px;">
+let cell;</pre>
+<p>
+	We initialize it in the setup() function, .&nbsp; Next, we need the game loop:</p>
+<pre style="margin-left: 40px;">
+function draw() {
+&nbsp;&nbsp;&nbsp; moveCell();
+&nbsp;&nbsp;&nbsp; createRandomFood();
+&nbsp;&nbsp;&nbsp; checkForCollision();
+&nbsp;&nbsp;&nbsp; update();
+}</pre>
+<p>
+	Here we create a pellet at a random position, i.e., a GOval with random color.&nbsp; Next we check if there was a collision between the cell and a pellet.&nbsp; How do we know if there&#39;s been a collision?&nbsp; The getElementAt() function is used for this:</p>
+<pre style="margin-left: 40px;">
+let collisonObject = getElementAt(x, y);
+if ((collisonObject != null) &amp;&amp; (collisonObject != cell)) {
+&nbsp;&nbsp;&nbsp; let w = cell.getWidth();
+&nbsp;&nbsp;&nbsp; cell.setSize(w + 1, h + 1);
+&nbsp;&nbsp;&nbsp; removeObj(collisonObject);
+}            </pre>
+<p>
+	This function checks if there is something at the x,y position.&nbsp; If there is nothing there, the function returns the value &quot;null&quot;.&nbsp; Otherwise, it returns the object that is at this position.&nbsp; It could be a pellet or it could be the cell itself.&nbsp; Therefore, we must check that it is not &quot;null&quot; and that it is not the cell itself.&nbsp; Since there is nothing else, we now know that the collisonObject must be a pellet.&nbsp; We &quot;eat&quot; the pellet, which means that the cell gets fatter and the pellet is removed.</p>
+<p>
+	Of course we still have to implement the mouseMoved() function.&nbsp; This is quite easy, we simply move the cell to the position of the mouse:</p>
+<pre style="margin-left: 40px;">
+function mouseMoved() {
+&nbsp;&nbsp;&nbsp; xMouse = mouseX;
+&nbsp;&nbsp;&nbsp; yMouse = mouseY;
+	cell.setLocation(x, y);
+}</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/tetris" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/tetris.png" style="width: 200px; height: 219px; display: block;" />Try it</a></div>
+<h2>
+	Tetris</h2>
+<p>
+	Tetris is a classic, everybody knows it.&nbsp; Originally it was programmed by Russian programmer Alexei Paschitnow [11].&nbsp; Tetris has different stone forms that resemble Latin letters (I, O, T, Z and L).&nbsp; Players must rotate the individual pieces that fall from the top of the board in 90 degree increments and move them so that they form horizontal, preferably gapless rows at the bottom edge.&nbsp; As usual, we limit ourselves to a somewhat simpler version, in which there are only four stone forms: a single block, a horizontal and a vertical block of two, and a block of four.&nbsp; We cannot rotate the blocks in our simple version.</p>
+<p>
+	In the setup() function we create a new stone:</p>
+<pre style="margin-left: 40px;">
+function setup() {
+&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; createNewBrick();
+}</pre>
+<p>
+	The createNewBrick() function creates a random new stone. The stone shape depends on a random number:</p>
+<pre style="margin-left: 40px;">
+function createNewBrick() {
+&nbsp;&nbsp;&nbsp; switch (rgen.nextInt(0, 3)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 0:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; brick = new GRect(WIDTH / 2, 0, BRICK_SIZE, BRICK_SIZE * 2);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 1:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; brick.setFilled(true);
+&nbsp;&nbsp;&nbsp; brick.setFillColor(rgen.nextColor());
+&nbsp;&nbsp;&nbsp; add(brick);
+}</pre>
+<p>
+	The brick must be an global variable, otherwise it won&#39;t work.&nbsp; The same applies to our random generator.&nbsp; In order for the stones to start falling down, we need a game loop:</p>
+<pre style="margin-left: 40px;">
+function draw() {
+&nbsp;&nbsp;&nbsp; moveBrick();
+&nbsp;&nbsp;&nbsp; checkForCollision();
+&nbsp;&nbsp;&nbsp; update();
+}</pre>
+<p>
+	The moveBrick() function simply moves the brick down by one brick width.&nbsp; The checkForCollision() function determines whether the stone is allowed to fall any further.&nbsp; Once the stone has arrived at the bottom, it just sits there.&nbsp; How do we do that? We simply create a new stone, and leave the old one where it is:</p>
+<pre style="margin-left: 40px;">
+function checkForCollision() {
+&nbsp;&nbsp;&nbsp; // check bottom
+&nbsp;&nbsp;&nbsp; if (brick.getY() &gt; HEIGHT - brick.getHeight()) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; createNewBrick();
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; ...
+</pre>
+<p>
+	However, we can also have collisions with other blocks, that are sitting already at the bottom.&nbsp; In this case the falling stone also is not allowed to fall any further. We need to use the getElementAt() function and check for collisions:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; // check for other bricks
+	let x = brick.getX() + 1;
+	let y = brick.getY() + brick.getHeight();
+&nbsp;&nbsp;&nbsp; let obj = getElementAt(x, y);
+&nbsp;&nbsp;&nbsp; if ((obj != null) &amp;&amp; (obj != brick)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; createNewBrick();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; ...
+}
+</pre>
+<p>
+	This function tells us whether there is a GObject at the x,y position.&nbsp; If there is, we simply create a new stone.</p>
+<p>
+	So, now our stones are falling.&nbsp; The only thing missing is key control.&nbsp; When a key on the keyboard is pressed, a KeyEvent occurs.&nbsp; This is completely analogous to the mouse events.&nbsp; Therefore, we need to add a keyPressed() function to our Tetris class:</p>
+<pre style="margin-left: 40px;">
+function keyPressed() {
+&nbsp;&nbsp;&nbsp; switch (keyCode) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case LEFT_ARROW:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; brick.move(-BRICK_SIZE, 0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case RIGHT_ARROW:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; brick.move(BRICK_SIZE, 0);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	The <em>keyCode</em> tells us which key was pressed: for the left arrow key the keycode is 37, for the right the keycode is 39 and that is all we need to finish our simple Tetris game.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/pong" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/pong.png" style="width: 200px; height: 150px; display: block;" />Try it</a></div>
+<h2>
+	Pong</h2>
+<p>
+	Pong was released by Atari in 1972 and is considered the forefather of all video games [8].&nbsp; It is a game for two players who try to play a ball back and forth similar to ping-pong.&nbsp; To get started, we need three global variables for the ball and the two paddles.</p>
+<pre style="margin-left: 40px;">
+let ball;
+let leftPaddle;
+let rightPaddle;</pre>
+<p>
+	Then of course there is our game loop:</p>
+<pre style="margin-left: 40px;">
+function draw() {
+&nbsp;&nbsp;&nbsp; moveBall();
+&nbsp;&nbsp;&nbsp; checkForCollision();
+&nbsp;&nbsp;&nbsp; update();
+}</pre>
+<p>
+	The moveBall() function simply moves the ball by a certain amount in x and y direction.</p>
+<p>
+	The checkForCollision() function does two things: it checks if there was a collision with the wall or if there was a collision with one of the paddles.&nbsp; If the ball wants to leave the playing field on the top or bottom, it is simply reflected. If it wants to leave on the left or right, then it simply disappears, and the round is over.&nbsp; If the ball collides with the paddles, it is also reflected.</p>
+<p>
+	For the collisions with the paddles we use the getElementAt() function.&nbsp; Reflection is quite simple.&nbsp; We first need an global variable for the speed:</p>
+<pre style="margin-left: 40px;">
+let vx = 2;
+let vy = 3;</pre>
+<p>
+	and then reflection simply means:</p>
+<pre style="margin-left: 40px;">
+vy = -vy;</pre>
+<p>
+	Of course, the moveBall() function must also use these variables.</p>
+<p>
+	The paddles should be controlled by the keyboard, so we need to add the KeyListener again and add the keyPressed() function:</p>
+<pre style="margin-left: 40px;">
+function keyPressed() {
+&nbsp;&nbsp;&nbsp; switch (key) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case &#39;p&#39;: // right paddle up
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rightPaddle.move(0, -PADDLE_VY);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case &#39;l&#39;: // right paddle down
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; }
+}
+</pre>
+<p>
+	Notice, we use <em>key</em> instead of <em>keyCode</em> here.&nbsp; We use <em>keyCode</em> if we want to detect special keys, however, for letters and digits, we use key.&nbsp; The first player controls her paddle with the keys &#39;q&#39; and &#39;a&#39;, the second player with the keys &#39;p&#39; and &#39;l&#39;.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr4_Agrar/brickBreaker" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/brickBreaker.png" style="width: 200px; height: 250px; display: block;" />Try it</a></div>
+<h2>
+	BrickBreaker</h2>
+<p>
+	BrickBreaker is inspired by Breakout, a game that was introduced by Atari in April 1976.&nbsp; The game principle was developed by Nolan Bushnell.&nbsp; Steve Jobs, who then worked at Atari, persuaded his friend Steve Wozniak (then at HP) to write the game.&nbsp; Steve Jobs got paid $5,000 for the game by Nolan Bushnell. He gave his friend Steve Wozniak half, that is 350 dollars [12].</p>
+<p>
+	The playing field consists of bricks, a ball and a paddle.&nbsp; The ball moves through the playing field and when it hits a brick, the brick disappears.&nbsp; The ball is reflected from the walls and the paddle.&nbsp; Except for the lower wall: here the ball just vanishes and the game is over.&nbsp; In our game, the paddle is to be controlled by the mouse.</p>
+<p>
+	As global variables we need the ball and the paddle:</p>
+<pre style="margin-left: 40px;">
+let paddle;
+let ball;</pre>
+<p>
+	In the setup() function, we initialize the ball and the paddle, and we also draw the wall of bricks:</p>
+<pre style="margin-left: 40px;">
+function setup() {
+&nbsp; ...
+&nbsp; createBall();
+&nbsp; createPaddle();
+&nbsp; createBricks();
+}</pre>
+<p>
+	When drawing the wall, we can borrow our function drawRowOfNBricks(int n) from the Stairs project, so that is easy.&nbsp; Maybe we want to make the bricks differently colored, then the game looks much better.</p>
+<p>
+	After the setup we come back to the game loop:</p>
+<pre style="margin-left: 40px;">
+function draw() {
+&nbsp; moveBall();
+&nbsp; checkForCollision();
+&nbsp; update();
+}</pre>
+<p>
+	The moveBall() function is identical to that in Pong, checkForCollision() is also very similar</p>
+<pre style="margin-left: 40px;">
+function checkForCollision() {
+&nbsp; checkForCollisionWithWall();
+&nbsp; checkForCollisionWithPaddleOrBricks();
+}</pre>
+<p>
+	What needs a bit more work is the checkForCollisionWithPaddleOrBricks() function.&nbsp; We use the getElementAt() function again, and check if the object is not null.&nbsp; If it is not null, then the only options are, that either it is the paddle or a brick,</p>
+<pre style="margin-left: 40px;">
+let obj = getElementAt(x, y);
+if (obj !== undefined) {
+if (obj === paddle) {
+&nbsp; vy = -vy;
+} else if (obj instanceof GRect) {
+&nbsp; removeObj(obj);
+&nbsp; vy = -vy;
+}</pre>
+<p>
+	You may notice the <em>instanceof</em> keyword, that can be used to test if an object is a GRect, or any other type for that matter.&nbsp; Last thing we have to worry about, is the movement of the paddle through the mouse.&nbsp; For this we have to call the addMouseListeners() function in the setup() and we need to implement the mouseMoved() function:</p>
+<pre style="margin-left: 40px;">
+function mouseMoved() {
+&nbsp; let x = mouseX;
+&nbsp; paddle.setLocation(x, HEIGHT - PADDLE_SEPARATION);
+}</pre>
+<p>
+	And that&#39;s it.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Questions</h1>
+<ol>
+	<li>
+		There are functions with a return value and some without.&nbsp; How can you tell that a function has no return value?<br />
+		&nbsp;</li>
+	<li>
+		Some functions have parameters.&nbsp; What are parameters?<br />
+		&nbsp;</li>
+	<li>
+		What do parameters and kilometers have in common?<br />
+		&nbsp;</li>
+	<li>
+		We have used the random generator &#39;rgen&#39; more than once.&nbsp; What is the command to generate a random number (integer) between 1 and 6?<br />
+		&nbsp;</li>
+	<li>
+		If you pass a primitive data type to a function as a parameter, is it passed in as the original or as a copy?<br />
+		&nbsp;</li>
+	<li>
+		Name four subclasses (child classes) of the class GObject.<br />
+		&nbsp;</li>
+	<li>
+		Draw a diagram that roughly represents the class hierarchy of the GObjects.<br />
+		&nbsp;</li>
+	<li>
+		We learned about the top-down approach.&nbsp; This gives rules regarding the names of functions, how many lines of code a function should have, etc. Name two of these guidelines.<br />
+		&nbsp;</li>
+	<li>
+		Analyze the game &#39;Agar.io&#39; using the top-down approach. You only need to worry about the high-level structure, not the detailed code.<br />
+		&nbsp;</li>
+	<li>
+		The addThirteen() function in the following code does not work as expected. What&#39;s the problem? How would you solve it?<br />
+		<br />
+		<strong><span style="font-family:courier new,courier,monospace;">function addThirteen( x ) {<br />
+		&nbsp;&nbsp;&nbsp; x += 12;<br />
+		}<br />
+		function run() {<br />
+		<span style="font-family:courier new,courier,monospace;">&nbsp;&nbsp;&nbsp; let</span> x = 4;<br />
+		<span style="font-family:courier new,courier,monospace;">&nbsp;&nbsp;&nbsp; </span>addThirteen( x );<br />
+		<span style="font-family:courier new,courier,monospace;">&nbsp;&nbsp;&nbsp; </span>println( &quot;x = &quot; + x );<br />
+		}</span></strong><br />
+		&nbsp;</li>
+	<li>
+		The arcade game &#39;RandomCircles&#39; was an absolute hit in the late 1980s.&nbsp; It is a game that draws a colorful circle at the point where the user clicks with the mouse.&nbsp; It would be a little to much to ask to implement the full version of the game, but it is relatively easy to write the code that<br />
+		1)&nbsp; draws a colored circle on the screen and<br />
+		2)&nbsp; draws the circle where the user clicked with the mouse.<br />
+		<br />
+		The first step is to create a class called GCircle that extends GOval and is initialized with random size and color.<br />
+		<br />
+		The second step is to write a graphics program that listens to mouse clicks and draws a circle at the location where the user clicked with the mouse.<br />
+		<br />
+		The following information may be helpful:<br />
+		<span style="font-family:courier new,courier,monospace;">&nbsp;&nbsp;&nbsp; let rgen = RandomGenerator.getInstance();</span><br />
+		The RandomGenerator has among others the following functions:<br />
+		<span style="font-family:courier new,courier,monospace;">&nbsp;&nbsp;&nbsp; rgen.nextInt( low, high )<br />
+		&nbsp;&nbsp;&nbsp; rgen.nextColor()</span><br />
+		&nbsp;</li>
+</ol>
+<p>
+	.</p>
+<hr />
+<h1>
+	References</h1>
+<p>
+	The references relevant for this chapter are the same as in Chapter 2.&nbsp; More details about the ACM graphics library can be found on the ACM Java Task Force [1] pages.&nbsp; Many more examples can be found in Tutorial [2], the book by Eric Roberts [3] and the Stanford Lecture &#39;Programming Methodologies&#39; [4].</p>
+<p>
+	[1] ACM Java Task Force, <a href="http://cs.stanford.edu/people/eroberts/jtf/">cs.stanford.edu/people/eroberts/jtf/</a></p>
+<p>
+	[2] ACM Java Task ForceTutorial , <a href="http://cs.stanford.edu/people/eroberts/jtf/tutorial/index.html">cs.stanford.edu/people/eroberts/jtf/tutorial/index.html</a></p>
+<p>
+	[3] The Art and Science of Java, von Eric Roberts, Addison-Wesley, 2008</p>
+<p>
+	[4] CS106A - Programming Methodology - Stanford University, <a href="https://see.stanford.edu/Course/CS106A">https://see.stanford.edu/Course/CS106A</a></p>
+<p>
+	[5] HSL and HSV, <a href="https://en.wikipedia.org/w/index.php?title=HSL_and_HSV&amp;oldid=694879918">https://en.wikipedia.org/w/index.php?title=HSL_and_HSV&amp;oldid=694879918</a> (last visited Mar. 3, 2016).</p>
+<p>
+	[6] Moiré-Effekt, <a href="https://de.wikipedia.org/wiki/Moiré-Effekt">https://de.wikipedia.org/wiki/Moiré-Effekt</a></p>
+<p>
+	[7] Sinus und Kosinus, <a href="https://de.wikipedia.org/wiki/Sinus_und_Kosinus">https://de.wikipedia.org/wiki/Sinus_und_Kosinus</a></p>
+<p>
+	[8] Pong, <a href="https://de.wikipedia.org/wiki/Pong">https://de.wikipedia.org/wiki/Pong</a></p>
+<p>
+	[9] Tic-Tac-Toe, <a href="https://de.wikipedia.org/wiki/Tic-Tac-Toe">https://de.wikipedia.org/wiki/Tic-Tac-Toe</a></p>
+<p>
+	[10] Agar.io, <a href="https://de.wikipedia.org/wiki/Agar.io">https://de.wikipedia.org/wiki/Agar.io</a></p>
+<p>
+	[11] Tetris, <a href="https://de.wikipedia.org/wiki/Tetris">https://de.wikipedia.org/wiki/Tetris</a></p>
+<p>
+	[12] Breakout, <a href="https://de.wikipedia.org/wiki/Breakout_(Computerspiel)">https://de.wikipedia.org/wiki/Breakout_(Computerspiel)</a></p>
+<p>
+.</p>
+<p class="footer">
+Copyright &copy; 2016-2023 <a href="http://www.lano.de">Ralph P. Lano</a>. All rights reserved.
+</p>
+</div>
+</div>
+</center>
+</body>
+
+</html>

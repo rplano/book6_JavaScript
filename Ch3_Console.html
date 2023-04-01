@@ -1,12 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Ch3 Console</title>
-  </head>
-  <body>
+<head>
+<title>JavaScript: Ch3 Console</title>
+<meta name="title" content="Variations on a Theme: JavaScript: Ch3 Console">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="UTF-8">
+<meta name="description" content="An object-oriented Introduction">
+<meta name="keywords" content="JavaScript,object orientation,introduction">
+<meta name="author" content="Ralph P. Lano">
+<meta name="robots" content="index,follow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="book.css">
+</head>
+
+<body>
+<center>
+<div id="wrap">
+<ul class="sidenav">
+<p><a href="../index.html">Variations on a Theme</a><a href="index.html">JavaScript</a></p>
+<li><a href="Ch1_Karel.html">Karel</a></li>
+<li><a href="Ch2_Graphics.html">Graphics</a></li>
+<li><a href="Ch3_Console.html">Console</a></li>
+<li><a href="Ch4_Agrar.html">Agrar</a></li>
+<li><a href="Ch5_MindReader.html">MindReader</a></li>
+<li><a href="Ch6_Swing.html">Swing</a></li>
+<li><a href="Ch7_Asteroids.html">Asteroids</a></li>
+<li><a href="Ch8_Stocks.html">Stocks</a></li>
+<li><a href="index.html"> </a></li>
+<li><a href="AppA_Primer.html">Primer</a></li>
+<li><a href="AppB_Libraries.html">Libraries</a></li>
+<li><a href="AppC_Ideas.html">Ideas</a></li>
+</ul>
+<div class="content">
 <p>
 	<img alt="" src="img/c08baf41-0039-4102-9b2c-ef97f4d8ce6a.png" style="display: block; margin-left: auto;  margin-right: auto; width: 267px; height: 158px;" /></p>
 <h1>
@@ -15,18 +41,955 @@
 	Console programs are actually even easier to write than graphics programs.&nbsp; Console programs are text based and they are about interacting with our users.&nbsp; Many concepts we have learned and used in the last two chapters will become clearer in this chapter and they will be set in a new context and explained in more detail.</p>
 <p>
 	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch3_Console/helloWorld" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/helloWorld2.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
 <h2>
-	ConsoleProgram<iframe src="https://rplano.github.io/book6_JavaScript/src/Ch3_Console/helloWorld.html" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 100px; float: right;"></iframe></h2>
+	Console Program</h2>
 <p>
 	Let&#39;s have a look at a simple &#39;HelloWorld&#39; console program:</p>
 <pre style="margin-left: 40px;">
-async function setup() {
+<span style="color:#0000ff;">async</span> function setup() {
 &nbsp; createConsole();
 &nbsp; println(&#39;Hello World!&#39;);
 }</pre>
 <p>
-	As usual, we are only interested in the code inside the run() method.&nbsp; It basically tells the computer to display the text in quotation marks, i.e. &quot;Hello World&quot;, in a console window.&nbsp; &#39;println&#39; is the short form for &#39;print line&#39; and means exactly that, so write a line in the console window.</p>
+	As usual, we are only interested in the code inside the setup() function.&nbsp; It basically tells the computer to display the text in quotation marks, i.e. &quot;Hello World&quot;, in a console window.&nbsp; &#39;println&#39; is the short form for &#39;print line&#39; and means exactly that, so write a line in the console window.&nbsp; Whenever we want the user to enter some information, we need to add the <em>async</em> keyword before the <em>setup()</em> function.&nbsp; Console programs will not work without it.&nbsp;</p>
 <p>
 	.</p>
-    </body> 
+<h2>
+	readInt()</h2>
+<p>
+	Console programs would be quite boring if all we could do is &#39;println()&#39;.&nbsp; The counterpart to println is <em>readInt()</em>.&nbsp; It allows the user of our program to enter a number:</p>
+<pre style="margin-left: 40px;">
+let n1 = <span style="color:#0000ff;">await</span> readInt(&#39;Enter number one: &#39;);</pre>
+<p>
+	The text in quotation marks is not really necessary, but it gives the users an indication of what they should do.&nbsp; Here we see the <em>await</em> statement: it means await input from the user.&nbsp; If we forget it, the program wont wait for the user.&nbsp; The await and the async always go together.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch3_Console/addTwoIntegers" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/addTwoIntegers.png" style="width: 206px; display: block; height: 116px;" />Try it</a></div>
+<h2>
+	Exercise: AddTwoIntegers</h2>
+<p>
+	Let&#39;s take a look at an example.&nbsp; We want to add two numbers and display the result on the console.</p>
+<pre style="margin-left: 40px;">
+async function setup() {
+&nbsp; createConsole();
+&nbsp; println(&#39;This program adds two numbers.&#39;);
+&nbsp; let n1 = await readInt(&#39;Enter number one: &#39;);
+&nbsp; let n2 = await readInt(&#39;Enter number two: &#39;);
+&nbsp; let sum = n1 + n2;
+&nbsp; println( &#39;The sum is: &#39; + sum ); &nbsp;
+}</pre>
+<p>
+	The first line simply tells the user what the program does.&nbsp; Then the user is asked to enter the first number.&nbsp; The program waits until the user enters a number.&nbsp; Then it prompts the user to enter the second number.&nbsp; After the user has done this, we add the two numbers n1 and n2 and store the result in the variable sum.&nbsp; The total is then displayed in the last line.</p>
+<p>
+	Question: What would a program look like that subtracts two numbers?</p>
+<p>
+	.</p>
+<h2>
+	Variables</h2>
+<p>
+	The question we ask ourselves immediately, what is a variable?&nbsp; Variables are a bit like boxes into which you can put things.&nbsp; What kind of things can you put in the box? For example, numbers or GRects.</p>
+<p>
+	<img alt="" src="img/326453ea-b08c-4c56-a18a-d0704d8ff997.png" style="margin-left: 10px; margin-right: 10px; width: 107px; height: 103px; float: right;" />Variables also have names, e.g., &#39;n1&#39; or &#39;fritz&#39;. We write the name on the outside of the box. For instance, if we say</p>
+<pre style="margin-left: 40px;">
+let n1;</pre>
+<p>
+	that means there&#39;s a box called &#39;n1&#39;.&nbsp; Next we say</p>
+<pre style="margin-left: 40px;">
+n1 = 6;</pre>
+<p>
+	This is like putting the number 6 in the box.&nbsp; This is called assignment, so the box &#39;n1&#39; is assigned the number &#39;6&#39;.&nbsp; If you want, you can change the number in the box.&nbsp; Then you simply make a new assignment and say</p>
+<pre style="margin-left: 40px;">
+n1 = 5;</pre>
+<p>
+	i.e., we replace the old number &#39;6&#39; with the new number &#39;5&#39;.&nbsp; However, the name &#39;n1&#39; has not changed, it is still written on the outside of the box.</p>
+<p>
+	<img alt="" src="img/a41fa673-8c0a-4c37-a383-096c11cb0060.png" style="margin-left: 10px; margin-right: 10px; width: 110px; height: 103px; float: right;" />We can not only put numbers in our boxes, but also other things.&nbsp; E.g. with</p>
+<pre style="margin-left: 40px;">
+let fritz;</pre>
+<p>
+	we say that there is a box called &#39;fritz&#39;.&nbsp; We can put GRects into this box, so with</p>
+<pre style="margin-left: 40px;">
+fritz = new GRect(50, 50);</pre>
+<p>
+	we put a new GRect 50 pixels wide and 50 pixels high in the box.&nbsp;</p>
+<p>
+	.</p>
+<h2>
+	Declaration and Assignment</h2>
+<p>
+	When we say</p>
+<pre style="margin-left: 40px;">
+let n1;</pre>
+<p>
+	we <em>declare</em> a variable.&nbsp; The variable is called &#39;n1&#39; and has no value, it is <em>undefined</em>.&nbsp; When we say</p>
+<pre style="margin-left: 40px;">
+n1 <span style="color:#0000ff;">=</span> 6;</pre>
+<p>
+	we make an <em>assignment</em>, i.e. we assign the value &#39;6&#39; to the variable &#39;n1&#39;.&nbsp; So the &#39;=&#39; does not mean equality, but assignment.&nbsp; This is very important.</p>
+<p>
+	<img alt="" src="img/9e4eacca-64b8-4b55-8c81-4a58fa273f9d.png" style="margin-left: 10px; margin-right: 10px; width: 306px; height: 115px; float: right;" />As far as the names of variables are concerned, they can be almost arbitrary, they can consist of letters, numbers and the underscore.&nbsp; However, some words are not allowed, such as &#39;if&#39; and &#39;for&#39;, because they are already used by JavaScript.&nbsp; Names should not start with numbers and special characters should generally be avoided.&nbsp; And you always have to worry about upper and lower case!</p>
+<p>
+	A variable always has a name, a type and a value.</p>
+<p>
+	<b>SEP: The names of variables should always be descriptive, e.g. &#39;blueRect&#39;.</b></p>
+<p>
+	.</p>
+<h2>
+	Types</h2>
+<p>
+	What kind of types are there?&nbsp; In the last chapter we already got to know some: GRect, GOval, GLine etc. are all types, more precisely data types.&nbsp; But there are other types too.&nbsp; The ones that will occupy us in this chapter are the simple data types.&nbsp; There are about six in JavaScript, but we are only interested in the following three:</p>
+<ul>
+	<li>
+		<strong>number:</strong>&nbsp; can be integers or floating point number.</li>
+	<li>
+		<strong>boolean:</strong>&nbsp; used for logical values, can only have the two values true or false.</li>
+	<li>
+		<strong>string:</strong>&nbsp; a string can contain letters, digits, but also special characters such as &#39;.&#39; and &#39;$&#39;, etc.</li>
+</ul>
+<p>
+	To see how they are used consider the following examples:</p>
+<pre style="margin-left: 40px;">
+let x = 42;
+let y = 42.0;
+let b = true;
+let z = &quot;42&quot;;</pre>
+<p>
+	The first two, x and y, are numbers.&nbsp; The third one is a boolean.&nbsp; Booleans should have the values <em>true</em> or <em>false</em>.&nbsp; Notice there are no quotation marks around the true or false.&nbsp; The last defines a string, you can tell by the quotation marks.&nbsp; They can be single or double quotation marks, but they should match.&nbsp; We will deal with the boolean data type below, the string data type we will cover in the next chapter.</p>
+<p>
+	.</p>
+<h2>
+	Expression</h2>
+<p>
+	The word <em>expression</em> as we use it, is used in the sense of &#39;mathematical expression&#39;.&nbsp; We have already seen an example, namely</p>
+<pre style="margin-left: 40px;">
+let sum = <span style="color:#0000ff;">n1 + n2</span>;</pre>
+<p>
+	On the left side of the assignment there is a variable, &#39;sum&#39;, and on the right side there is a mathematical expression, namely the sum of the numbers &#39;n1&#39; and &#39;n2&#39;.&nbsp; More precisely, the sum of the numbers inside the boxes &#39;n1&#39; and &#39;n2&#39;.</p>
+<p>
+	So what this line means is: Get the numbers in the boxes &#39;n1&#39; and &#39;n2&#39;, add them together and save the result in the box &#39;sum&#39;.&nbsp; You can illustrate this very nicely with the &#39;Jeliot&#39; program [1].</p>
+<p>
+	.</p>
+<h2>
+	Exercise: Jeliot</h2>
+<p>
+	Jeliot is a very nice program that helps us to visualize what happens, when we execute the three lines:</p>
+<pre style="margin-left: 40px;">
+int n1 = 6;
+int n2 = 4;
+int sum = n1 + n2;</pre>
+<p>
+	We see our code in the code window on the left.&nbsp; We can go through this code step by step.&nbsp; And on the right side we see the Method Area where we also see our boxes &#39;n1&#39;, &#39;n2&#39; and &#39;sum&#39;, as well as the Expression Evaluation Area.&nbsp; We observe how the expression &#39;6+4=&#39; is currently being evaluated.&nbsp; In the next step the result (&#39;10&#39;) is put into the box &#39;sum&#39;.</p>
+<p>
+	<img alt="" src="img/jeliot.png" style="margin-left: 10px; margin-right: 10px; width: 586px; height: 255px;" /></p>
+<p>
+	.</p>
+<h2>
+	Operators</h2>
+<p>
+	When we use the word operator, we use it in the mathematical sense, i.e. the &#39;plus&#39; operator or the &#39;minus&#39; operator.&nbsp; In JavaScript we use the characters &#39;+&#39;, &#39;-&#39;, &#39;*&#39; and &#39;/&#39; to denote these operations.&nbsp;</p>
+<p>
+	Expressions can also be a little longer:</p>
+<pre style="margin-left: 40px;">
+let x = 1 + 3 * 5 / 2;</pre>
+<p>
+	In such a case, they are usually evaluated from left to right.&nbsp; Kind of in the same way you write them.&nbsp; The exception, however, are multiplication and division.&nbsp; You might remember from school: brackets before multiplication/division before addition/substraction.</p>
+<p>
+	.</p>
+<p>
+	<img alt="" src="img/95e52edc-59c9-477a-a561-ddc5df1d9cb5.png" style="margin-left: 10px; margin-right: 10px; width: 96px; height: 236px; float: right;" /></p>
+<h2>
+	Remainder</h2>
+<p>
+	One operator we haven&#39;t talked about is the remainder operator, sometimes also called the modulo operator.&nbsp; The last time we probably heard about it was in the second grade, and that was before we were able to divide properly.&nbsp; If we calculated 5 / 2 at that time, then the result was: two <em>remainder</em> one.&nbsp; Or the result of 4 / 2, was two <em>remainder</em> zero.&nbsp; Do you still remember those times? Those were good times.</p>
+<pre style="margin-left: 40px;">
+let remainder = 5 % 2;</pre>
+<p>
+	It turns out that the remainder operator is extremely useful, so in JavaScript there is an extra sign for it, the percentage sign: &#39;%&#39;.&nbsp; Actually, we use the remainder operator every day: if we say it is 2 pm, then we have implicitly calculated 14 % 12 in our mind.</p>
+<p>
+	.</p>
+<h2>
+	Exercise: Even Numbers, Odd Numbers</h2>
+<p>
+	A useful exercise is to list the numbers from 0 to 6 and to calculate the remainder with respect to division by 2 for each of these numbers, i.e. x % 2 We see that for even numbers the remainder is always zero and for odd numbers the remainder is always one.&nbsp; This is very useful, because sometimes we want to know if a number is even or odd.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch3_Console/averageTwoIntegers" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/averageTwoIntegers.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Exercise: AverageTwoIntegers</h2>
+<p>
+	We have to be a little careful when doing mathematical calculations, the example AverageTwoIntegers will illustrate why.&nbsp; Similar to AddTwoIntegers, we first read in two integers.&nbsp; And if someone is a bit careless, he might write the following statement to calculate the average of two numbers:</p>
+<pre style="margin-left: 40px;">
+let average = n1 + n2 / 2;</pre>
+<p>
+	Interestingly, this even works, e.g. if n1=0 and n2=2.&nbsp; However, for other numerical values you quickly notice that something is wrong.</p>
+<p>
+	Of course, the error was the missing parentheses!&nbsp; What we should have written is the following:</p>
+<pre style="margin-left: 40px;">
+let average = ( n1 + n2 ) / 2;</pre>
+<p>
+	However, an even better solution is the following:</p>
+<pre style="margin-left: 40px;">
+let average = ( n1 + n2 ) / <span style="color:#0000ff;">2.0</span>;</pre>
+<p>
+	In JavaScript it makes little difference, in other languages it does.</p>
+<p>
+	<b>SEP: You should always test your code thoroughly.</b></p>
+<p>
+	.</p>
+<h2>
+	Order of Precedence</h2>
+<p>
+	There are many rules relating to the order of precedence in JavaScript.&nbsp; The following hierarchy lists the most important ones:</p>
+<ol>
+	<li>
+		parentheses: ()</li>
+	<li>
+		*, /, %</li>
+	<li>
+		+, -</li>
+</ol>
+<p>
+	It says that first parentheses are evaluated, then multiplication, division and remainder, and finally addition and subtraction.&nbsp; But it can get even more complicated with operators like &#39;^&#39;, &#39;&amp;&#39;, &#39;|&#39;, etc.&nbsp; Therefore it is always recommended to make heavy use of parentheses.</p>
+<p>
+	<strong>SEP: To avoid trouble, use a lot of parentheses!</strong></p>
+<p>
+	.</p>
+<h2>
+	Constants</h2>
+<p>
+	Some variables do not change, so they are actually constants.&nbsp; For example, the circle number &#39;Pi&#39; always has the value &#39;3.1415...&#39;.&nbsp; To make a variable constant, we mark it with the keyword <em>const</em>:</p>
+<pre style="margin-left: 40px;">
+<span style="color:#0000ff;">const</span> PI = 3.1415;</pre>
+<p>
+	Constants cannot be changed once they have been initialized.&nbsp; This may seem not very useful at first, but later we will see that using constants leads to much better code.</p>
+<p>
+	<strong>SEP: Constants should always be written in capital letters, e.g. &#39;MAX_NUM&#39;, so that they can be immediately distinguished from normal variables.</strong></p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch3_Console/area" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/area.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Exercise: Area</h2>
+<p>
+	Write a ConsoleProgram that asks the user for the radius of a circle, then calculates its area (area = PI * radius * radius) and prints the result to the console (println()).&nbsp; PI should be a constant in this program.</p>
+<p>
+	.</p>
+<h2>
+	Boolean Values</h2>
+<p>
+	So far we have dealt with the numbers.&nbsp; Now let&#39;s take a look at the logical type, also called <em>boolean</em>.&nbsp; To get a feeling for booleans, we take a look at the following inequality:</p>
+<pre style="margin-left: 40px;">
+3 &gt; 5</pre>
+<p>
+	It is like a question:&nbsp; is three greater than five?&nbsp; The answer is no. One also says the statement &#39;3 &gt; 5&#39; is wrong or false.&nbsp; To deal with this, the data type boolean was invented:</p>
+<pre style="margin-left: 40px;">
+let b = 3 &gt; 5;
+println(b);</pre>
+<p>
+	That is, the variable b is of the data type boolean and can take the values <em>true</em> or <em>false</em>.&nbsp; The whole thing should remind us a little of Karel&#39;s sensors: e.g. the beepersPresent() sensor always returned true if a beeper was there and false if none was there.</p>
+<p>
+	.</p>
+<h2>
+	Conditions</h2>
+<p>
+	Boolean expressions mostly make sense when used in a condition.&nbsp; In Karel&#39;s world we used them with the if statement:</p>
+<pre style="margin-left: 40px;">
+if ( beepersPresent() ) {
+&nbsp;   pickBeeper();
+} else {
+&nbsp;   putBeeper();
+}</pre>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch3_Console/condition" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/condition.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<p>
+	We can do the same in a console program:</p>
+<pre style="margin-left: 40px;">
+let x = readInt(&quot;Enter a number: &quot;);
+if ( x &gt; 5 ) {
+&nbsp;&nbsp;&nbsp; println(&quot;Number is larger than 5.&quot;);
+} else {
+&nbsp;&nbsp;&nbsp; println(&quot;Number is less than or equal to 5.&quot;);
+}</pre>
+<p>
+	The fact that &#39;x &gt; 5&#39; is a boolean expression is actually not really important.</p>
+<p>
+	<strong>SEP:&nbsp; We should always use the curly braces with an if statement!</strong></p>
+<p>
+	.</p>
+<h2>
+	Comparisons</h2>
+<p>
+	What other comparisons exist besides &#39;&gt;&#39;?&nbsp; Six in all:</p>
+<pre style="margin-left: 40px;">
+==&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; equal to
+!=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; not equal to
+&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; greater than
+&lt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; less than
+&gt;=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; greater than or equal to
+&lt;=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; less than or equal to
+</pre>
+<p>
+	In addition, JavaScript has two more comparison operators: the exactly equals &#39;===&#39; and the not exactly equals &#39;!==&#39;.&nbsp; They compare not only value but also data type.&nbsp; The following example shows the difference:</p>
+<pre style="margin-left: 40px;">
+let x = 42;
+let y = &quot;42&quot;;
+if (x == y) {
+&nbsp;&nbsp;&nbsp; println(&quot;x and y are equal&quot;);
+}
+if (x === y) {
+&nbsp;&nbsp;&nbsp; println(&quot;x and y are exactly equal&quot;);
+}</pre>
+<p>
+	Since x is a number and y is a string, they are equal, but not exactly equal.&nbsp; In general, always use the exactly equals operators.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch3_Console/dayOfTheWeek" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/dayOfTheWeek.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Exercise: DayOfTheWeek</h2>
+<p>
+	Let&#39;s write a program that tells us whether a day is a weekday, a Saturday or a Sunday:</p>
+<pre style="margin-left: 40px;">
+let day = await readInt(&quot;Enter day of week as int (0-6): &quot;);
+if (day == 0) {
+&nbsp;&nbsp;&nbsp; println(&quot;Sunday&quot;);
+} else if (day &lt;= 5) {
+&nbsp;&nbsp;&nbsp; println(&quot;Weekday&quot;);
+} else {
+&nbsp;&nbsp;&nbsp; println(&quot;Saturday&quot;);
+}</pre>
+<p>
+	If the day entered is zero, it is a Sunday; otherwise, if the day is less than or equal to 5, it is a weekday; and otherwise it must be a Saturday.&nbsp; This form of concatenated if statements is also known as a &#39;cascading if&#39;.</p>
+<p>
+	.</p>
+<h2>
+	switch Statement</h2>
+<p>
+	Karel didn&#39;t know about the switch statement, but it is quite handy.&nbsp; In principle, it does the same thing as the &#39;cascading if&#39;, but a little more elegantly:</p>
+<pre style="margin-left: 40px;">
+let day = await readInt(&quot;Enter day of week as int (0-6): &quot;);
+switch (day) {
+case 0:
+&nbsp;&nbsp;&nbsp; println(&quot;Sunday&quot;);
+&nbsp;&nbsp;&nbsp; break;
+case 6:
+&nbsp;&nbsp;&nbsp; println(&quot;Saturday&quot;);
+&nbsp;&nbsp;&nbsp; break;
+default:
+&nbsp;&nbsp;&nbsp; println(&quot;Weekday&quot;);
+&nbsp;&nbsp;&nbsp; break;
+}</pre>
+<p>
+	If you do not think that this looks more elegantly just wait a little.</p>
+<p>
+	<strong>SEP: You should always have a default in your switch statement. Also, in a cascading if there should&nbsp; always be an else branch.</strong></p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch3_Console/dayOfTheWeek2" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/dayOfTheWeek2.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Exercise: DayOfTheWeek</h2>
+<p>
+	We want to solve our DayOfTheWeek problem with the switch statement.&nbsp; First, we use the code as above, and test if it works.&nbsp; Testing means that we test many different possible inputs, even unusual ones.&nbsp; (What happens if we enter -1 or 42?)</p>
+<p>
+	Question: What happens if we omit one of the break statements?</p>
+<p>
+	.</p>
+<h2>
+	Boolean Operators</h2>
+<p>
+	Let&#39;s remember YardstickKarel: in the last step, when Karel was collecting all the beepers to put them in a big pile, it would have been great if we could have tested two conditions at the same time:</p>
+<pre>
+&nbsp;   while ( leftIsBlocked() <strong><span style="color:#0000ff;">&amp;&amp;</span></strong> beepersPresent() ) {...}
+</pre>
+<p>
+	Here the &#39;&amp;&amp;&#39; means as much as &#39;and&#39;, so only if both conditions are fulfilled, Karel should do something. It would have been similarly practical if we had a way for Karel only to do something when something is not fulfilled,</p>
+<pre>
+&nbsp;   if ( <strong><span style="color:#0000ff;">!</span></strong>beepersPresent() ) {...}
+</pre>
+<p>
+	Here the &#39;!&#39; means as much as &#39;not&#39;.&nbsp; Finally, we had the example of BreadcrumbKarel where Karel was supposed to do something when there was either a wall in front of him or no beeper:</p>
+<pre>
+&nbsp;   if ( frontIsBlocked() <span style="color:#0000ff;"><strong>||</strong></span> noBeepersPresent() ) {...}
+</pre>
+<p>
+	That &#39;||&#39; means &#39;or&#39; in the sense of either-or, i.e., if either the front is blocked or there are no beepers present should Karel do something.</p>
+<p>
+	These three operators are the so-called boolean operators:</p>
+<pre>
+&nbsp;   !&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; not
+&nbsp;   &amp;&amp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; and
+&nbsp;   ||&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; or
+</pre>
+<p>
+	The order also reflects the priority rules, so &#39;!&#39; has a higher priority than &#39;and&#39;.</p>
+<p>
+	.</p>
+<h2>
+	Truth Tables</h2>
+<p>
+	It is common to display boolean operations in so-called truth tables.&nbsp; Here b1 and b2 are the two boolean operands, and out is the boolean result, e.g.</p>
+<pre style="margin-left: 40px;">
+let out = b1 &amp;&amp; b2;</pre>
+<p>
+	for the &#39;and&#39; operation.&nbsp; The truth tables for the three logical operations are as follows:</p>
+<p style="margin-left: 40px;">
+	<img alt="" src="img/98bce237-bbb2-4d00-adad-cfeb82d7d284.png" style="margin-left: 10px; margin-right: 10px; width: 464px; height: 167px;" /></p>
+<p>
+	.</p>
+<h2>
+	Exercise: LeapYear</h2>
+<p>
+	There is a cool boolean expression that tells us whether a year is a leap year or not:</p>
+<pre style="margin-left: 40px;">
+let p = ((y % 4 == 0) &amp;&amp; (y % 100 != 0)) || (y % 400 == 0);</pre>
+<p>
+	To understand the expression, it is best to write down the truth table for it.</p>
+<p style="margin-left: 40px;">
+	<img alt="" src="img/29d01bac-4234-46ed-9a3f-4c12bcf33588.png" style="margin-left: 10px; margin-right: 10px; width: 405px; height: 319px;" /></p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch3_Console/counterWithWhile" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/counterWithWhile.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	while Loop</h2>
+<p>
+	We have already met the while loop with Karel:</p>
+<pre style="margin-left: 40px;">
+while ( frontIsClear() ) {
+	move();
+}
+</pre>
+<p>
+	The while loop is executed as long as a certain condition is fulfilled.&nbsp; As a simple example, let&#39;s output the numbers from 0 to 9.</p>
+<pre style="margin-left: 40px;">
+let i = 0;
+while (<span style="color:#0000ff;">i &lt; 10</span>) {
+&nbsp;&nbsp;&nbsp; print(i + &quot;, &quot;);
+&nbsp;&nbsp;&nbsp; i = i + 1;
+}
+</pre>
+<p>
+	In the first line we declare a variable named i of data type int and set its value to 0. Then we test if i is less than 10.&nbsp; As long as this is the case, we print the current value of i in the console window. After that we increase the value of i by one.</p>
+<p>
+	This last line might be a bit unusual (especially mathematicians have a problem with it).&nbsp; But it is important to remember that &#39;=&#39; does not stand for equality, but for assignment.&nbsp; So</p>
+<pre style="margin-left: 40px;">
+i = i + 1;</pre>
+<p>
+	means: take the current value of i, add one to it, and then assign the result to the variable i.</p>
+<p>
+	.</p>
+<h2>
+	Exercise: CounterWithWhile</h2>
+<p>
+	As a little exercise we will try out the counter code: simply insert the lines above into the setup() function of a console program.&nbsp; What happens if we only use print() instead of println()?</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch3_Console/counterWithFor" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/counterWithFor.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	for Loop</h2>
+<p>
+	We got to know the for loop from the very beginning with Karel.&nbsp; At that time, we were only interested in the number of times the loop is run.&nbsp; But now we are ready to understand the rest.&nbsp; The following for loop also outputs the numbers from 0 to 9:</p>
+<pre style="margin-left: 40px;">
+for (let i = 0; i &lt; 10; i++) {
+&nbsp;&nbsp;&nbsp; print(i + &quot;, &quot;);
+}</pre>
+<p>
+	In general, a for loop always looks like this:</p>
+<pre style="margin-left: 40px;">
+for ( init; condition; step ) {
+	&nbsp;  statements;
+}</pre>
+<p>
+	First, the init step is executed, usually something like &#39;int i = 0&#39;.&nbsp; Then the condition is checked, so is &#39;i &lt; 10&#39;?&nbsp; If yes, the statements are executed within the loop.&nbsp; Finally, step &#39;i++&#39; is executed.&nbsp; This is done until the condition is no longer fulfilled.</p>
+<p>
+	What does this &#39;i++&#39; mean?&nbsp; It is called the increment operator, and it means as much as the line,</p>
+<pre style="margin-left: 40px;">
+i = i + 1;</pre>
+<p>
+	So the value of the variable i is increased by one.&nbsp; There is also a decrement operator that does exactly the opposite: &#39;i--&#39;.</p>
+<p>
+	.</p>
+<h2>
+	Exercise: For Loops with Jeliot</h2>
+<p>
+	To understand the for loop even better, let&#39;s take a look at the for loop in Jeliot and watch step by step what happens.</p>
+<p>
+	<img alt="" src="img/JeliotForLoop.png" style="margin-left: 10px; margin-right: 10px; width: 586px; height: 255px;" />.</p>
+<p>
+	.</p>
+<h2>
+	for versus while</h2>
+<p>
+	As we have seen, while loop and for loop actually do the same thing.&nbsp; Thus the question arises when to use which?</p>
+<ul>
+	<li>
+		<strong>for:</strong>&nbsp; if we know from the outset how often something is done, e.g.,<br />
+		<span style="font-family:courier new,courier,monospace;">for ( let i=0; i&lt;10; i++ ) {...} </span></li>
+	<li>
+		<strong>while:</strong>&nbsp; we use the while loop, if we don&#39;t know exactly how often a loop is executed, e.g.,<br />
+		<span style="font-family:courier new,courier,monospace;">while ( frontIsClear() ) {...}&nbsp; </span></li>
+</ul>
+<p>
+	.</p>
+<h2>
+	OBOB: FillRowKarel</h2>
+<p>
+	There is another loop we haven&#39;t talked about yet, the &#39;Loop and a Half&#39;: it is the solution to our OBOB problem.&nbsp; Let&#39;s remember FillRowKarel:</p>
+<pre style="margin-left: 40px;">
+while ( frontIsClear() ) {
+	putBeeper();
+	move();
+}
+putBeeper();
+</pre>
+<p>
+	The problem is that we need the &#39;putBeeper()&#39; function twice.&nbsp; This duplication of code occurs with every OBOB and duplicate code is always a bad thing.</p>
+<p>
+	<strong>SEP:&nbsp; Avoid duplicate code.</strong></p>
+<p>
+	.</p>
+<h2>
+	Loop and a Half</h2>
+<p>
+	The solution is actually quite simple and is called the &#39;Loop and a Half&#39;:</p>
+<pre style="margin-left: 40px;">
+while ( true ) {
+	putBeeper();
+	if ( frontIsBlocked() ) <span style="color:#0000ff;">break</span>;
+	move();
+}
+</pre>
+<p>
+	Let&#39;s analyze the code:&nbsp; First of all, we have an infinite loop, &#39;while (true)&#39;.&nbsp; However, we can end this infinite loop with the break statement.&nbsp; We do this when there is a wall in front of Karel, &#39;if ( frontIsBlocked() )&#39;&#39;.&nbsp; Now we can see why it is called &#39;Loop and a Half&#39;: only half of the loop is executed in the last step.&nbsp; To understand the code, we should go through it step by step on a piece of paper.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch3_Console/cashRegister" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/cashRegister.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Exercise: CashRegister</h2>
+<p>
+	A nice application for the &#39;Loop and a Half&#39; is the cash register in a grocery store: assume, we have five items in our shopping cart and we are ready to pay.&nbsp; The cashier enters the prices of the individual goods, one after the other into the cash register. It adds them up and at the end outputs how much we should pay:</p>
+<pre style="margin-left: 40px;">
+const SENTINEL = 0;
+let total = 0;
+while (true) {
+&nbsp;&nbsp;&nbsp; let price = await readInt(&quot;Enter price: &quot;);
+&nbsp;&nbsp;&nbsp; if (price == SENTINEL)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">break</span>;
+&nbsp;&nbsp;&nbsp; total += price;
+}
+println(&quot;Your total is: &quot; + total);
+</pre>
+<p>
+	But since not all people always buy exactly five things, we need some termination criterion: in our case it is when the cashier enters 0 for the price.&nbsp; This abort criterion is sometimes also called the sentinel.</p>
+<p>
+	Question: Could we also use a negative number as abort criterion?</p>
+<p>
+	<strong>SEP:&nbsp; If possible, you should not use more than one break statement.</strong></p>
+<p>
+	.</p>
+<h2>
+	Post-Increment vs Pre-Increment</h2>
+<p>
+	So far we have only seen the increment operator as post-increment operator, but it is also available as pre-increment.&nbsp; The difference is that the &#39;++&#39; operator is either before the variable (pre) or after (post) it.&nbsp; So:</p>
+<pre style="margin-left: 40px;">
+let x = 5;
+let y = x++;&nbsp;&nbsp;&nbsp; // Post: y=5
+</pre>
+<p>
+	or</p>
+<pre style="margin-left: 40px;">
+let x = 5;
+let y = ++x;&nbsp;&nbsp;&nbsp; // Pre: y=6
+</pre>
+<p>
+	The difference is subtle, and you only notice it when this operator is related to assignments or other operations:</p>
+<pre style="margin-left: 40px;">
+let a = 6;
+<span style="color:#0000ff;">let x = ++&shy;&shy;a;</span>
+let y = x++;
+</pre>
+<p>
+	In the second line, first (pre) the variable a is increased by one, and then the assignment is done.&nbsp; In the third line, the assignment is done first, and then (post) the variable x is incremented by one.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch3_Console/typeOf" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/typeOf.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	typeOf</h2>
+<p>
+	You can ask JavaScript what the type of a given variable is with the <em>typeof</em> operator.&nbsp; For instance, the following code,</p>
+<pre style="margin-left: 40px;">
+let x = 42;
+println( typeof(x) );</pre>
+<p>
+	would output <em>number</em> to the console.&nbsp; You may want to try the following examples to see how the typeof operator works.</p>
+<pre style="margin-left: 40px;">
+let u1;
+println(typeof (u1));&nbsp; // undefined
+let u2 = undefined;
+println(typeof (u2));&nbsp; // undefined
+let x = 42;
+println(typeof (x));&nbsp;&nbsp; // number
+let y = 42.0;
+println(typeof (y));&nbsp;&nbsp; // number
+let z = &quot;42&quot;;
+println(typeof (z));&nbsp;&nbsp; // string
+let b = true;
+println(typeof (b));&nbsp;&nbsp; // boolean
+let n = null;
+println(typeof (n));&nbsp;&nbsp; // object
+let arr = [];
+println(typeof (arr)); // object
+let obj = { name: &quot;Garfield&quot;, age: 42 };
+println(typeof (obj)); // object
+let f = function () { };
+println(typeof (f));&nbsp;&nbsp; // function</pre>
+<p>
+	The last four types you have not seen, they will come soon.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Review</h1>
+<p>
+	We have made it!&nbsp; This chapter was a little more difficult than the previous two.&nbsp; But from now on it&#39;s all downhill.&nbsp; What have we learned in this chapter?&nbsp; We have</p>
+<ul>
+	<li>
+		got to know variables,</li>
+	<li>
+		reminded us of the remainder operator,</li>
+	<li>
+		had our first contact with constants,</li>
+	<li>
+		seen boolean operators and truth tables for the first time,</li>
+	<li>
+		found that the if and switch statements are very similar,</li>
+	<li>
+		learned when we should use a for and when a while loop and</li>
+	<li>
+		found the solution to our OBOB problem with the &#39;Loop and a Half&#39;.</li>
+</ul>
+<p>
+	The most important thing in this chapter however was that we filled all the little details we left unexplained in the first two chapters.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Projects</h1>
+<p>
+	The following projects may not be as interesting as those in the last chapter.&nbsp; But they are the basis for future chapters.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr3_Console/countdown" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/countdown.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Countdown</h2>
+<p>
+	Karel loves rockets and especially the countdown just before lift-off.&nbsp; Therefore we want to write a program that displays the numbers from 10 to 0 on the console.</p>
+<p>
+	.</p>
+	<p>
+		.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr3_Console/calculator" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/calculator.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Calculator</h2>
+<p>
+	The DoubleBeeper was a lot of work for Karel.&nbsp; This is much easier with console programs and variables.&nbsp; That&#39;s why we want to write a console program that adds two numbers.</p>
+<p>
+	What is a bit annoying about the program, that we have to restart it every time we want to make a new addition.&nbsp; What could be done to allow the program to allow multiple additions (always of two numbers)?</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr3_Console/temperature" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/temperature.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Temperature</h2>
+<p>
+	Karel loves Europe, but he can&#39;t deal with those Celsius.&nbsp; That&#39;s why we write a program for him that converts Fahrenheit to Celsius.&nbsp; We ask the user to give us a temperature in Fahrenheit.&nbsp; Using <em>readInt()</em> we store them in the variable <em>f</em>. And with the formula</p>
+<pre style="margin-left: 40px;">
+let c = (5.0 / 9.0) * (f - 32);</pre>
+<p>
+	we can convert it to Celsius.</p>
+<p>
+	What happens if you enter 33 for the Fahrenheit?&nbsp; The result is: 0.5555555555555556.&nbsp; If you&nbsp; rather want rounded results, you can use the function <em>Math.round()</em> to do that:</p>
+<pre style="margin-left: 40px;">
+let c = Math.round( (5.0 / 9.0) * (f - 32) );</pre>
+<p>
+	We will also need the function <em>Math.trunc()</em>: it truncates, that rounds off the result.&nbsp; Both can be used to convert floating point numbers to integers.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr3_Console/squares" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/squares.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Squares</h2>
+<p>
+	As an example for the use of constants, we want to write a console program that outputs the square numbers of the numbers from 0 to MAX_NUM, where MAX_NUM is a constant that is to be set to the value 10.</p>
+<p>
+	<strong>SEP: &#39;Magic Numbers&#39; are numbers that appear somewhere in our code, and we usually have no idea where they come from and what they mean.&nbsp; Therefore, all numbers except 0, 1 and 2 should be declared as constants.</strong></p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr3_Console/evenOdd" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/evenOdd.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	EvenOdd</h2>
+<p>
+	We want to write a small console program that lists the numbers from 0 to 10, next to it the value of the (number % 2), and finally whether the number is even or odd. What we see is that the remainder operator can be used to determine if a number is even or odd.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr3_Console/money" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/money.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Money</h2>
+<p>
+	If we are dealing with money in our programs, should we use an int data type or a double data type?&nbsp; The answer is very simple when you ask yourself: can you count money?&nbsp; Everything you can count uses the int data type.</p>
+<p>
+	That means when we work with money we should always think in cents.&nbsp; However, if we then spend them, it would be better if we did not spend 120 cents but 1.20 euros.&nbsp; Here too, the remainder operator &#39;%&#39; is of great benefit:</p>
+<pre style="margin-left: 40px;">
+int money = 120;
+int euros = money / 100;
+int cents = money % 100;
+println(&quot;The amount is &quot; + euros + &quot;,&quot; + cents + &quot; Euro.&quot;);
+</pre>
+<p>
+	To make sure that our code really works, we should try different inputs.&nbsp; Good test candidates are the inputs: 120, 90, 100, 102 and 002.&nbsp; Our program has always returned the correct output, yes?</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr3_Console/bigMoney" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/bigMoney.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	BigMoney</h2>
+<p>
+	For amounts over a thousand euros, one more comma is added for the thousands and millions, for example: 1,001,233.45 euros.&nbsp; So we want to write a function formatNumericString(int cent), which gets an amount of money in cents as parameter, and returns a string that is correctly formatted.&nbsp; When we test the program, we should use the above amount.&nbsp; We will find that it makes sense to write a function padWithZeros().</p>
+<p>
+	Also here we should try different inputs, e.g. 100123345, 100123305, and 05 might be good test candidates.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr3_Console/time" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/time.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Time</h2>
+<p>
+	People prefer to specify the time in hours, minutes and seconds.&nbsp; Computers, on the other hand, only think in seconds, seconds that have passed since midnight.&nbsp; That&#39;s why we want to write a program that calculates the current time from the seconds that have passed since midnight.&nbsp; For this we again need the remainder operator. It may also make sense to write a function padWithZeros() which ensures that &quot;06&quot; minutes are displayed instead of &quot;6&quot; minutes.</p>
+<p>
+	For testing we should try at least the following inputs: 5, 61, 85, 3600, 3601.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr3_Console/leapYear" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/leapYear.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	LeapYear</h2>
+<p>
+	We have seen above how to determine if a year is a leap year.&nbsp; With this knowledge, we want to write a console program that tells us if the year someone was born in was a leap year.&nbsp; For example, 1996, 2000, and 2004 should be leap years, but 1800 and 1900 should not be.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr3_Console/truthTables" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/truthTables.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	TruthTables*</h2>
+<p>
+	In this project we want to deal with the boolean data type and the logical operators &amp;&amp; (and), || (or) and ^ (exclusive or).&nbsp; We want to write a program that calculates and outputs the truth tables for all three operators.&nbsp; Possibly helpful is the following trick how to create a boolean datatype from an number datatype:</p>
+<pre style="margin-left: 40px;">
+let in1 = 0;
+let b1 = (in1 != 0);</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr3_Console/interactiveMenuProgram" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/interactiveMenuProgram.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	InteractiveMenuProgram</h2>
+<p>
+	Very often you need a kind of menu in a console program.&nbsp; The user can choose between different menu items by entering a number.&nbsp; We therefore want to write a program in which the user can choose between three possibilities: if he enters &#39;0&#39;, the program should be terminated, if he enters &#39;1&#39;, a message should be output, and if he enters &#39;2&#39;, nothing should happen.&nbsp; The first thing you want to do is, tell the user what the options are:</p>
+<pre style="margin-left: 40px;">
+println(&quot;0: Exit / 1: Print message / 2: Do nothing&quot;);</pre>
+<p>
+	Then comes a &#39;Loop and a Half&#39;, in which we ask the user for the choice:</p>
+<pre style="margin-left: 40px;">
+let choice = await readInt(&quot;Your choice: &quot;);</pre>
+<p>
+	If the user enters the &#39;0&#39; we end the &#39;Loop and a Half&#39;:</p>
+<pre style="margin-left: 40px;">
+if (choice == 0) break;</pre>
+<p>
+	After this follows a switch or cascading if for the options &#39;1&#39; and &#39;2&#39;.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr3_Console/yearlyRate" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/yearlyRate.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	YearlyRate</h2>
+<p>
+	Karel wants to buy a car, so he started saving up.&nbsp; He wants to buy a Mini (Mercedes is to expensive), and he has seen a used one for 5000 euros.&nbsp; He saw a cheap loan from a bank of 5% a year.&nbsp; What&#39;s his annual rate if he wants the loan to be paid off in five years?</p>
+<p>
+	For this Karel needs a program in which he can enter the loan amount (k), the interest rate (z) and the years (n).&nbsp; The program should then tell him how high his annual rate (y) is.&nbsp; The formula for this can be found in the Wikipedia under compound interest formula [2]:</p>
+<pre style="margin-left: 40px;">
+let q = 1.0 + z;
+let qn = Math.pow(q, n);
+let y = k * qn * (q - 1) / (qn - 1);</pre>
+<p>
+	It is helpful to know that floating point numbers can be read with readDouble().</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr3_Console/chessboard" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/chessboard.png" style="width: 197px; height: 197px; display: block;" />Try it</a></div>
+<h2>
+	ChessBoard</h2>
+<p>
+	We want to draw a checkerboard pattern using GRects.&nbsp; Of course, this must be a GraphicsProgram.&nbsp; It is a nice, but not quite easy application of loops and residual operator &#39;%&#39;.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Questions</h1>
+<ol>
+	<li>
+		Name three of the standard data types of JavaScript.<br />
+		&nbsp;</li>
+	<li>
+		What is a magic number?<br />
+		&nbsp;</li>
+	<li>
+		What is the difference between a graphics program and a console program?<br />
+		&nbsp;</li>
+	<li>
+		In the lecture you have heard of many software engineering principles. Give three examples.<br />
+		&nbsp;</li>
+	<li>
+		During programming there are some typical errors that happen again and again (Common Errors). Name two of those errors.<br />
+		&nbsp;</li>
+	<li>
+		Write a console program that asks the user for the radius of a circle, then calculates its area (area = PI * radius * radius) and prints it to the console.<br />
+		&nbsp;</li>
+	<li>
+		What is the difference between &#39;print(&quot;hi&quot;)&#39; and &#39;println(&quot;hi&quot;)&#39;?<br />
+		&nbsp;</li>
+	<li>
+		What does the &#39;readInt()&#39; function do?<br />
+		&nbsp;</li>
+	<li>
+		What are the values of the variables &#39;x&#39; and &#39;y&#39; after the following three lines have been executed?<br />
+		<span style="font-family:courier new,courier,monospace;">a = 6;<br />
+		x = ++&shy;&shy;a;<br />
+		y = x++;</span><br />
+		&nbsp;</li>
+	<li>
+		Describe in your own words what the following expression means:<br />
+		&nbsp;&nbsp;<span style="font-family:courier new,courier,monospace;"> (x &lt; 0) || (x &gt; WIDTH)</span><br />
+		&nbsp;</li>
+	<li>
+		What is the advantage of using constants?<br />
+		&nbsp;</li>
+	<li>
+		Compare the two &#39;switch&#39; examples below, and describe their output.<br />
+		<span style="font-family:courier new,courier,monospace;">a)&nbsp; let day = 0;<br />
+		&nbsp;&nbsp;&nbsp; switch (day) {<br />
+		&nbsp;&nbsp;&nbsp; case 0:<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println(&quot;Sunday&quot;);<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;<br />
+		&nbsp;&nbsp;&nbsp; case 6:<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println(&quot;Saturday&quot;);<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;<br />
+		&nbsp;&nbsp;&nbsp; }</span><br />
+		<br />
+		<span style="font-family:courier new,courier,monospace;">b)&nbsp; let day = 0;<br />
+		&nbsp;&nbsp;&nbsp; switch (day) {<br />
+		&nbsp;&nbsp;&nbsp; case 0:<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println(&quot;Sunday&quot;);<br />
+		&nbsp;&nbsp;&nbsp; case 6:<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println(&quot;Saturday&quot;);<br />
+		&nbsp;&nbsp;&nbsp; }</span><br />
+		<br />
+		&nbsp;</li>
+	<li>
+		Which values can a boolean variable take?<br />
+		&nbsp;</li>
+	<li>
+		What data type must the variable &#39;b&#39; be in the example below?<br />
+		<span style="font-family:courier new,courier,monospace;">&nbsp;&nbsp;&nbsp; if ( b ) {<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println(&quot;hi&quot;);<br />
+		&nbsp;&nbsp;&nbsp; }</span><br />
+		&nbsp;</li>
+	<li>
+		Write the test which determines whether a number y is divisible by 400.<br />
+		&nbsp;</li>
+	<li>
+		Recall the remainder &#39;%&#39; operator?&nbsp; Give two examples of what you can use it for.<br />
+		&nbsp;</li>
+	<li>
+		People prefer to specify times in hours, minutes and seconds.&nbsp; Computers prefer to calculate in seconds. For example, the time 13:35:12 for the computer simply is 48912 seconds. Use this knowledge to convert the computer time &#39;t&#39; into a human readable form, i.e. hours, minutes and seconds. You can also use several intermediate steps.<br />
+		&nbsp;</li>
+	<li>
+		When should you use a for loop and when a while loop?<br />
+		&nbsp;</li>
+	<li>
+		Anything you can do with a &#39;for&#39; loop can also be done with a &#39;while&#39; loop and vice versa.&nbsp; Rewrite the following &#39;for&#39; loop as a &#39;while&#39; loop.<br />
+		<span style="font-family:courier new,courier,monospace;">&nbsp;&nbsp;&nbsp; for (let i=0; i&lt;5; i++) {<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println(i);<br />
+		&nbsp;&nbsp;&nbsp; }</span><br />
+		&nbsp;</li>
+	<li>
+		Describe the structure of the &#39;loop-and-a-half&#39;.&nbsp; Which problem does it solve?<br />
+		&nbsp;</li>
+	<li>
+		Loop and a Half: Rewrite the following Karel example using the Loop and a Half. What is the advantage of the Loop and a Half?<br />
+		<span style="font-family:courier new,courier,monospace;">&nbsp;&nbsp;&nbsp; function run() {<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while ( frontIsClear() ) {<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; putBeeper();<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; putBeeper();<br />
+		&nbsp;&nbsp;&nbsp; }</span></li>
+</ol>
+<p>
+	.</p>
+<hr />
+<h1>
+	References</h1>
+<p>
+	References for the topics in this chapter can be found in practically every book on Java, especially of course in [3].</p>
+<p>
+	[1] Jeliot 3, Program Visualization application, University of Helsinki, <a href="http://cs.joensuu.fi/jeliot/description.php">cs.joensuu.fi/jeliot/description.php</a></p>
+<p>
+	[2] Seite &bdquo;Sparkassenformel&ldquo;. In: Wikipedia, Die freie Enzyklopädie. URL: <a href="https://de.wikipedia.org/w/index.php?title=Sparkassenformel&amp;oldid=143971427">https://de.wikipedia.org/w/index.php?title=Sparkassenformel&amp;oldid=143971427</a></p>
+<p>
+	[3] The Art and Science of Java, von Eric Roberts, Addison-Wesley, 2008</p>				
+<p>
+.</p>
+<p class="footer">
+Copyright &copy; 2016-2023 <a href="http://www.lano.de">Ralph P. Lano</a>. All rights reserved.
+</p>
+</div>
+</div>
+</center>
+</body>
+
 </html>

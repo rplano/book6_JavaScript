@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>JavaScript: AppA Primer</title>
+<meta name="title" content="Variations on a Theme: JavaScript: AppA Primer">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="UTF-8">
+<meta name="description" content="An object-oriented Introduction">
+<meta name="keywords" content="JavaScript,object orientation,introduction">
+<meta name="author" content="Ralph P. Lano">
+<meta name="robots" content="index,follow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="book.css">
+</head>
+
+<body>
+<center>
+<div id="wrap">
+<ul class="sidenav">
+<p><a href="../index.html">Variations on a Theme</a><a href="index.html">JavaScript</a></p>
+<li><a href="Ch1_Karel.html">Karel</a></li>
+<li><a href="Ch2_Graphics.html">Graphics</a></li>
+<li><a href="Ch3_Console.html">Console</a></li>
+<li><a href="Ch4_Agrar.html">Agrar</a></li>
+<li><a href="Ch5_MindReader.html">MindReader</a></li>
+<li><a href="Ch6_Swing.html">Swing</a></li>
+<li><a href="Ch7_Asteroids.html">Asteroids</a></li>
+<li><a href="Ch8_Stocks.html">Stocks</a></li>
+<li><a href="index.html"> </a></li>
+<li><a href="AppA_Primer.html">Primer</a></li>
+<li><a href="AppB_Libraries.html">Libraries</a></li>
+<li><a href="AppC_Ideas.html">Ideas</a></li>
+</ul>
+<div class="content">
+<h1>
+	JavaScript Primer</h1>
+<p>
+	This is a very brief and superficial introduction to JavaScript.&nbsp; The books in the references are much better and you should get all of them.&nbsp; Here we only do client-side, browser-based JavaScript.&nbsp; Also, we use ES6.&nbsp; Although the class syntax is considered to be only syntactic sugar, we actually like sugar quite a lot.</p>
+<p>
+	JavaScript was invented by Brendan Eich in 1995.&nbsp; Its syntax is somewhat inspired by Java, but it has very little to do with Java.&nbsp; To understand some of the differences, the following comparison might be helpful:</p>
+<table align="center" border="0" cellpadding="1" cellspacing="1" width="200">
+	<tbody>
+		<tr>
+			<td>
+				<b>Java</b></td>
+			<td>
+				<b>JavaScript</b></td>
+		</tr>
+		<tr>
+			<td>
+				Strongly-typed</td>
+			<td>
+				Loosely-typed</td>
+		</tr>
+		<tr>
+			<td>
+				Static</td>
+			<td>
+				Dynamic</td>
+		</tr>
+		<tr>
+			<td>
+				Classical</td>
+			<td>
+				Prototypal</td>
+		</tr>
+		<tr>
+			<td>
+				Classes</td>
+			<td>
+				Functions</td>
+		</tr>
+		<tr>
+			<td>
+				Constructors</td>
+			<td>
+				Functions</td>
+		</tr>
+		<tr>
+			<td>
+				Methods</td>
+			<td>
+				Functions</td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	The key differences being that Java has a statically typed system, whereas JavaScript has a dynamic type system.&nbsp; And in JavaScript basically almost everythings seems to be a function.</p>
+<p>
+	With the advent of ES6 JavaScript has many new features.&nbsp; Most people say it is just syntactic sugar, but in my opinion it is much more than that.&nbsp; We will introduce a few of them here, such as classes, inheritance, closure, generators, and promises.</p>
+<p>
+	.</p>
+<h2>
+	Introduction</h2>
+<p>
+	The simplest way to run JavaScript is in the browser.&nbsp; Use your favorite text editor, such as Notepad, Mousepad, TextEdit, or vi, and type the following into a file you can call &quot;index.html&quot;:</p>
+<pre style="margin-left: 40px;">
+&lt;html&gt;
+&nbsp;&nbsp;&nbsp; &lt;head&gt;
+<span style="color:#0000ff;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;script type=&quot;text/javascript&quot;&gt;
+&nbsp;&nbsp;&nbsp;         alert(&quot;Hello world!&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/script&gt;</span>
+&nbsp;&nbsp;&nbsp; &lt;/head&gt;
+&lt;/html&gt;</pre>
+<p>
+	Now simply open it with your browser and a pop-up box saying &quot;Hello world!&quot; should show up.&nbsp; You could place the script tag also inside the body, but usually it is placed inside the head tag.</p>
+<p>
+	Next, let us consider <em>functions</em>, the bread and butter of JavaScript.</p>
+<pre style="margin-left: 40px;">
+&lt;html&gt;
+&nbsp;&nbsp;&nbsp; &lt;head&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;script type=&quot;text/javascript&quot;&gt;<span style="color:#0000ff;">
+<span style="color:#0000ff;"><span style="color:#0000ff;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span>function run() {
+<span style="color:#0000ff;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span>&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">document.write</span>(&quot;Hello world!&quot;);
+<span style="color:#0000ff;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span>}</span>
+</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/script&gt;
+&nbsp;&nbsp;&nbsp; &lt;/head&gt;
+&nbsp;&nbsp;&nbsp; &lt;body <span style="color:#0000ff;">onload=&quot;run()</span>;&quot;&gt;
+&nbsp;&nbsp;&nbsp; &lt;/body&gt;
+&lt;/html&gt;</pre>
+<p>
+	Here we actually use three features of JavaScript: <em>functions</em>, <em>events</em> and the <em>DOM</em>.&nbsp; Functions are declared inside script tags, they start with the keyword &quot;function&quot;, often have a name and have a function body, containing JavaScript code:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; document.write(&quot;Hello world!&quot;);
+}</pre>
+<p>
+	The word &quot;document&quot; refers to an HTML document and is part of the browsers DOM.&nbsp; DOM stands for Document Object Model and it is a JavaScript wrapper around all the different HTML elements in the browser.&nbsp; Most important are the <em>window</em> and the <em>document</em> objects.</p>
+<p>
+	JavaScript has many events, in our example we use the <em>onload</em> event:</p>
+<pre style="margin-left: 40px;">
+&lt;body <span style="color:#0000ff;">onload=&quot;run();</span>&quot;&gt;
+&lt;/body&gt;
+</pre>
+<p>
+	It is triggered when the browser has finished loading the whole HTML page.&nbsp; The above tells the browser to execute the JavaScript function <em>run()</em> after the HTML page has loaded completely.&nbsp; Interestingly, for very large pages, JavaScript may actually start running before the whole page is loaded, this can cause problems when JavaScript tries to access parts that haven&#39;t even loaded.&nbsp; Hence it is advisable to only start executing JavaScript code after the whole page has loaded.</p>
+<p>
+	Finally, let us talk about JavaScript files.&nbsp; Instead of mixing HTML with JavaScript code, we can also place them in separate files.&nbsp; In this case the &quot;index.html&quot; file would look like this:</p>
+<pre style="margin-left: 40px;">
+&lt;html&gt;
+&nbsp;&nbsp;&nbsp; &lt;head&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;script type=&quot;text/javascript&quot; src=&quot;<span style="color:#0000ff;">script.js</span>&quot;&gt;&lt;/script&gt;
+&nbsp;&nbsp;&nbsp; &lt;/head&gt;
+&nbsp;&nbsp;&nbsp; &lt;body <span style="color:#0000ff;">onload=&quot;run()</span>;&quot;&gt;
+&nbsp;&nbsp;&nbsp; &lt;/body&gt;
+&lt;/html&gt;</pre>
+<p>
+	and we put the JavaScript code inside a file called &quot;script.js&quot;:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; document.write(&quot;Hello world!&quot;);
+}</pre>
+<p>
+	This is clearly the preferred way of writing JavaScript code.&nbsp; First, it separates look (HTML) from function (JavaScript).&nbsp; Especially, when both get large, this is very helpful.&nbsp; And second, it allows for reuse, meaning, we can include the same JavaScript file in many different HTML pages.</p>
+<p>
+	.</p>
+<h2>
+	Popup Boxes</h2>
+<p>
+	For simple interaction with the user, JavaScript has three kind of popup boxes: <em>alert</em>, <em>confirm</em>, and <em>prompt</em>.&nbsp; The alert, we have seen already:</p>
+<pre style="margin-left: 40px;">
+function showAlert() {
+	alert(&quot;I am an alert box!&quot;);
+}
+</pre>
+<p>
+	The confirm box is often used if we want the user to verify or accept something.&nbsp; When a confirm box pops up, the user will have to click either &quot;OK&quot; or &quot;Cancel&quot; to proceed.&nbsp; If the user clicks &quot;OK&quot;, the box returns true, if the user clicks &quot;Cancel&quot;, the box returns false.</p>
+<pre style="margin-left: 40px;">
+function showConfirm() {
+&nbsp;   let b=confirm(&quot;Press a button&quot;);
+&nbsp;   if ( b === true ) {
+&nbsp;       document.write(&quot;You pressed OK!&quot;);
+&nbsp;   } else {
+&nbsp;       document.write(&quot;You pressed Cancel!&quot;);
+&nbsp;   }
+}
+</pre>
+<p>
+	The prompt box is often used if you want the user to enter some value.&nbsp; When a prompt box pops up, the user will have to click either &quot;OK&quot; or &quot;Cancel&quot; to proceed after entering an input value.&nbsp; If the user clicks &quot;OK&quot; the box returns the input value. If the user clicks &quot;Cancel&quot; the box returns <em>null</em>.</p>
+<pre style="margin-left: 40px;">
+function showPrompt() {
+&nbsp;   let name = prompt(&quot;Please enter your name&quot;, &quot;Harry Potter&quot;);
+&nbsp;   if ( name !== null ) {
+&nbsp;       document.write(&quot;Hello &quot; + name + &quot;!&quot;);
+&nbsp;   }
+}
+</pre>
+<p>
+	.</p>
+<h2>
+	Variables</h2>
+<p>
+	Let us consider some simple variable declarations:</p>
+<pre style="margin-left: 40px;">
+x;
+var y;
+let z;
+const c;
+</pre>
+<p>
+	The first one declares the variable x.&nbsp; This maybe surprising, especially if you come from other programming languages, but JavaScript is a weakly typed language, meaning you do not have to declare variables at all.&nbsp; Also, you do not specify a data type.&nbsp; The JavaScript interpreter tries to do its best to figure this out by itself.&nbsp;</p>
+<p>
+	This seems very convenient, but may lead to problems.&nbsp; The most common has to do with typos: you slightly misspell a variable name.&nbsp; In normal languages, the compiler would give an error message that the variable was not declared.&nbsp; Not so in JavaScript: the interpreter thinks you want a new variable, and declares it for you automatically.&nbsp; However, you can tell the interpreter not to do that with &quot;use strict&quot;, which you should.</p>
+<p>
+	Therefore, preferrably we use the other declarations with the keywords <em>var</em>, <em>let</em>, and <em>const</em>.&nbsp; The last one is always preferred, if a variable does not change, declare it a constant.&nbsp; The difference between the other two is subtle.&nbsp; Consider the following examples [2]:</p>
+<pre style="margin-left: 40px;">
+function varTest() {
+&nbsp; var x = 1;
+&nbsp; {
+&nbsp;&nbsp;&nbsp; var x = 2; // same variable!
+&nbsp;&nbsp;&nbsp; console.log(x); // 2
+&nbsp; }
+&nbsp; console.log(x); // 2
+}
+
+function letTest() {
+&nbsp; let x = 1;
+&nbsp; {
+&nbsp;&nbsp;&nbsp; let x = 2; // different variable
+&nbsp;&nbsp;&nbsp; console.log(x); // 2
+&nbsp; }
+&nbsp; console.log(x); // 1
+}</pre>
+<p>
+	A variable declared with <em>let</em> is restricted to the scope in which it is defined, that is inside the curly braces.</p>
+<p>
+	In general, it is better to use <em>let</em>, unless one explicitely wants to create a <em>global</em> variable.&nbsp; Because <em>let</em>, unlike <em>var</em>, does not allow you to create a global variable:</p>
+<pre style="margin-left: 40px;">
+var x = &quot;global&quot;;
+let y = &quot;global&quot;;
+console.log(this.x); // &quot;global&quot;
+console.log(this.y); // undefined</pre>
+<p>
+	If you declare a variable within a function, the variable can only be accessed within that function. When you exit the function, the variable is destroyed. These variables are called local variables. You can have local variables with the same name in different functions, because each is recognized only by the function in which it is declared.</p>
+<p>
+	.</p>
+<h2>
+	Data Types</h2>
+<p>
+	In JavaScript you do not have much control over your data types.&nbsp; However, they do exist internally.&nbsp; The simplest one being</p>
+<ul>
+	<li>
+		number,</li>
+	<li>
+		string,</li>
+	<li>
+		boolean,</li>
+	<li>
+		and undefined.</li>
+</ul>
+<p>
+	You may notice, there is no difference between integers and floating point numbers.&nbsp; JavaScript infers the actual data type from the declaration:</p>
+<pre style="margin-left: 40px;">
+let x = 42;
+let y = 42.0;
+let z = &quot;42&quot;;
+</pre>
+<p>
+	So <em>x</em> is actually treated as an integer, <em>y</em> as a floating point number, and <em>z</em> as a string.&nbsp; But as soon as it is needed, JavaScript will perform automatic type conversion.&nbsp; However, only in one direction, that is from integer to floating point, integer to string and floating point to string, but not the other way round.</p>
+<p>
+	For this the conversion functions are helpful:</p>
+<pre style="margin-left: 40px;">
+let x = parseInt(&quot;42&quot;);
+let y = parseFloat(&quot;42.0&quot;);
+let z = Math.trunc(42.0);</pre>
+<p>
+	The last one converts a floating point number to an integer.&nbsp; Always use <em>trunc()</em>, because <em>floor()</em> works differently on negative numbers.</p>
+<h3>
+	Arrays and Objects</h3>
+<p>
+	In JavaScript we also have complex data types, arrays and objects.&nbsp; Arrays are declared with square brackets:</p>
+<pre style="margin-left: 40px;">
+let arr1 = [];
+let arr2 = [1, 2, 3, 4];</pre>
+<p>
+	The first is an empty array and the second is an array with four elements.&nbsp; Arrays in JavaScript can grow and shrink.</p>
+<p>
+	Similarily, objects are defined using curly braces, with a list of key-value pairs:</p>
+<pre style="margin-left: 40px;">
+let cat = { name: &quot;Garfield&quot;, age: 42 };</pre>
+<p>
+	In this context also the JavaScript Object Notation (JSON) is interesting, since it is a simple way to represent these arrays and objects.&nbsp; For instance the above cat would become:</p>
+<pre style="margin-left: 40px;">
+&quot;cat&quot;: { &quot;name&quot;: &quot;Garfield&quot;, &quot;age&quot;: 42 }</pre>
+<h3>
+	Functions</h3>
+<p>
+	Finally, unless you are used to C&#39;s function pointers, the following may seem a little strange:</p>
+<pre style="margin-left: 40px;">
+let f = function() { alert(&quot;hi&quot;); };
+f();
+</pre>
+<p>
+	Here we seem to define a variable called <em>f</em>, which actually is a function, not a variable.&nbsp; The second line shows how <em>f</em> is being used.</p>
+<h3>
+	typeof</h3>
+<p>
+	You can ask the JavaScript interpreter what the type of a given variable is with the <em>typeof</em> operator.&nbsp; For instance, the following code</p>
+<pre style="margin-left: 40px;">
+let x = 42;
+console.log( typeof(x) );</pre>
+<p>
+	would output &quot;number&quot; to the console.&nbsp; You may want to try the following examples to see how the typeof operator works.</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; let u1;
+&nbsp;&nbsp;&nbsp; console.log(typeof (u1));&nbsp; // undefined
+&nbsp;&nbsp;&nbsp; let u2 = undefined;
+&nbsp;&nbsp;&nbsp; console.log(typeof (u2));&nbsp; // undefined
+&nbsp;&nbsp;&nbsp; let x = 42;
+&nbsp;&nbsp;&nbsp; console.log(typeof (x));&nbsp;&nbsp; // number
+&nbsp;&nbsp;&nbsp; let y = 42.0;
+&nbsp;&nbsp;&nbsp; console.log(typeof (y));&nbsp;&nbsp; // number
+&nbsp;&nbsp;&nbsp; let z = &quot;42&quot;;
+&nbsp;&nbsp;&nbsp; console.log(typeof (z));&nbsp;&nbsp; // string
+&nbsp;&nbsp;&nbsp; let b = true;
+&nbsp;&nbsp;&nbsp; console.log(typeof (b));&nbsp;&nbsp; // boolean
+&nbsp;&nbsp;&nbsp; let n = null;
+&nbsp;&nbsp;&nbsp; console.log(typeof (n));&nbsp;&nbsp; // object
+&nbsp;&nbsp;&nbsp; let arr = [];
+&nbsp;&nbsp;&nbsp; console.log(typeof (arr)); // object
+&nbsp;&nbsp;&nbsp; let obj = { name: &quot;Garfield&quot;, age: 42 };
+&nbsp;&nbsp;&nbsp; console.log(typeof (obj)); // object
+&nbsp;&nbsp;&nbsp; let f = function () { };
+&nbsp;&nbsp;&nbsp; console.log(typeof (f));&nbsp;&nbsp; // function
+}</pre>
+<p>
+	Interesting maybe that <em>null</em>, <em>arrays</em> and <em>objects</em> are all considered objects.</p>
+<p>
+	.</p>
+<h2>
+	Operators</h2>
+<p>
+	JavaScript has the standard arithmetic and assignment operators: =, +, -, *, /, %, ++ and --.&nbsp; The + operator can also be used to concatenate strings.&nbsp; When adding a number and a string, the result will be a string.&nbsp;</p>
+<p>
+	Comparison and logical operators are used to test for true or false.&nbsp; We have the standard comparison operators</p>
+<pre style="margin-left: 40px;">
+==&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; equal
+!=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; not equal
+&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; larger than
+&lt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; less than
+&gt;=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; larger than or equal
+&lt;=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; less than or equal</pre>
+<p>
+	In addition, JavaScript has two more comparison operators: the exactly equals === and the not exactly equals !==.&nbsp; They compare not only value but also type.&nbsp; The following example shows the difference:</p>
+<pre style="margin-left: 40px;">
+let x = 42;
+let y = &quot;42&quot;;
+if (x == y) {
+&nbsp;&nbsp;&nbsp; console.log(&quot;x and y are equal&quot;);
+}
+if (x === y) {
+&nbsp;&nbsp;&nbsp; console.log(&quot;x and y are exactly equal&quot;);
+}</pre>
+<p>
+	In general, always use the exactly equals operators.&nbsp;</p>
+<p>
+	As for the logical operators again those work exactly as in Java or C++.&nbsp;</p>
+<p>
+	As for the bitwise operators, strange things might happen here, and they are slow.&nbsp; So no point in using them.</p>
+<p>
+	.</p>
+<h2>
+	Conditional Statements</h2>
+<p>
+	As for conditions, JavaScript has the standard if-else statement:</p>
+<pre style="margin-left: 40px;">
+let dt = new Date()
+let time = dt.getHours()
+if (time &lt; 10) {
+&nbsp;&nbsp;&nbsp; alert(&quot;Good morning&quot;);
+} else if (time &gt; 10 &amp;&amp; time &lt; 16) {
+&nbsp;&nbsp;&nbsp; alert(&quot;Good day&quot;);
+} else {
+&nbsp;&nbsp;&nbsp; alert(&quot;Good evening&quot;);
+}
+</pre>
+<p>
+	In addition, there is also the standard <em>switch</em> statement which works as expected.</p>
+<p>
+	.</p>
+<h2>
+	Loops</h2>
+<p>
+	JavaScript has the standard for-loop:</p>
+<pre style="margin-left: 40px;">
+for (<span style="color:#0000ff;">let</span> i = 0; i &lt; 10; i++) {
+&nbsp;&nbsp;&nbsp; console.log(i);
+}</pre>
+<p>
+	Important here is the <em>let</em>, because if you forget it, JavaScript won&#39;t complain, but it will create a global variable <em>i</em> for you, which is most likely not what you intended.&nbsp; There is also the while-loop and the do-loop.</p>
+<p>
+	However, we have two more loops in JavaScript:&nbsp; the <em>for...in</em> loop and the <em>for...of</em> loop.&nbsp;</p>
+<h3>
+	for...in Loop</h3>
+<p>
+	The for...in loop is used in connection with objects, when you want to iterate through all the properties of an object.</p>
+<pre style="margin-left: 40px;">
+let cat = { name: &quot;Garfield&quot;, age: 42 };
+for (const property in cat) {
+&nbsp;&nbsp;&nbsp; console.log(property + &quot;: &quot; + cat[property]);
+}</pre>
+<h3>
+	for...of Loop</h3>
+<p>
+	The for...of loop is used when you want to iterate over an iterable object. Iterable objects are Arrays, Strings, TypedArrays, Maps, and Sets, for instance.</p>
+<pre style="margin-left: 40px;">
+let arr = [1, 2, 3, 4];
+for (const element of arr) {
+&nbsp;&nbsp;&nbsp; console.log(element);
+}</pre>
+<p>
+	JavaScript also has the <em>break</em> and <em>continue</em> statement, but if possible those should be avoided.</p>
+<p>
+	.</p>
+<h2>
+	Functions</h2>
+<p>
+	As we have seen, functions are at the core of JavaScript.&nbsp; In JavaScript almost everything is a function.&nbsp; Functions can be called by events or by other functions.&nbsp; Functions can have parameters and they can be anonymous.&nbsp; There can also be functions inside functions.</p>
+<p>
+	JavaScript distinuishes between function declaration and function expression.</p>
+<h3>
+	Function Declaration</h3>
+<p>
+	This is most likely the way you have declared functions before.&nbsp; Here the function has a name and parameters, they can also return something, and they exist on the global scope.</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; print(&quot;hi there&quot;);
+}
+
+<span style="color:#0000ff;">function print(msg)</span> {
+&nbsp;&nbsp;&nbsp; console.log(msg);
+}</pre>
+<h3>
+	Function Expression</h3>
+<p>
+	Function expressions on the other hand look like they are assigned to a variable.&nbsp; A function expression is only available after it has been declared, and it is not neccessarily of global scope.</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">const print = function (msg)</span> {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log(msg);
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; print(&quot;hi there&quot;);
+}</pre>
+<p>
+	Notice the space between the keyword <em>function</em> and the parameter list <em>()</em>.&nbsp; This is convention.</p>
+<p>
+	Function expressions are also called anonymous functions.&nbsp; To see why, first notice that in JavaScript functions can also be passed as parameters to other functions.&nbsp; We declare two functions, <em>createMsg()</em> and <em>print()</em>, and we pass the result of one into the other:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; const print = function (msg) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log( msg );
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; const createMsg = function () {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return &quot;hi there&quot;;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">print(createMsg())</span>;
+}</pre>
+<p>
+	We can rewrite this with an anonymous function:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; const print = function (f) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log( <span style="color:#0000ff;">f()</span> );
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; print(<span style="color:#0000ff;">function () {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return &quot;hi there&quot;;
+&nbsp;&nbsp;&nbsp; }</span>);
+}</pre>
+<p>
+	You may notice that the <em>createMsg()</em> function has disappeared, the code became shorter, but not neccessarily easier to read.</p>
+<h3>
+	Parameters</h3>
+<p>
+	In other languages you may have seen something called <em>overloading</em>, where you have two functions with the same name, but different types or number of parameters.&nbsp; Since JavaScript is weakly typed that does not make a lot of sense, and therefore is not possible.&nbsp; JavaScript&#39;s solution to the problem is as simple as it is ingenious: simply define the function with the maximum number of parameters, but when calling it, you do not have to give all parameters.&nbsp;</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; print(&quot;hi there&quot;, &quot;how are you?&quot;);
+&nbsp;&nbsp;&nbsp; print(&quot;hi there&quot;);
+}
+
+function print(msg1, msg2) {
+&nbsp;&nbsp;&nbsp; console.log(msg1);
+&nbsp;&nbsp;&nbsp; console.log(msg2);
+}</pre>
+<p>
+	&nbsp;</p>
+<p>
+	The first version behaves as expected, whereas in the second version, the parameter <em>msg2</em> is <em>undefined</em>.&nbsp; However, the code just runs fine.&nbsp; If you do not like things to be <em>undefined</em>, which is perfectly understandable, you can set parameters to a predefined value:</p>
+<pre style="margin-left: 40px;">
+function print(msg1, <span style="color:#0000ff;">msg2 = &quot;empty&quot;</span>) {
+&nbsp;&nbsp;&nbsp; console.log(msg1);
+&nbsp;&nbsp;&nbsp; console.log(msg2);
+}</pre>
+<p>
+	.</p>
+<h2>
+	Error Handling</h2>
+<p>
+	Because JavaScript is a weakly typed, interpreted language, it is very easy to use, but it is also very easy to make mistakes.&nbsp; Fortunately, it has a pretty elaborate error handling mechanism, using the try catch syntax.</p>
+<h3>
+	try catch</h3>
+<p>
+	For instance, assigning a variable to something that does not exist, will cause a <em>ReferenceError</em> (assuming you use &quot;use strict&quot;):</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; let x = y;
+}</pre>
+<p>
+	If you want to catch this error, you would surround it with a try catch block,&nbsp; The difference is: without our program will crash, whereas with it will print an error message, and continue to run:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let x = y;
+&nbsp;&nbsp;&nbsp; } catch (<span style="color:#0000ff;">error</span>) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log(&quot;An error occured: &quot; + <span style="color:#0000ff;">error</span>);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	The error object contains information about what kind of error occured, and we can decide what to do next depending on the error.</p>
+<p>
+	In JavaScript, there are many errors, such as <em>TypeError</em>, <em>RangeError</em>, <em>ReferenceError</em>, and <em>SyntaxError</em>:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; // TypeError
+&nbsp;&nbsp;&nbsp; try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let fritz;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fritz.setColor(Color.RED);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let num = 1;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; num.toUpperCase();
+
+&nbsp;&nbsp;&nbsp; } catch (e) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log(e);
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; // RangeError
+&nbsp;&nbsp;&nbsp; try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let b = new Array(-1)
+
+&nbsp;&nbsp;&nbsp; } catch (e) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log(e);
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; // ReferenceError
+&nbsp;&nbsp;&nbsp; try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let x = 3;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x = x + y;
+
+&nbsp;&nbsp;&nbsp; } catch (e) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log(e);
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; // SyntaxError
+&nbsp;&nbsp;&nbsp; try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; eval(&quot;let s = &#39;hi&quot;);
+
+&nbsp;&nbsp;&nbsp; } catch (e) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log(e);
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; console.log(&quot;still running...&quot;);
+}</pre>
+<p>
+	Interesting maybe that what would be errors in other languages, are no problem for JavaScript:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // ArithmeticException
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let x = 5 / 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log(x);        // Infinity
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // NumberFormatException
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let y = parseInt(&quot;five&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log(y);        // NaN
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // ArrayIndexOutOfBoundsException
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let eggs = [0, 1, 2, 3];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log(eggs[5]);  // undefined
+
+&nbsp;&nbsp;&nbsp; } catch (e) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log(&quot;No errors here&quot;);
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; console.log(&quot;still running...&quot;);
+}</pre>
+<h3>
+	throw</h3>
+<p>
+	If you want to, you can also throw errors.&nbsp; For instance,</p>
+<pre style="margin-left: 40px;">
+if (!locateKarel()) {
+&nbsp;&nbsp; &nbsp;throw Error(&quot;Could not locate Karel in the world&quot;);
+}</pre>
+<p>
+	would throw an error, which then should be caught with some try catch.</p>
+<h3>
+	&quot;use strict&quot;</h3>
+<p>
+	While we are at errors: recall that in JavaScript we are not required to declare variables.&nbsp; This can lead to problems:</p>
+<pre style="margin-left: 40px;">
+//&quot;use strict&quot;;  // uncomment this line
+
+function run(() {
+&nbsp;&nbsp;&nbsp; let fritz = 5;
+&nbsp;&nbsp;&nbsp; frits = 4;
+&nbsp;&nbsp;&nbsp; console.log(fritz);
+}</pre>
+<p>
+	In the third line, we want to reassign a new value to the variable <em>fritz</em>.&nbsp; But we made a typo, and hence instead of a reassignment, we declared a new variable named <em>frits</em>.&nbsp; JavaScript does not care, there is no error here.&nbsp; To avoid these kinds of stupid mistakes, it is highly recommended that you start all of your JavaScript code with the &quot;use strict&quot; keyword.&nbsp; Adding it, will result in an error being thrown.</p>
+<p>
+	.</p>
+<h2>
+	DOM</h2>
+<p>
+	JavaScript per se is independent of the Document Object Model (DOM).&nbsp; But as soon as we say things like</p>
+<pre style="margin-left: 40px;">
+document.write(&quot;Hello World&quot;);
+console.log(&quot;hi there&quot;);
+</pre>
+<p>
+	we use the DOM.&nbsp; Both <em>document</em> and <em>console</em> are part of the browser, one being the HTML document displayed, the other the browser&#39;s console.&nbsp; For JavaScript they are just objects with certain properties and methods.&nbsp; So DOM is just an abstraction of the browser, and whenever we want to interact with the browser, we do that via the DOM.</p>
+<p>
+	The most important objects the DOM provides are the <em>console</em>, which is mostly used for debugging, the <em>document</em>, which allows use to modify the HTML shown, and the <em>window</em> object, which gives us information about the browser window, for instance its size.&nbsp; As an example for what the window object might be good for consider the following code:</p>
+<pre style="margin-left: 40px;">
+function <span style="color:#0000ff;">main()</span> {
+&nbsp;&nbsp;&nbsp; alert(&quot;Done loading!&quot;);
+}
+<span style="color:#0000ff;">window.onload = main();</span></pre>
+<p>
+	The last line tells the browser to call the main() function, once the page has completely loaded.</p>
+<p>
+	To see why the <em>document</em> object is useful consider the following two examples.&nbsp; Assume we have the following HTML document:</p>
+<pre style="margin-left: 40px;">
+&lt;html&gt;
+&nbsp;&nbsp;&nbsp; &lt;head&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;script type=&quot;text/javascript&quot; src=&quot;script.js&quot;&gt;&lt;/script&gt;
+&nbsp;&nbsp;&nbsp; &lt;/head&gt;
+&nbsp;&nbsp;&nbsp; &lt;body onload=&quot;run();&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">&lt;textarea id=&quot;hans&quot;&gt;Hi there&lt;/textarea&gt;</span>
+&nbsp;&nbsp;&nbsp; &lt;/body&gt;
+&lt;/html&gt;</pre>
+<p>
+	where we have a text area element, which has the id named &quot;hans&quot;.&nbsp; We can access this element with the <em>getElementById()</em> method:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; const element = <span style="color:#0000ff;">document.getElementById(&quot;hans&quot;)</span>;
+&nbsp;&nbsp;&nbsp; console.log(element.innerHTML);
+}</pre>
+<p>
+	We can also add, modify, and remove HTML elements.&nbsp; Assume we have an empty HTML document and we want to add a text area.&nbsp; The following code would just do that:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; // create text area
+&nbsp;&nbsp;&nbsp; let textarea = document.createElement(&#39;textarea&#39;);
+&nbsp;&nbsp;&nbsp; textarea.id = &#39;hans&#39;;
+&nbsp;&nbsp;&nbsp; textarea.value = &#39;Hi there&#39;;
+&nbsp;&nbsp;&nbsp; textarea.rows = 10;
+&nbsp;&nbsp;&nbsp; textarea.cols = 32;
+&nbsp;&nbsp;&nbsp; textarea.readOnly = true;
+
+&nbsp;&nbsp;&nbsp; // add text area to body
+&nbsp;&nbsp;&nbsp; const _body = document.getElementsByTagName(&#39;body&#39;)[0];
+&nbsp;&nbsp;&nbsp; _body.appendChild(textarea);
+
+&nbsp;&nbsp;&nbsp; textarea.focus();
+}</pre>
+<p>
+	This should give you an impression of the power of the DOM.</p>
+<p>
+	.</p>
+<h2>
+	Events</h2>
+<p>
+	Interaction with the user usually happens via events.&nbsp; But there are also events coming from the browser, such as the <em>onload</em> event, we have already seen. Examples of events are</p>
+<ul>
+	<li>
+		loading of a web page or an image,</li>
+	<li>
+		a mouse click or a keystroke,</li>
+	<li>
+		submitting an HTML form,</li>
+	<li>
+		or a timer event.</li>
+</ul>
+<p>
+	We need to tell the browser which events we are interested in, and what to do when the event occurs.&nbsp; This can be done in the HTML or via JavaScript.&nbsp;</p>
+<p>
+	An HTML example we have seen already:</p>
+<pre style="margin-left: 40px;">
+&lt;html&gt;
+&nbsp;&nbsp;&nbsp; &lt;head&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;script type=&quot;text/javascript&quot; src=&quot;script.js&quot;&gt;&lt;/script&gt;
+&nbsp;&nbsp;&nbsp; &lt;/head&gt;
+&nbsp;&nbsp;&nbsp; &lt;body <span style="color:#0000ff;">onload=&quot;run()</span>;&quot;&gt;
+&nbsp;&nbsp;&nbsp; &lt;/body&gt;
+&lt;/html&gt;</pre>
+<p>
+	Here we tell the browser that if the <em>onload</em> event occurs, that it should call the <em>run()</em> function.&nbsp; We can do the same thing with JavaScript:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; document.write(&quot;Hello world!&quot;);
+}
+<span style="color:#0000ff;">window.onload = run();</span></pre>
+<p>
+	If you are interested in key events, you would add an event listener:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">document.addEventListener</span>(&#39;keydown&#39;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; function (ev) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log(ev.key + &quot;,&quot; + ev.code);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; );
+}</pre>
+<p>
+	In the same way you can add all kinds of events, such as <em>keydown</em>, <em>keypress</em>, <em>click</em>, <em>onmousedown</em>, <em>change</em> and many more.</p>
+<p>
+	Two interesting functions are the <em>setTimeout()</em> and <em>setInterval()</em> functions: the first allows you to wait a given time before a function is being called, and the second one calls a function repeatedly.</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; setInterval(<span style="color:#0000ff;">sayHi</span>, 1000);
+}
+
+function sayHi() {
+&nbsp; document.write(&quot;hi there&lt;br/&gt;&quot;);
+}</pre>
+<p>
+	Please, notice that inside the <em>setInterval()</em> function we are not calling &quot;sayHi()&quot;, but instead &quot;sayHi&quot;.&nbsp; This makes a big difference, try it for yourself, and make sure you understand the difference!</p>
+<p>
+	.</p>
+<h2>
+	eval()</h2>
+<p>
+	Some people say eval() is evil, I personally think it is the greatest thing since sliced bread.&nbsp; Sure it is dangerous, especially in a web language, but which other language lets you dynamically execute arbitrary new code during run-time?</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; let code = prompt(&quot;Enter some JavaScript code:&quot;, &quot;document.write(&#39;hi&#39;);&quot;);
+&nbsp;&nbsp;&nbsp; eval(code);
+}</pre>
+<p>
+	If this does not shock you, nothing will [6].</p>
+<p>
+	.</p>
+<h2>
+	Classes</h2>
+<p>
+	One of the most welcome additions to JavaScript are classes.&nbsp; The syntax looks quite similar to Java&#39;s, however, there are subtle differences:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; const hansel = <span style="color:#0000ff;">new Student(&quot;Hänschen&quot;)</span>;
+&nbsp;&nbsp;&nbsp; console.log(hansel.name);
+&nbsp;&nbsp;&nbsp; console.log(hansel.toString());
+}
+
+class Student {
+&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">constructor(nm)</span> {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.name = nm;
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; toString() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return &quot;Student [name=&quot; + this.name + &quot;]&quot;;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	&nbsp;</p>
+<p>
+	You will immediately notice that the constructor is actually called <em>constructor</em>.&nbsp; Creation of objects using the <em>new</em> keyword also may look familiar.&nbsp;</p>
+<p>
+	Interesting should be the line</p>
+<pre style="margin-left: 40px;">
+this.name = nm;</pre>
+<p>
+	which seems to indicate that there is an instance variable called <em>name</em>, but if we look, we do not find a declaration.&nbsp; In fact, there is none, this is just JavaScripts way of defining instance variables, very efficient I would say.</p>
+<p>
+	Another interesting thing, there is no overloading in JavaScript, neither for the constructor nor for methods, we talked about this when we were talking about functions before.&nbsp;</p>
+<h3>
+	Closures</h3>
+<p>
+	Let&#39;s return to the instance variables.&nbsp; All instance variables defined above are public, meaning anybody can see and modify them.&nbsp; This violates the principle of information hiding.&nbsp; But not all is lost, because we have <em>closures</em> in JavaScript.&nbsp; Assume our Student class should also have a read-only, private property <em>id</em>.&nbsp; This is how we would implement this in JavaScript:</p>
+<pre style="margin-left: 40px;">
+class Student {
+&nbsp;&nbsp;&nbsp; constructor(name, id = -1) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.name = name;
+
+<span style="color:#0000ff;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // closure: read only
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.getId = (function () {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let _id = id;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return function () {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return _id
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; })();</span>
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; toString() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return &quot;Student [name=&quot; + this.name + &quot;, id=&quot; + <span style="color:#0000ff;">this.getId()</span> + &quot;]&quot;;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	While we are at it, we can also use closures to implement an increment-only method:</p>
+<pre style="margin-left: 40px;">
+class Student {
+&nbsp;&nbsp;&nbsp; constructor(name, id = -1) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.name = name;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // closure: increment only
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.incrementCredits = (function (x) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let _credits = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return function (x) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (x !== undefined &amp;&amp; x &gt; 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _credits += x;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return _credits
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; })();
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; toString() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return &quot;Student [name=&quot; + this.name + &quot;, id=&quot; + this.getId()
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + &quot;, credits=&quot; + this.incrementCredits() + &quot;]&quot;;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	If we call <em>incrementCredits()</em> without arguments, it just returns the current value of credits, if we call it with an argument, it will increment the credits by that amount.</p>
+<h3>
+	Inheritance</h3>
+<p>
+	We use the keyword <em>extends</em> to inherit from a parent class:</p>
+<pre style="margin-left: 40px;">
+class Freshman extends Student {
+	constructor(name, id = -1) {
+		super(name, id);
+	}
+
+&nbsp;&nbsp;&nbsp; toString() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return &quot;Freshman [name=&quot; + this.name + &quot;, id=&quot; + this.getId()
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + &quot;, credits=&quot; + this.incrementCredits() + &quot;]&quot;;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	If you know Java this may look familiar to you.&nbsp; As you can see we can override methods if we desire, but we don&#39;t have to.&nbsp; And there is the <em>super</em> keyword to call the parent&#39;s class constructor or methods of the parent class.</p>
+<h3>
+	Inheritance Chain</h3>
+<p>
+	How about methods of the grandparent class, can we call those as well?&nbsp; JavaScript has a method named <em>getPrototypeOf()</em> that allows you to get a handle to the respective parent, kind of neat:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; const hansel = new Freshman(&quot;Hänschen&quot;, 12345);
+
+&nbsp;&nbsp;&nbsp; let me = Object.getPrototypeOf(hansel);
+&nbsp;&nbsp;&nbsp; console.log(me.constructor.name);           // Freshman
+&nbsp;&nbsp;&nbsp; let parent = Object.getPrototypeOf(me);
+&nbsp;&nbsp;&nbsp; console.log(parent.constructor.name);       // Student
+&nbsp;&nbsp;&nbsp; let grandParent = Object.getPrototypeOf(parent);
+&nbsp;&nbsp;&nbsp; console.log(grandParent.constructor.name);  // Object
+
+&nbsp;&nbsp;&nbsp; parent.test();
+}</pre>
+<p>
+	.</p>
+<h2>
+	Polymorphism</h2>
+<p>
+	If you lookup the meaning of polymorph, it says something like &quot;an object or material which takes various forms&quot;.&nbsp; We stay with our Student and Freshman classes.&nbsp; If we have two students, <em>hansel</em> and <em>gretel</em>, <em>hansel</em> being a Freshman and <em>gretel</em> being a Student, then actually both of them are Students:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; const hansel = new Freshman(&quot;Hänschen&quot;);
+&nbsp;&nbsp;&nbsp; polymorphic(hansel);
+&nbsp;&nbsp;&nbsp; const gretel = new Student(&quot;Gretchen&quot;);
+&nbsp;&nbsp;&nbsp; polymorphic(gretel);
+&nbsp;&nbsp;&nbsp; polymorphic(&quot;hi there&quot;);
+}
+
+function polymorphic(studnt) {
+&nbsp;&nbsp;&nbsp; console.log(studnt.toString());
+}</pre>
+<p>
+	Now in our <em>polymorphic()</em> method, we assume that the parameters passed in are Students, and therefore have the <em>toString()</em> method.</p>
+<p>
+	So using polymorphism in JavaScript is straight forward, the problem is enforcing it: because JavaScript is weakly typed, we can pass actually anything we want.&nbsp; However, again not all is lost, because we can enforce proper datatypes using the <em>instanceof</em> operator:</p>
+<pre style="margin-left: 40px;">
+function polymorphic(studnt) {
+&nbsp;&nbsp;&nbsp; if (studnt <span style="color:#0000ff;">instanceof</span> Student) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log(studnt.toString());
+&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw Error(&quot;Parameter is not of type Student!&quot;);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	.</p>
+<h2>
+	Static Methods</h2>
+<p>
+	JavaScript also has <em>static</em> methods, an example is the Random class:</p>
+<pre style="margin-left: 40px;">
+class Random {
+&nbsp;&nbsp;&nbsp; static nextInt(low, high) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (high !== undefined) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return parseInt(low + Math.random() * (high - low));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return this.nextInt(0, low);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; static nextDouble(low, high) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (high !== undefined) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return low + Math.random() * (high - low);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return this.nextDouble(0, low);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	We call these methods directly, i.e., no object needs to be instantiated:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; console.log( Random.nextInt(2,7) );
+}</pre>
+<p>
+	Another example inspired from Java is <em>System.currentTimeMillis()</em>:</p>
+<pre style="margin-left: 40px;">
+class System {
+&nbsp;&nbsp;&nbsp; static currentTimeMillis() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return new Date().getTime();
+&nbsp;&nbsp;&nbsp; }
+}
+// const time = System.currentTimeMillis();</pre>
+<p>
+	Don&#39;t use static to often, it does more harm than good.</p>
+<p>
+	.</p>
+<h2>
+	Enums and Constants</h2>
+<p>
+	A neat trick on how to create &quot;constants&quot; or something resembling enums is in the following way:</p>
+<pre style="margin-left: 40px;">
+class Color {
+}
+Color.RED = &#39;red&#39;;
+Color.GREEN = &#39;green&#39;;
+Color.BLUE = &#39;blue&#39;;
+Color.WHITE = &#39;white&#39;;
+Color.BLACK = &#39;black&#39;;
+</pre>
+<p>
+	Although neat, be careful, they are not constants!</p>
+<p>
+	.</p>
+<h2>
+	Namespaces</h2>
+<p>
+	Another thing kind of missing in JavaScript are <em>namespaces</em>.&nbsp; But as usual there is a trick.&nbsp; We define an empty object called <em>Utils</em> as a global variable, and then attach our class to it as property:</p>
+<pre style="margin-left: 40px;">
+<span style="color:#0000ff;">var Utils = {}</span>
+<span style="color:#0000ff;">Utils.Random</span> = class {
+&nbsp;&nbsp;&nbsp; static nextInt(low, high) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (high !== undefined) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return parseInt(low + Math.random() * (high - low));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return this.nextInt(0, low);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	When using it, it looks exactly like a namespace or package would:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; console.log( <span style="color:#0000ff;">Utils.Random</span>.nextInt(2,7) );
+}</pre>
+<p>
+	But naturally, it is not.</p>
+<p>
+	.</p>
+<h2>
+	Promise</h2>
+<p>
+	Whenever you have to wait for something, most likely you will need a promise.&nbsp; Let&#39;s look at two simple examples.</p>
+<p>
+	Assume you want something to happen once per second, that is you want a <em>pause()</em> method.&nbsp; Then the following is an implementation using a Promise:</p>
+<pre style="margin-left: 40px;">
+const pause = function (milliseconds = 500) {
+&nbsp;&nbsp;&nbsp; return new Promise(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; function (resolve) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return setTimeout(resolve, milliseconds);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; })
+};</pre>
+<p>
+	You would call this method in the following way:</p>
+<pre style="margin-left: 40px;">
+<span style="color:#0000ff;">async</span> function run() {
+&nbsp;&nbsp;&nbsp; let i = 0;
+&nbsp;&nbsp;&nbsp; while (true) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log(&quot;waiting one second: &quot; + i++);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">await</span> pause(1000);
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Notice the <em>async</em> and <em>await</em> keywords: <em>async</em> tells us that the function run() is asynchronous, and the <em>await</em> tells us that at this point execution might stop until something happens.</p>
+<p>
+	Another nice example is asking the user for feedback [3]:</p>
+<pre style="margin-left: 40px;">
+function promptForDishChoice() {
+&nbsp;&nbsp;&nbsp; return new Promise(function (<span style="color:#0000ff;">resolve</span>, <span style="color:#0000ff;">reject</span>) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const dialog = document.createElement(&quot;dialog&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dialog.innerHTML = &#39;&lt;form method=&quot;dialog&quot;&gt;&#39; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;&lt;select&gt;&lt;option value=&quot;pizza&quot;&gt;Pizza&lt;/option&gt;&#39; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;&lt;option value=&quot;pasta&quot;&gt;Pasta&lt;/option&gt;&lt;/select&gt;&#39; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;&lt;button value=&quot;cancel&quot;&gt;Cancel&lt;/button&gt;&#39; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;&lt;button type=&quot;submit&quot; value=&quot;ok&quot;&gt;OK&lt;/button&gt;&lt;/form&gt;&#39;
+		
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dialog.addEventListener(&quot;close&quot;, <span style="color:#0000ff;">function ()</span> {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (dialog.returnValue === &quot;ok&quot;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">return resolve</span>(dialog.querySelector(&quot;select&quot;).value);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">return reject</span>(new Error(&quot;User cancelled dialog&quot;));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; });
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; document.body.appendChild(dialog);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dialog.showModal();
+&nbsp;&nbsp;&nbsp; });
+}
+
+async function run() {
+&nbsp;&nbsp;&nbsp; const choice = await promptForDishChoice();
+&nbsp;&nbsp;&nbsp; console.log(&#39;choice=&#39; + choice);
+}</pre>
+<p>
+	To understand this, first look at the <em>addEventListener()</em> part: if the user clicked &quot;ok&quot; we return a <em>resolve()</em>, meaning the promise was resolved. Otherwise, we return a <em>reject()</em>, meaning the promise was rejected.</p>
+<p>
+	This shows very nicely the idea behind promises: a promise is in one of three states:</p>
+<ul>
+	<li>
+		pending: this is the initial state, it is neither resolved nor rejected,</li>
+	<li>
+		resolved: meaning that the operation was completed successfully, or</li>
+	<li>
+		rejected: meaning that the operation has failed.</li>
+</ul>
+<p>
+	.</p>
+<h2>
+	Generators</h2>
+<p>
+	JavaScript is a synchronous language, meaning there is a single thread.&nbsp; Events are an exception, so are timer and asynchronous web requests.&nbsp; So obviously asynchronous programming seems possible in JavaScript.&nbsp; A callback is also an example of asynchronous programming.&nbsp; And generators are another.</p>
+<p>
+	A generator function is defined in the following way:</p>
+<pre style="margin-left: 40px;">
+function* generator(i) {
+&nbsp;&nbsp;&nbsp; yield 1;
+&nbsp;&nbsp;&nbsp; yield 2;
+&nbsp;&nbsp;&nbsp; yield 3;
+}</pre>
+<p>
+	We notice that instead of <em>returns</em> it has <em>yields</em>.&nbsp; We create a function expression <em>generate</em> and then call the <em>next()</em> method:</p>
+<pre style="margin-left: 40px;">
+function run() {
+&nbsp;&nbsp;&nbsp; const generate = generator();
+&nbsp;&nbsp;&nbsp; console.log(generate.next().value);  // 1
+&nbsp;&nbsp;&nbsp; console.log(generate.next().value);  // 2
+&nbsp;&nbsp;&nbsp; console.log(generate.next().value);  // 3
+&nbsp;&nbsp;&nbsp; console.log(generate.next().value);  // undefined
+}</pre>
+<p>
+	We observe that after every call to <em>next()</em> we go from one yield to the next yield.&nbsp; So in a sense <em>yield</em> is similar to <em>return</em>, but it keeps state, meaning it remembers where it left of last time, and continues from there when it is called again.&nbsp; This may seem useless, but let&#39;s consider two more examples.</p>
+<p>
+	Assume we want a function that generates the sequence 0, 1, 2, 3, 3, 3, ... then we could do this with the following generator function:</p>
+<pre style="margin-left: 40px;">
+function* generator(i) {
+&nbsp;&nbsp;&nbsp; for (let i = 0; i &lt; 3; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yield i;
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; return 3;
+}</pre>
+<p>
+	Or if we want a function that is called exactly four times, once per second?&nbsp; We use the same generator function as above, but our <em>run()</em> method looks like this:</p>
+<pre style="margin-left: 40px;">
+async function run() {
+&nbsp;&nbsp;&nbsp; const generate = generator();
+&nbsp;&nbsp;&nbsp; while (true) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let result = generate.next();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; console.log(&quot;next: &quot;, result);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; await pause(1000);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (<span style="color:#0000ff;">result.done</span>) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	where we used the <em>pause()</em> method from above.&nbsp; Notice that <em>result.done</em> is true when we hit the return statement in the generator [5].</p>
+<p>
+	.</p>
+<h2>
+	Arrow Function</h2>
+<p>
+	Another new feature of ES6 is the arrow function.&nbsp; You will not see it much in my code, because for beginners it may be a bit confusing.&nbsp; Consider the following code with arrow function:</p>
+<pre style="margin-left: 40px;">
+const pause = (milliseconds = 500) =&gt; 
+    new Promise(resolve =&gt; setTimeout(resolve, milliseconds));</pre>
+<p>
+	Very concise, but maybe not so easy to understand on first sight.&nbsp; The same code without arrow function:</p>
+<pre style="margin-left: 40px;">
+const pause = function (milliseconds = 500) {
+&nbsp;&nbsp;&nbsp; return new Promise(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; function (resolve) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return setTimeout(resolve, milliseconds);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; })
+};</pre>
+<p>
+	It definitely is more code to write, but now it becomes clear that what you are doing here is declaring two anonymous functions [4].</p>
+<p>
+	.</p>
+	<h1>
+		References</h1>
+<p>
+	[1] JavaScript: The Good Parts: Working with the Shallow Grain of JavaScript, Douglas Crockford</p>
+<p>
+	[2] let, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let</a></p>
+<p>
+	[3] Promise, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise</a></p>
+<p>
+	[4] When should I use arrow functions in ECMAScript 6?, <a href="https://stackoverflow.com/questions/22939130/when-should-i-use-arrow-functions-in-ecmascript-6">https://stackoverflow.com/questions/22939130/when-should-i-use-arrow-functions-in-ecmascript-6</a></p>
+<p>
+	[5] Generator: Using the function* Declaration in JavaScript, <a href="https://www.geeksforgeeks.org/using-the-function-declaration-in-javascript/?ref=rp">https://www.geeksforgeeks.org/using-the-function-declaration-in-javascript/?ref=rp</a></p>
+<p>
+	[6] eval(), <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval</a></p>
+<p>
+	.</p>
+<p class="footer">
+	Copyright &copy; 2016-2023 <a href="http://www.lano.de">Ralph P. Lano</a>. All rights reserved.
+</p>
+</div>
+</div>
+</center>
+</body>
+</html>

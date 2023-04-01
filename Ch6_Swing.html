@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>JavaScript: Ch6 Swing</title>
+<meta name="title" content="Variations on a Theme: JavaScript: Ch6 Swing">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="UTF-8">
+<meta name="description" content="An object-oriented Introduction">
+<meta name="keywords" content="JavaScript,object orientation,introduction">
+<meta name="author" content="Ralph P. Lano">
+<meta name="robots" content="index,follow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="book.css">
+</head>
+
+<body>
+<center>
+<div id="wrap">
+<ul class="sidenav">
+<p><a href="../index.html">Variations on a Theme</a><a href="index.html">JavaScript</a></p>
+<li><a href="Ch1_Karel.html">Karel</a></li>
+<li><a href="Ch2_Graphics.html">Graphics</a></li>
+<li><a href="Ch3_Console.html">Console</a></li>
+<li><a href="Ch4_Agrar.html">Agrar</a></li>
+<li><a href="Ch5_MindReader.html">MindReader</a></li>
+<li><a href="Ch6_Swing.html">Swing</a></li>
+<li><a href="Ch7_Asteroids.html">Asteroids</a></li>
+<li><a href="Ch8_Stocks.html">Stocks</a></li>
+<li><a href="index.html"> </a></li>
+<li><a href="AppA_Primer.html">Primer</a></li>
+<li><a href="AppB_Libraries.html">Libraries</a></li>
+<li><a href="AppC_Ideas.html">Ideas</a></li>
+</ul>
+<div class="content">
+<p>
+	<img alt="" src="img/a6a5703b-cf7a-4778-aaa4-c635989a9ec5.png" style="display: block; margin-left: auto;  margin-right: auto; width: 225px; height: 204px;" /></p>
+<h1>
+	Swing</h1>
+<p>
+	Programs with graphical user interfaces (GUI) are the topic of this chapter. Similar to graphic programs, there are ready-made components with which we can build small and large programs.&nbsp; It&#39;s a bit like Lego.&nbsp; In addition, we will learn some more about instance variables.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="img/377f7211-da52-4eb6-8c44-0ac3a14e6b81.png" style="width: 292px; height: 261px; float: right;" />Graphical User Interface</h2>
+<p>
+	Most of the programs we deal with every day are programs with a graphical user interface (GUI or UI).&nbsp; GUIs consist of graphical elements, which we also call widgets or interactors, because we can interact with them.&nbsp; Well-known examples are:</p>
+<ul>
+	<li>
+		Labels</li>
+	<li>
+		Buttons</li>
+	<li>
+		Textfields</li>
+	<li>
+		Checkboxes</li>
+	<li>
+		Radiobuttons</li>
+	<li>
+		Comboboxes</li>
+</ul>
+<p>
+	In the following we will see how to use them.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch6_Swing/dateAndTime" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/dateAndTime.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	JSLabel</h2>
+<p>
+	We start again very simple, with the JSLabel.&nbsp; There is practically no difference to the Glabel we already know.&nbsp; It is used to display text in GUI programs:</p>
+<pre style="margin-left: 40px;">
+function setup() {
+&nbsp;&nbsp;&nbsp; createGUI(300, 150);
+
+&nbsp;&nbsp;&nbsp; let dt = new Date();
+&nbsp;&nbsp;&nbsp; print(dt.toLocaleString());
+&nbsp;&nbsp;&nbsp; let fritz = new JSLabel(dt.toLocaleString());
+&nbsp;&nbsp;&nbsp; fritz.addStyle(&#39;font: 15px monospace;&#39;);
+&nbsp;&nbsp;&nbsp; addWidget(fritz);
+}</pre>
+<p>
+	We see two differences to our previous programs: we now write createGUI() instead of createCanvas().&nbsp; And we use mostly the setup() function, the draw() we will hardly use.&nbsp; Furthermore we see for the first time the class Date.&nbsp; This is very practical when you need date or time.&nbsp; If you are familiar with CSS, then the content of the addStyle() method should look familiar to you.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch6_Swing/firstButton" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/firstButton.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	JSButton</h2>
+<p>
+	The JSLabel is not very interactive, and doesn&#39;t really deserve to be called an &#39;interactor&#39;.&nbsp; That is different for the JButton, because you can click on it with the mouse.&nbsp; We&#39;ll start again very simple:</p>
+<pre style="margin-left: 40px;">
+function setup() {
+&nbsp;&nbsp;&nbsp; createGUI(300, 150);
+&nbsp;&nbsp;&nbsp; setLayout(&#39;border&#39;);
+&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp;&nbsp; let btn = new JSButton(&quot;OK&quot;);
+&nbsp;&nbsp;&nbsp; addWidget(btn, &#39;SOUTH&#39;);
+}
+</pre>
+<p>
+	We create a new JSButton, on which &quot;OK&quot; should be written.&nbsp; We&#39;ll add that to the south of our program.&nbsp; When we start the program, we can press the button, but nothing happens.</p>
+<p>
+	For the button to work properly, that is, to become interactive, we have to implement the actionPerformed() function.&nbsp; It is like the Hollywood principle: don&#39;t call us, we&#39;ll call you.&nbsp; This is like with mouse events, if you remember.&nbsp; But instead of the mousePressed(), now the function actionPerformed() is being called.&nbsp; This means that every time someone presses the button, this function is called.</p>
+<pre style="margin-left: 40px;">
+function actionPerformed(ev) {
+&nbsp;&nbsp;&nbsp; print(&quot;hi:&quot; + ev.getActionCommand());
+}</pre>
+<p>
+	Now every time we press on the button with the mouse, in the console part of our program &quot;hi:&quot; together with the buttons name is being displayed.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="img/3d9087be-7b2e-4d4e-af76-a1127aa0645b.png" style="margin-left: 10px; margin-right: 10px; width: 387px; height: 178px; float: right;" />Regions</h2>
+<p>
+	In the two examples above, we have already used regions, NORTH and SOUTH. In total, there are three regions: SOUTH, NORTH, and CENTER.&nbsp; We can insert our widgets into any one of these regions.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch6_Swing/login" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/login.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	JSTextField</h2>
+<p>
+	Using the JSTextField widget we can read text and numbers.&nbsp; In the following example, we want the users to log in with their names:</p>
+<pre style="margin-left: 40px;">
+let tf;
+
+function setup() {
+&nbsp;&nbsp;&nbsp; createGUI(300, 150);
+&nbsp;&nbsp;&nbsp; setLayout(&#39;border&#39;);
+
+&nbsp;&nbsp;&nbsp; let lbl = new JSLabel(&quot;Name: &quot;);
+&nbsp;&nbsp;&nbsp; addWidget(lbl, &#39;SOUTH&#39;);
+&nbsp;&nbsp;&nbsp; tf = new JSTextField(10);
+&nbsp;&nbsp;&nbsp; addWidget(tf, &#39;SOUTH&#39;);
+&nbsp;&nbsp;&nbsp; let btn = new JSButton(&quot;Login&quot;);
+&nbsp;&nbsp;&nbsp; addWidget(btn, &#39;SOUTH&#39;);
+}
+
+function actionPerformed(ev) {
+&nbsp;&nbsp;&nbsp; print(&quot;Name: &quot; + tf.getText());
+}</pre>
+<p>
+	We create a JSLabel, a JSTextField and a JSButton.&nbsp; The constructor of the JSTextField needs to know how wide the field should be.&nbsp; It is also important that the JSTextField variable <em>tf</em> is a global variable.&nbsp; If it were a local variable, then we could not access it in the actionPerformed() function.</p>
+<p>
+	.</p>
+<h2>
+	Global Variables</h2>
+<p>
+	We have mentioned global variables briefly in the last chapters.&nbsp; The above example nicely shows what global variables are actually good for: they allow information to be exchanged between different functions.&nbsp; Up to now we could do this only by using parameters and return values.</p>
+<p>
+	Another reason why global variables can be very practical is that all local variables are deleted when a function is exited.&nbsp; For example, in the rollTheDie() function,</p>
+<pre style="margin-left: 40px;">
+function rollTheDie() {
+&nbsp;&nbsp; &nbsp;let rgen = new MyRandomGenerator();
+&nbsp;&nbsp; &nbsp;let dieRoll = rgen.nextInt(1,6);
+&nbsp;&nbsp; &nbsp;println(dieRoll);
+}
+</pre>
+<p>
+	a new random generator is created each time the function is called and then it is deleted again when the function is exited.&nbsp; Both take time.&nbsp; But if we create the RandomGenerator as a global variable,</p>
+<pre style="margin-left: 40px;">
+let rgen = new MyRandomGenerator();
+&nbsp;&nbsp; &nbsp;
+function rollTheDie() {
+&nbsp;&nbsp; &nbsp;let dieRoll = rgen.nextInt(1,6);
+&nbsp;&nbsp; &nbsp;println(dieRoll);
+}</pre>
+<p>
+	it is created only once, and in addition we can use it in any function of our class.&nbsp; This is much more resource-saving.</p>
+<p>
+	.</p>
+<h2>
+	Functions and Methods</h2>
+<p>
+	We have been using the words function and method, and it maybe a little confusing what the difference is.&nbsp; It is actually very easy:</p>
+<pre style="margin-left: 40px;">
+async function setup() {
+&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; let hansel = new Student(&quot;Hänschen&quot;, 12345, 0.0);
+&nbsp;&nbsp;&nbsp; println(hansel.name);
+&nbsp;&nbsp;&nbsp; ...
+}
+
+function rollTheDie() {
+&nbsp;&nbsp; &nbsp;...
+}
+
+class Student {
+
+&nbsp;&nbsp;&nbsp; constructor(_name, _id, _credits) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; incrementCredits(_credits) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; }
+
+&nbsp;&nbsp;&nbsp; toString() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	When a function belongs to a class, it is called a method.&nbsp; In the above example, constructor(), incrementCredits() and toString() are methods, because they belong to the class Student.&nbsp; Also in Math.random() or GRect.setColor(), both random() and setColor() are methods, because they belong to a class.</p>
+<p>
+	Conversely, setup() and rollTheDie() are functions, because they do not belong to any class.&nbsp; Also, println() and readLine() are functions, they also do not belong to any class.&nbsp;</p>
+<p>
+	.</p>
+<h2>
+	Global Variables vs Instance Variables vs. Locale Variables</h2>
+<p>
+	Confucing may also be the difference between the three types of variables we have been using: global, instance and local variables.&nbsp; Consider this example:</p>
+<pre style="margin-left: 40px;">
+let rgen = new MyRandomGenerator();
+
+async function setup() {
+&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; let hansel = new Student(&quot;Hänschen&quot;, 12345, 0.0);
+&nbsp;&nbsp;&nbsp; ...
+}
+
+class Student {
+
+&nbsp;&nbsp;&nbsp; constructor(_name, _id, _credits) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.name = _name;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+		let local = 5;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	Global variables are declared outside of any functions, like <em>rgen</em> above.&nbsp; They can be accessed from anywhere, and they live forever.&nbsp;</p>
+<p>
+	Instance variables are declared in the constructor of a class and and always belong to a class or an object, like <em>name</em> in the above example. They are visible inside the entire class and all its methods, and they live as long as the object they belong to exists.</p>
+<p>
+	Conversely, local variables are declared within a method or function, can only be accessed within this function, and are deleted when leaving the function.&nbsp; In the above example <em>hansel</em> is a local variable, as is <em>local</em>.&nbsp; Also parameters to functions or methods are considered to be local variables.</p>
+<p>
+	Now the question arises, when do we use which?&nbsp; The answer is relatively simple in most cases:</p>
+<ul>
+	<li>
+		if it is a calculation that can be performed locally in a method, then local variables are used, e.g. the conversion from degrees to fahrenheit is a local calculation,</li>
+	<li>
+		if an information is used in several methods, we should use an instance variable, if all those methods belong to the same class.&nbsp;</li>
+	<li>
+		if we are dealing with an internal state of an object, we should use an instance variable.&nbsp; For example, in the Student class, the name, ID and credits were internal states.</li>
+</ul>
+<p>
+	<strong>SEP: If possible, use local variables.</strong></p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch6_Swing/okCancel" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/okCancel.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	Exercise: OKCancel</h2>
+<p>
+	As a little exercise we add a cancel button to our program.&nbsp; How can we tell which of the two buttons was pressed?&nbsp; One way to do this is to use the getSource() method of the ActionEvent,</p>
+<pre style="margin-left: 40px;">
+let btn1 = new JSButton(&quot;OK&quot;);
+...
+function actionPerformed(ev) {
+&nbsp;&nbsp;&nbsp; if (ev.getSource() === btn1) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print(&quot;source: btn1&quot;);
+&nbsp;&nbsp;&nbsp; } else if (ev.getSource() === btn2) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print(&quot;source: btn2&quot;);
+&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print(&quot;unknown source&quot;);
+&nbsp;&nbsp;&nbsp; }
+}
+</pre>
+<p>
+	to distinguish between several buttons or widgets in general. In this case the buttons or widgets must be instance variables.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch6_Swing/pizza" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/pizza.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	JSCheckBox</h2>
+<p>
+	Next we will consider the JSCheckBox widget: we use check boxes when we have several choices.</p>
+<pre style="margin-left: 40px;">
+let topping1;
+
+function setup() {
+&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; topping1 = new JSCheckBox(&quot;Tomatoes&quot;);
+&nbsp;&nbsp;&nbsp; addWidget(topping1, &#39;CENTER&#39;);
+&nbsp;&nbsp;&nbsp; let topping2 = new JSCheckBox(&quot;Bacon&quot;);
+&nbsp;&nbsp;&nbsp; addWidget(topping2, &#39;CENTER&#39;);
+&nbsp;&nbsp;&nbsp; let topping3 = new JSCheckBox(&quot;Onions&quot;);
+&nbsp;&nbsp;&nbsp; addWidget(topping3, &#39;CENTER&#39;);
+}</pre>
+<p>
+	In the pizza example, we want to be able to select all possible combinations of toppings.&nbsp; This can best be achieved with check boxes.&nbsp; To determine which toppings were selected, there is the method isSelected():</p>
+<pre style="margin-left: 40px;">
+function actionPerformed(ev) {
+&nbsp;&nbsp;&nbsp; print(&quot;source: &quot; + ev.getSource().isSelected());
+&nbsp;&nbsp;&nbsp; if (ev.getSource() === topping1) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print(&quot;Tomatoes:&quot; + topping1.isSelected());
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	We have to do that for all three toppings, of course.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch6_Swing/exam" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/exam.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	JSRadioButton</h2>
+<p>
+	Radio buttons are used when making decisions.&nbsp; Let&#39;s look at the following example:</p>
+<pre style="margin-left: 40px;">
+let yes;
+let no;
+
+function setup() {
+&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; yes = new JSRadioButton(&quot;Yes&quot;);
+&nbsp;&nbsp;&nbsp; yes.setSelected(true);
+&nbsp;&nbsp;&nbsp; addWidget(yes, &#39;SOUTH&#39;);
+
+&nbsp;&nbsp;&nbsp; no = new JSRadioButton(&quot;No&quot;);
+&nbsp;&nbsp;&nbsp; addWidget(no, &#39;SOUTH&#39;);
+}</pre>
+<p>
+	Here we have two radio buttons, where the &quot;yes&quot; button is preselected.&nbsp; Radio buttons belong together in the sence that only one of the buttons can be selected at a time.&nbsp; If you want to know which button the user has selected, you can do this using:</p>
+<pre style="margin-left: 40px;">
+let b = yes.isSelected();</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch6_Swing/favoriteColor" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/favoriteColor.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	JSComboBox</h2>
+<p>
+	As an example for the JSComboBox we look at the example FavoriteColor.&nbsp; It is about selecting a color from a list:</p>
+<pre style="margin-left: 40px;">
+let colorPicker;
+
+function setup() {
+&nbsp;&nbsp;&nbsp; ...
+	colorPicker = new JSComboBox();
+&nbsp;&nbsp;&nbsp; colorPicker.addItem(&quot;Red&quot;);
+&nbsp;&nbsp;&nbsp; colorPicker.addItem(&quot;White&quot;);
+&nbsp;&nbsp;&nbsp; colorPicker.addItem(&quot;Blue&quot;);
+&nbsp;&nbsp;&nbsp; addWidget(colorPicker, &#39;NORTH&#39;);
+}
+
+function actionPerformed(ev) {
+&nbsp;&nbsp;&nbsp; println(&quot;Color:&quot; + colorPicker.getSelectedItem());
+}</pre>
+<p>
+	In the init() method we initialize the colorPicker with the preset colors.&nbsp; To determine which color the user has selected, there is the getSelectedItem() method.&nbsp; But to access them in the actionPerformed() method, colorPicker must be an instance variable.</p>
+<p>
+	Note: if we closely observe the behavior of the JSComboBox, we will notice that it has some small quirks.&nbsp; There&#39;s nothing we can do about it.</p>
+<p>
+	.</p>
+<h2>
+	UI Interactor Hierarchy</h2>
+<p>
+	Similar to the hierarchy of the ACM graphics classes, there is also a hierarchy with the UI interactor classes.&nbsp; The most important ones are summarized in the following diagram, but there are many more:</p>
+<p>
+	<img alt="" src="img/SwingClassDiagram.jpg" style="margin-left: 10px; margin-right: 10px; width: 673px; height: 405px;" /></p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="img/40c49c0e-a278-44cc-963a-fb7a816b117f.png" style="width: 246px; height: 198px; float: right;" />Layout</h2>
+<p>
+	We already learned about the different regions SOUTH, NORTH, and CENTER. Those are a special feature of the BorderLayout.&nbsp; There are several other layouts besides the BorderLayout.&nbsp; Layouts are about how to &quot;layout&quot; several widgets on the screen.&nbsp; The following are some of the more important layouts:</p>
+<ul>
+	<li>
+		<strong>BorderLayout:</strong> here there are three regions and widgets must be explicitly assigned to a region.</li>
+	<li>
+		<strong>FlowLayout:</strong>&nbsp; is the simplest layout, widgets are simply laid out side by side from left to right.</li>
+	<li>
+		<strong>GridLayout:</strong>&nbsp; the available space is divided into equally separated rows and columns, e.g. 3 by 2.</li>
+</ul>
+<p>
+	Let&#39;s look at a few examples.&nbsp; To use the BorderLayout we would use the following code:</p>
+<pre style="margin-left: 40px;">
+setLayout(&#39;border&#39;);
+addWidget(new JSButton(&quot;0&quot;), &#39;NORTH&#39;);
+addWidget(new JSButton(&quot;1&quot;), &#39;SOUTH&#39;);
+...
+</pre>
+<p>
+	For the FlowLayout the code looks like this:</p>
+<pre style="margin-left: 40px;">
+setLayout(&#39;flow&#39;);
+addWidget(new JSButton(&quot;0&quot;));
+addWidget(new JSButton(&quot;1&quot;));
+...</pre>
+<p>
+	and the GridLayout is used in this fashion:</p>
+<pre style="margin-left: 40px;">
+setLayout(&#39;grid&#39;, 2);
+addWidget(new JSButton(&quot;0&quot;));
+addWidget(new JSButton(&quot;1&quot;));
+...</pre>
+<p>
+	The following depicts how the different layouts look graphically:</p>
+<table align="center" border="0" cellpadding="10" cellspacing="10" style="width: 100%;">
+	<tbody>
+		<tr>
+			<td style="text-align: center; vertical-align: middle;">
+				<div style="display:block;">
+					<a href="./src/tryIt.html?name=Ch6_Swing/layoutExample" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/layoutExample1.png" style="width: 200px; height: 100px; display: block; margin: 0px auto;" />Try it</a></div>
+			</td>
+			<td style="text-align: center; vertical-align: middle;">
+				<div style="display:block;">
+					<a href="./src/tryIt.html?name=Ch6_Swing/layoutExample" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/layoutExample3.png" style="width: 200px; height: 100px; display: block; margin: 0px auto;" />Try it</a></div>
+			</td>
+			<td style="text-align: center; vertical-align: middle;">
+				<div style="display:block;">
+					<a href="./src/tryIt.html?name=Ch6_Swing/layoutExample" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/layoutExample2.png" style="width: 200px; height: 100px; display: block; margin: 0px auto;" />Try it</a></div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	.</p>
+<h2>
+	JSPanel</h2>
+<p>
+	What the GCompound was for graphics programs is the JSPanel for UI programs: it allows us to combine several widgets into a new widget.&nbsp; Details about the JSPanel class can be found below in the project &quot;Quiz&quot;.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Review</h1>
+<p>
+	Congratulations!&nbsp; As we will soon see, we now have the tools to create almost any graphical user interface (UI).&nbsp; We know how to work with</p>
+<ul>
+	<li>
+		Labels,</li>
+	<li>
+		Buttons,</li>
+	<li>
+		Textfields,</li>
+	<li>
+		Checkboxes,</li>
+	<li>
+		Radiobuttons,</li>
+	<li>
+		and Comboboxes.</li>
+</ul>
+<p>
+	We also learned about different layouts and briefly got to know the JSPanel.</p>
+<p>
+	Equally important, however, was the deepening of our understanding of global, instance and local variables.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Projects</h1>
+<p>
+	In the projects of this chapter we will create simple UIs.&nbsp; Some we will need later again.&nbsp; There&#39;s a lot to do, so let&#39;s get started.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr6_Swing/clock" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/clock.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	Clock</h2>
+<p>
+	We want to write a little digital clock.&nbsp; For this we use the Date class and its methods getHours(), getMinutes() and getSeconds().&nbsp; For the display itself we use a JSLabel.&nbsp; And of course the text of the JSLabel should change once per second (better twice).&nbsp; For this you can use the setText() method of the JSLabel.</p>
+<p>
+	It may make sense to write a method padWithZeros() that ensures that &quot;06&quot; minutes are displayed instead of &quot;6&quot; minutes.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr6_Swing/wordGuess" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/wordGuess.png" style="width: 200px; height: 80px; display: block;" />Try it</a></div>
+<h2>
+	WordGuess</h2>
+<p>
+	WordGuess is a graphical version of Hangman from the last chapter.&nbsp; It&#39;s about guessing a word by typing letters.</p>
+<p>
+	We start by selecting a random word with the pickRandomWord() method.&nbsp; This word should be saved in the instance variable wordToGuess.&nbsp; Then we should create an instance variable, wordShown, with as many dashes, &#39;-&#39;, as there are characters in the wordToGuess.&nbsp; Next, we create a JSLabel and add it to the northern region:</p>
+<pre style="margin-left: 40px;">
+wordLbl = new JSLabel(wordShown);
+wordLbl.addStyle(&#39;font: 60px Courier;&#39;);
+addWidget(wordLbl, &#39;NORTH&#39;);</pre>
+<p>
+	What remains to be implemented is the method keyTyped(KeyEvent e).&nbsp; It is called when the user presses a key.&nbsp; Similar to Hangman, if a key was pressed, we check if the letter is in wordToGuess, and update the label if it is.&nbsp; Of course it also makes sense to count how many attempts were needed to guess the word correctly.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr6_Swing/stopWatch" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/stopWatch.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	StopWatch</h2>
+<p>
+	A stopwatch needs a higher accuracy than what the Date class provides.&nbsp; For this purpose we can use the now() method of the Date class,</p>
+<pre style="margin-left: 40px;">
+startTime = Date.now();</pre>
+<p>
+	which returns the milliseconds that have elapsed since 0 o&#39;clock on January 1, 1970, UTC.&nbsp;</p>
+<p>
+	We can use this to measure how much time has passed.&nbsp; We simply remember the time, when the user presses the &quot;Start&quot; button, and subtract from it the current time.&nbsp; To get the time in seconds, we simply divide this by 1000.&nbsp; If, however, we take this modulo 1000 we get only milliseconds.</p>
+<p>
+	The display should be animated, so it makes sense to put the whole thing in a game loop.&nbsp; It also makes sense to have a delay of 20ms, otherwise the refresh of the display is to slow, and we will see nothing.&nbsp; And we should include two buttons, one to start and one to pause.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr6_Swing/countDown" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/countDown.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	CountDown</h2>
+<p>
+	The CountDown works similar to the stopwatch.&nbsp; Instead of a JSLabel we use a JSTextField.&nbsp; The advantage is that you can edit it, i.e. you can set the number from which you want to count backwards.&nbsp; As soon as the user presses the &quot;Start&quot; button, the countdown should begin.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr6_Swing/alarmClock" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/alarmClock.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	AlarmClock</h2>
+<p>
+	Writing an alarm clock that uses the hour:minute:second format is surprisingly complicated.&nbsp; However, if you already have the methods for the conversion from hours:minutes:seconds to seconds convertTimeInSeconds() and from seconds to hours:minutes:seconds, convertSecondsInTime(), then it is not that difficult, and actually similar to the CountDown project.</p>
+<p>
+	For this program we use a large JSLabel, which we place in the north.&nbsp; There is also a JSTextField in the south for entering the alarm time in the hours:minutes:seconds format.&nbsp; And there is a JSButton to start the alarm.</p>
+<p>
+	It makes sense to use two instance variables:</p>
+<pre style="margin-left: 40px;">
+let alarmTime = -1;
+let alarmStarted = false;</pre>
+<p>
+	The first is simply the time in seconds, and the second is used to tell the game loop to do something:</p>
+<pre style="margin-left: 40px;">
+function draw() {
+&nbsp;&nbsp;&nbsp; if (alarmStarted) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	If the JSButton is pressed, then alarmTime is set to the seconds, and alarmStarted is set to true, so that the game loop knows that it should now display something.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr6_Swing/editor" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/editor.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	Editor</h2>
+<p>
+	Next on our list of things to do is a text editor.&nbsp; This consists of a JSTextField for the file name and two JSButtons, one for loading files, the other for saving files.&nbsp; We place these three widgets in the south, the lower part.</p>
+<p>
+	In the middle part, the CENTER region, we place a JSTextArea:</p>
+<pre style="margin-left: 40px;">
+display = new JSTextArea(&quot;Enter text here...&quot;,10,20);
+display.addStyle(&#39;font: 18px Courier;&#39;);
+display.addStyle(&#39;width: 99%&#39;);
+display.addStyle(&#39;height: 98%&#39;);
+addWidget(display, &#39;CENTER&#39;);</pre>
+<p>
+	A JSTextArea is like a JSTextField, only that you can enter multi-line text. In the next chapter we will learn how to load and save files.&nbsp; The 99% and 98% are needed, because I do not really understand CSS...</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr6_Swing/quiz" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/quiz.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	Quiz</h2>
+<p>
+	We want to write the UI for a MultipleChoice quiz.&nbsp; This consists of a question, i.e. a JSLabel, which we place in the upper area (NORTH).&nbsp; Then below follow the possible answers.&nbsp; These are, of course, radio buttons.&nbsp; Since they belong together, we group them into a button group.&nbsp; The radio buttons are placed in the middle area (CENTER).&nbsp; Finally, we also want to add two navigation buttons at the bottom, the SOUTH.&nbsp; The program should have no further functionality, this comes in the chapter after the next one.</p>
+<p>
+	This program is a nice example how to use JSPanels.&nbsp; Multiple-choice questions do not always consist of three answers.&nbsp; Sometimes they are less, sometimes more.&nbsp; So it makes sense to summarize the questions and insert them into a JSPanel,</p>
+<pre style="margin-left: 40px;">
+let <span style="color:#0000ff;">answersPnl</span> = new JSPanel();
+answersPnl.setLayout(&#39;grid&#39;, 1);
+...
+let btn1 = new JSRadioButton(answer1);
+btn1.addStyle(&#39;justify-self: start;&#39;);
+<span style="color:#0000ff;">answersPnl</span>.add(btn1);
+...
+addWidget(<span style="color:#0000ff;">answersPnl</span>, &#39;CENTER&#39;);</pre>
+<p>
+	and then insert the JSPanel into the center region.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr6_Swing/drawingEditor" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/drawingEditor.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	DrawingEditor</h2>
+<p>
+	In the last chapter of this book we want to write a drawing editor.&nbsp; Until then, we can do some preparatory work.&nbsp; The idea is that we can choose between the shapes rectangle and circle with two radio buttons.&nbsp; Additionally we want to be able to set whether these shapes should be filled or not.&nbsp; This is best done with a check box.&nbsp; And finally, we want to be able to determine the color of the shapes with a combo box.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Challenges</h1>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr6_Swing/calculator" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/calculatorGUI.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+<h2>
+	Calculator</h2>
+<p>
+	Our next project is a small calculator.&nbsp; This consists of a JSTextField (display) and 16 JSButtons.&nbsp; Best is to place the JSTextField in the north, and the JSButtons in a 4x4 GridLayout.</p>
+<p>
+	When programming the logic of this calculator, we need to conisder the following:&nbsp; First, it makes sense to introduce two instance variables:</p>
+<pre style="margin-left: 40px;">
+let operand1 = 0;
+let operation = &#39;+&#39;;</pre>
+<p>
+	For example, if we calculate &quot;6 - 2&quot; with our calculator, we first enter the number &quot;6&quot;, then the &quot;-&quot; and then the &quot;2&quot;.&nbsp; So we have to remember both the &quot;6&quot; and the &quot;-&quot; in between, hence the two instance variables.</p>
+<p>
+	In the actionPerformed() method we must distinguish between the &quot;=&quot; character, the operators (&quot;+&quot;, &quot;-&quot;, &quot;*&quot; and &quot;/&quot;), and digits.</p>
+<p>
+	When digits are entered, we simply append them to the display:</p>
+<pre style="margin-left: 40px;">
+let cmd = e.getActionCommand().charAt(0);
+display.setText(display.getText() + cmd);</pre>
+<p>
+	If an operator was entered, then we have to set the instance variables operand1 and operation, so</p>
+<pre style="margin-left: 40px;">
+operand1 = Number(display.getText());
+display.setText(&quot;&quot;);
+operation = cmd;</pre>
+<p>
+	And if the &quot;=&quot; sign was pressed, then we have to perform the calculation and display the result:</p>
+<pre style="margin-left: 40px;">
+let operand2 = Number(display.getText());
+let result = calculate(operand1, operand2, operation);
+display.setText(&quot;&quot; + result);</pre>
+<p>
+	All that is left to do, is to implement the method calculate(double operand1, double operand2, char operation).</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Questions</h1>
+<ol>
+	<li>
+		There are local variables, instance variables and constants.&nbsp; Explain the difference.<br />
+		&nbsp;</li>
+	<li>
+		In the following example there are several variables, some with the same name.&nbsp; Describe how the variables are related and which are valid where.<br />
+		<br />
+		<span style="font-family:courier new,courier,monospace;">&nbsp; class Lifetime {<br />
+		<br />
+		&nbsp;&nbsp;&nbsp; function run() {<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let i = 3;<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cow(i);<br />
+		&nbsp;&nbsp;&nbsp; }<br />
+		<br />
+		&nbsp;&nbsp;&nbsp; <span style="font-family:courier new,courier,monospace;">function</span> cow( n ) {<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (let i=0; i&lt;3; i++) {<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+		&nbsp;&nbsp;&nbsp; }<br />
+		&nbsp; }</span><br />
+		&nbsp;</li>
+	<li>
+		Name three different LayoutManagers.<br />
+		&nbsp;</li>
+	<li>
+		Sketch what the UI for the following code would look like.<br />
+		<br />
+		<span style="font-family:courier new,courier,monospace;">...<br />
+		face = new JSLabel(&quot;0:00:00&quot;);<br />
+		face.addStyle(&#39;font: 60px SansSerif;&#39;);<br />
+		addWidget(face, &#39;NORTH&#39;);<br />
+		<br />
+		tfAlarm = new JSTextField(10);<br />
+		tfAlarm.addStyle(&#39;text-align: right;&#39;);<br />
+		addWidget(tfAlarm, &#39;SOUTH&#39;);<br />
+		<br />
+		btnStart = new JSButton(&quot;Set Alarm&quot;);<br />
+		addWidget(btnStart, &#39;SOUTH&#39;);<br />
+		...</span><br />
+		&nbsp;</li>
+	<li>
+		If you click on a JButton, what kind of event is triggered?</li>
+</ol>
+<p>
+	.</p>
+<hr />
+<h1>
+	References</h1>
+<p>
+	In this chapter the preferred reference is the book by Eric Roberts [1].&nbsp; A nice but challenging tutorial is that by Oracle, the creators of Java [2].</p>
+<p>
+	[1] The Art and Science of Java, von Eric Roberts, Addison-Wesley, 2008</p>
+<p>
+	[2] The Swing Tutorial, <a href="http://docs.oracle.com/javase/tutorial/uiswing/">docs.oracle.com/javase/tutorial/uiswing/</a></p>
+<p>
+.</p>
+<p class="footer">
+Copyright &copy; 2016-2023 <a href="http://www.lano.de">Ralph P. Lano</a>. All rights reserved.
+</p>
+</div>
+</div>
+</center>
+</body>
+</html>

@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>JavaScript: Ch5 MindReader</title>
+<meta name="title" content="Variations on a Theme: JavaScript: Ch5 MindReader">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="UTF-8">
+<meta name="description" content="An object-oriented Introduction">
+<meta name="keywords" content="JavaScript,object orientation,introduction">
+<meta name="author" content="Ralph P. Lano">
+<meta name="robots" content="index,follow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="book.css">
+</head>
+
+<body>
+<center>
+<div id="wrap">
+<ul class="sidenav">
+<p><a href="../index.html">Variations on a Theme</a><a href="index.html">JavaScript</a></p>
+<li><a href="Ch1_Karel.html">Karel</a></li>
+<li><a href="Ch2_Graphics.html">Graphics</a></li>
+<li><a href="Ch3_Console.html">Console</a></li>
+<li><a href="Ch4_Agrar.html">Agrar</a></li>
+<li><a href="Ch5_MindReader.html">MindReader</a></li>
+<li><a href="Ch6_Swing.html">Swing</a></li>
+<li><a href="Ch7_Asteroids.html">Asteroids</a></li>
+<li><a href="Ch8_Stocks.html">Stocks</a></li>
+<li><a href="index.html"> </a></li>
+<li><a href="AppA_Primer.html">Primer</a></li>
+<li><a href="AppB_Libraries.html">Libraries</a></li>
+<li><a href="AppC_Ideas.html">Ideas</a></li>
+</ul>
+<div class="content">
+<p>
+	<img alt="" src="img/b6b4d73c-045b-41e8-9aa4-02379366993d.png" style="display: block; margin-left: auto;  margin-right: auto;width: 325px; height: 262px;" /></p>
+<h1>
+	MindReader</h1>
+<p>
+	In this chapter we return to console programs.&nbsp; We will learn about text and word processing, that is how to use characters and strings.&nbsp; In addition, we will also deepen our understanding of classes.&nbsp; We will see how classes are structured and we will create our own classes.</p>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="img/3252a125-0883-496a-88cd-8183ff7af75d.png" style="margin-left: 10px; margin-right: 10px; width: 186px; height: 60px; float: right;" />String</h2>
+<p>
+	Strings are made up of zero or more characters.&nbsp; A character can be a letters, a digits or a special character.&nbsp; The apostrophes (single or double quotes) are necessary to distinguish digits from numbers:</p>
+<pre style="margin-left: 40px;">
+let x = 42;
+let z = &quot;42&quot;;
+</pre>
+<p>
+	The first line declares the number 42, the second line the string &quot;42&quot;.&nbsp; Special characters are characters like &#39;.&#39;, &#39;$&#39;, etc., but there are also invisible characters such as &#39;\n&#39; for a new line or &#39;\t&#39; for a tab.</p>
+<p>
+	Let&#39;s continue with a few examples:</p>
+<pre style="margin-left: 40px;">
+let s1 = &quot;Hello&quot;;
+let s2 = &quot;world&quot;;</pre>
+<p>
+	Here we declare two strings, s1 and s2, and initialize them to the values &quot;Hello&quot; and &quot;world&quot;.&nbsp; Strings can contain none, one or many characters:</p>
+<pre style="margin-left: 40px;">
+let s3 = &quot;!&quot;;
+let s4 = &quot; &quot;;
+let s5 = &quot;&quot;;</pre>
+<p>
+	Here s3 contains an exclamation mark.&nbsp; s4 also contains a character, the space.&nbsp; s5 contains no character at all, but s5 is still a string.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch5_MindReader/stringExample" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/stringExample.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<p>
+	What makes strings really interesting is that we can make new strings out of old ones by concatenating them:</p>
+<pre style="margin-left: 40px;">
+s6 = s1 + s4 + s2 + s3;</pre>
+<p>
+	and also print them</p>
+<pre style="margin-left: 40px;">
+println( s6 );</pre>
+<p>
+	And just as we can read numbers (int and double) from the console, we can also read strings from the console:</p>
+<pre style="margin-left: 40px;">
+let name = readLine(&quot;Enter your name: &quot;);</pre>
+<p>
+	The String class has a few useful functions:</p>
+<ul>
+	<li>
+		<strong>length:</strong>&nbsp; returns the number of characters in a string,</li>
+	<li>
+		<strong>charAt(pos):</strong>&nbsp; returns the character at the position pos,</li>
+	<li>
+		<strong>substring(p1):</strong>&nbsp; returns the substring from position p1 to the end of the string,</li>
+	<li>
+		<strong>substring(p1, p2):</strong>&nbsp; returns the substring from position p1 to position p2, but without the character at position p2,</li>
+	<li>
+		<strong>includes(s):</strong>&nbsp; returns true if the string s is contained in the string,</li>
+	<li>
+		<strong>indexOf(s):</strong>&nbsp; determines if the string s is contained in the string, if it is it returns the position of the character, -1 otherwise,</li>
+	<li>
+		<strong>trim():</strong> removes white spaces at the beginning and end of a string, and</li>
+	<li>
+		<strong>toUpperCase():</strong>&nbsp; returns the uppercase version of a string, of course there is also a toLowerCase().</li>
+</ul>
+<p>
+	As we will see in a moment, there are quite a few things we can do with these functions.</p>
+<p>
+	.</p>
+<h2>
+	Exercise: Print the Characters of a String</h2>
+<p>
+	As a first example, we iterate through the characters of a string and display them one by one on the console:</p>
+<pre style="margin-left: 40px;">
+let s1 = &quot;Hello&quot;;
+for (let i=0; i&lt;s1.length; i++) {
+&nbsp;&nbsp; &nbsp;let c = s1.charAt( i );
+&nbsp;&nbsp; &nbsp;println( c );
+}
+</pre>
+<p>
+	.</p>
+<h2>
+	Exercise: Reverse a String</h2>
+<p>
+	We can use what we just learned to reverse a string:</p>
+<pre style="margin-left: 40px;">
+let s1 = &quot;stressed&quot;;
+let s2 = &quot;&quot;;
+for ( let i=0; i&lt;s1.length; i++) {
+&nbsp;&nbsp; &nbsp;let c = s1.charAt( i );
+&nbsp;&nbsp; &nbsp;s2 = c + s2;
+}
+println( s2 );
+</pre>
+<p>
+	The word &quot;stressed&quot; becomes the word &quot;desserts&quot;.&nbsp; Words that remain the same when reversed, such as &quot;racecar&quot; or &quot;otto&quot;, are called palindromes.</p>
+<p>
+	.</p>
+<h2>
+	Exercise: Compare two Strings</h2>
+<p>
+	Next, we want to determine whether two strings are equal.&nbsp; In JavaScript we can use the &quot;==&quot; operator for this:</p>
+<pre style="margin-left: 40px;">
+let s1 = &quot;Hello &quot;;
+let s2 = s1 + &quot;world&quot;;
+let s3 = &quot;Hello world&quot;;
+if (s2 == s3) {
+&nbsp;&nbsp; &nbsp;println(&quot;Equal&quot;);
+} else {
+&nbsp;&nbsp; &nbsp;println(&quot;Not Equal&quot;);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
+}</pre>
+<p>
+	As expected &quot;Equal&quot; is what gets prinited here.&nbsp; Just for curiosity, what happens if we compare numbers and strings:</p>
+<pre style="margin-left: 40px;">
+let x = 42;
+let y = &quot;42&quot;;
+if (x == y) {
+&nbsp;&nbsp;&nbsp; console.log(&quot;x and y are equal&quot;);
+}
+if (x <span style="color:#0000ff;">===</span> y) {
+&nbsp;&nbsp;&nbsp; console.log(&quot;x and y are exactly equal&quot;);
+}</pre>
+<p>
+	When we use the simple equality operator &quot;==&quot;, JavaScript says they are equal.&nbsp; However, there is also the exactly equals operator &quot;===&quot; with three equal signs, and in that case they are not longer equal.&nbsp; The difference is that the exactly equal operator also checks if the two variables are of the same type.</p>
+<p>
+	<strong>SEP: Always use the exactly equals operator &quot;===&quot; when comparing variables.</strong></p>
+<p>
+	.</p>
+<h2>
+	Exercise: Cut a String</h2>
+<p>
+	As a last little exercise, we want to cut a string into two pieces.&nbsp; For this we use the functions indexOf() and substring():</p>
+<pre style="margin-left: 40px;">
+let s1 = &quot;Hello world&quot;;
+let posSpace = s1.indexOf(&quot; &quot;);
+let s2 = s1.substring(0, posSpace);
+let s3 = s1.substring(posSpace);
+println(s2);
+println(s3);</pre>
+<p>
+	We find the position of the space using the indexOf() function.&nbsp; Then we cut off the front part with the substring() function.&nbsp; Two things are important here: the first character is at position 0, i.e. as usual we start counting at 0.&nbsp; And the character at the posSpace position is not included.&nbsp; Finally, we cut off the rest, and store it in s3.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch5_MindReader/stringTokenizerExample" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/stringTokenizerExample.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	StringTokenizer</h2>
+<p>
+	Cutting strings into pieces is a very common task. That is why there is a special class for this, the StringTokenizer:</p>
+<pre style="margin-left: 40px;">
+let sentence = &quot;hi there what&#39;s up?&quot;;
+let toki = new StringTokenizer(sentence, &quot; .,?&quot;);
+while (toki.hasMoreTokens()) {
+&nbsp;&nbsp; &nbsp;println(toki.nextToken());
+}</pre>
+<p>
+	First, we initialize the StringTokenizer by telling it what it should cut apart (sentence), and how it should cut it. That means we tell it the separators it should use, like &#39; &#39;, &#39;.&#39;, &#39;,&#39; or &#39;?&#39;, for instance.&nbsp; The StringTokenizer then splits the string into tokens, i.e., words.&nbsp; To get to these words, we ask the StringTokenizer if it has any tokens, so we call the hasMoreTokens() function.&nbsp; If it has any, we ask the StringTokenizer to give us the next token using nextToken().&nbsp; We do this until all the tokens are used up.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch5_MindReader/immutability" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/immutability.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Immutability</h2>
+<p>
+	Something that sometimes leads to confusion is the immutability of strings.&nbsp; Immutability means that a string cannot be changed.&nbsp; Let&#39;s take a look at an example:</p>
+<pre style="margin-left: 40px;">
+let s1 = &quot;Hello&quot;;
+s1.toUpperCase();
+println(s1);
+</pre>
+<p>
+	What is displayed on the console?&nbsp; &quot;Hello&quot; is displayed, and not, as one might hope, &quot;HELLO&quot;.&nbsp; This has to do with the fact that strings are unchangeable, i.e. immutable.</p>
+<p>
+	But there is a trick to changing strings anyways: we simply assign a new value to them:</p>
+<pre style="margin-left: 40px;">
+let s1 = &quot;Hello&quot;;
+<span style="color:#0000ff;">s1 = </span>s1.toUpperCase();
+println(s1);
+</pre>
+<p>
+	.</p>
+<h2>
+	Classes</h2>
+<p>
+	We have already heard a lot about classes, and we have used them many times, e.g. the Karel class or the graphic classes like GRect and GOval.&nbsp; Also, in this chapter we used the String class and the StringTokenizer class.&nbsp; The question that arises is: can we make our own classes?</p>
+<p>
+	Of course, and it&#39;s not that hard.&nbsp; As a first example, we look at a student from the perspective of a university.&nbsp; What information would a university need to know about a student?&nbsp; If we limit ourselves to the essentials, then these are name, matriculation number and credit points (ECTS).&nbsp; We take these attributes of a student and combine them into a class:</p>
+<pre style="margin-left: 40px;">
+class Student {
+&nbsp;&nbsp;&nbsp; constructor(_name, _id, _credits) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.name = _name;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.id = _id;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.credits = _credits;
+&nbsp;&nbsp;&nbsp; }
+}
+</pre>
+<p>
+	In principle, a class is nothing more than a data container.&nbsp; Each class should be saved in its own file, the name of the file should be the same as the name of the class with a &#39;.js&#39; extension.</p>
+<p>
+	<strong><strong>SEP: Class names should always start with capital letters and follow the CamelCase convention.</strong></strong></p>
+<p>
+	.</p>
+<h2>
+	Constructor</h2>
+<p>
+	Classes are &#39;intelligent&#39; data containers.&nbsp; This means that they not only contain and bundle the data, but also initialize, manage and change it.&nbsp; So they also do something with the data, and classes have functions for that.&nbsp; Usually, we call functions that belong to classes <em>methods</em>, to distinguish them from the normal functions.&nbsp; The most important method is the constructor, which initializes the data.</p>
+<pre style="margin-left: 40px;">
+class Student {
+&nbsp;&nbsp;&nbsp; <span style="color:#0000ff;">constructor(_name, _id, _credits)</span> {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.name = _name;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.id = _id;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.credits = _credits;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	The constructor, like any function, can have parameters.&nbsp; A constructor never returns a value, because it is implicitely assumed, what it returns is an <em>instance</em> of that class.</p>
+<p>
+	Now we have a class, how do we use it?&nbsp; We use them like any other class.&nbsp; Let&#39;s write a console program which creates an instance of our Student class:</p>
+<pre style="margin-left: 40px;">
+async function setup() {
+&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; let fritz = <span style="color:#0000ff;">new</span> Student(&quot;Fritz&quot;, 12345, 0.0);
+	println(fritz.name + &quot;, &quot; + fritz.id + &quot;, &quot; + fritz.credits);
+}
+</pre>
+<p>
+	We create a new instance of the class Student.&nbsp; This instance (also called object) we call fritz.&nbsp; To create the object we have to call the constructor with &quot;new&quot;.&nbsp; We initialize the instance variables of the class: that is, name is initialized to the value &quot;Fritz&quot;, id to the value 12345, and credits to the value 0.0.</p>
+<p>
+	.</p>
+<h2>
+	Methods</h2>
+<p>
+	Let&#39;s say we want to print this information about fritz quite often.&nbsp; Then every time, we would have to write the above print statement.&nbsp; However, if we create a method called toString(),</p>
+<pre style="margin-left: 40px;">
+class Student {
+	...
+&nbsp;&nbsp;&nbsp; toString() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return &quot;Student [name=&quot; + this.name + &quot;, id=&quot; + this.id 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    + &quot;, credits=&quot; + this.credits + &quot;]&quot;;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	then printing is much easier:</p>
+<pre style="margin-left: 40px;">
+async function setup() {
+&nbsp;&nbsp;&nbsp; ...
+	println(fritz.toString());
+}
+</pre>
+<p>
+	&nbsp;</p>
+<p>
+	Another example is incrementing credits.&nbsp; Fritz has been studying hard, passed his Programming exam, and now he wants he credits updated:</p>
+<pre style="margin-left: 40px;">
+	fritz.credits = fritz.credits + 5;</pre>
+<p>
+	More convenient would be an incrementCredits() method:</p>
+<pre style="margin-left: 40px;">
+	fritz.incrementCredits(5);</pre>
+<p>
+	This is more for convenience, but makes our code more readable.</p>
+<p>
+	<strong>SEP: Every class should have a toString() method.</strong></p>
+<p>
+	.</p>
+<h2>
+	Closures</h2>
+<p>
+	Now notice, we can read fritz&#39;s name, but we can also change it:</p>
+<pre style="margin-left: 40px;">
+println(fritz.name);
+fritz.name = &quot;Hans&quot;;
+println(fritz.name);</pre>
+<p>
+	JavaScript is pretty open about accessing the instance variables of a class.&nbsp; Sometimes you are fine with that, but sometimes you don&#39;t want this.</p>
+<p>
+	Consider the following class, where we added a method named <em>getId()</em>:</p>
+<pre style="margin-left: 40px;">
+class Student {
+
+&nbsp;&nbsp; &nbsp;constructor(_name, _id, _credits) {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.name = _name;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.credits = _credits;
+
+<span style="color:#0000ff;">&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// closure: read only
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this.getId = (function () {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;let id = _id;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return function () {
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;return id
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;})();</span>
+&nbsp;&nbsp; &nbsp;}
+}
+</pre>
+<p>
+	It looks very strange, but it does what we wanted: we can read the <em>id</em>, but we can no longer change it:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; let fritz = new Student(&quot;Fritz&quot;, 12345, 0.0);
+	println(fritz.getId());  // 12345
+&nbsp;&nbsp; &nbsp;fritz.id = 42;
+&nbsp;&nbsp; &nbsp;println(fritz.getId());  // 12345</pre>
+<p>
+	JavaScript just ignores the assignment.&nbsp; Closures are kind of complicated, and we will not use them often.&nbsp; But you know now, that they exist.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Ch5_MindReader/student" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/student.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Exercise: Hansel und Gretel</h2>
+<p>
+	The class Student is now ready for use and as an example we take a look at the two students Hansel and Gretel at the Brothers Grimm college:</p>
+<pre style="margin-left: 40px;">
+async function setup() {
+&nbsp;&nbsp; &nbsp;createConsole();
+
+&nbsp;&nbsp; &nbsp;let hansel = new Student(&quot;Hänschen&quot;, 12345, 0.0);
+&nbsp;&nbsp; &nbsp;println(hansel.name);
+
+&nbsp;&nbsp; &nbsp;let gretel = new Student(&quot;Gretel&quot;, 54321, 11.0);
+&nbsp;&nbsp; &nbsp;println(gretel.name);
+&nbsp;&nbsp; &nbsp;gretel.name = &quot;Gretchen&quot;;
+&nbsp;&nbsp; &nbsp;gretel.incrementCredits(5);
+&nbsp;&nbsp; &nbsp;println(gretel.toString());
+}
+</pre>
+<p>
+	.</p>
+<h2>
+	Type Conversion</h2>
+<p>
+	JavaScript has a few functions for converting between strings and numbers.&nbsp; It is not uncommon that we have to convert a string into a number.&nbsp;</p>
+<pre style="margin-left: 40px;">
+let x = parseInt(&quot;42&quot;);
+let y = parseFloat(&quot;42.0&quot;);
+</pre>
+<p>
+	Sometimes we also want to convert a floating point number into an integer number:</p>
+<pre style="margin-left: 40px;">
+let z = Math.trunc(42.0);
+</pre>
+<p>
+	Conversely, to create a string from a number, you can use a little trick:</p>
+<pre style="margin-left: 40px;">
+let x = 42;
+let fourtyTwo = &quot;&quot; + x;</pre>
+<p>
+	There is also other ways, but knowing one is fine.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Review</h1>
+<p>
+	In this chapter we have mainly dealt with strings and classes.&nbsp; Also, it is the first time we&#39;ve written our own class.&nbsp; We have seen that a class has variables and methods.&nbsp; Sometimes we also call the variables instance variables, class properties, or class attributes.&nbsp; We have seen that methods always do something, and that there is a special method, the constructor. We also learned about the String and StringTokenizer classes.</p>
+<p>
+	.</p>
+<hr />
+<h1>
+	Projects</h1>
+<p>
+	The projects in this chapter mainly deal with strings and writing simple classes.</p>
+<p>
+	.</p>
+<h2>
+	Student</h2>
+<p>
+	In the example for Student the question arises why are the instance variables private?&nbsp; Let us look at the problem from the other side.&nbsp; Suppose instance variables were public: could we then prevent a student from getting negative credits, or that her id could be changed?</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/ascii" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/ascii.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	ASCII</h2>
+<p>
+	To store characters internally the computer uses numbers.&nbsp; This means we can add and subtract these characters just like numbers, and we can even use them in conditions and loops.&nbsp; For example, to determine if a character is an uppercase letter, you can use the following condition:</p>
+<pre style="margin-left: 40px;">
+if (c &gt;= &#39;A&#39; &amp;&amp; c &lt;= &#39;Z&#39;) { ... }&nbsp;&nbsp;&nbsp; </pre>
+<p>
+	Or to turn a lowercase letter into an uppercase letter, we can use the following trick:</p>
+<pre style="margin-left: 40px;">
+let klein = &#39;d&#39;;
+let gross = klein.toUpperCase();</pre>
+<p>
+	You can also make ints out of chars and vice versa via a cast, that is a type conversion</p>
+<pre style="margin-left: 40px;">
+let char = String.fromCharCode(i);
+print(char);
+</pre>
+<p>
+	With this knowledge we want to write the following three functions:</p>
+<ul>
+	<li>
+		isUpperCase(char c)</li>
+	<li>
+		toUpperCase(char c)</li>
+	<li>
+		printASCIITable()</li>
+</ul>
+<p>
+	As for the latter, it is sufficient to output the ASCII characters between 32 and 128, since the first 31 ASCII characters cannot be printed.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/passwordCreator" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/passwordCreator.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	PasswordCreator</h2>
+<p>
+	With our knowledge of strings we can now write a password generator.&nbsp; A good password should be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit and one symbol.&nbsp; So we could define four strings containing the possible characters, and then use the RandomGenerator to randomly select two of them and put them together to a password, for example:</p>
+<pre style="margin-left: 40px;">
+const small = &quot;abcdefghijklmnopqrstuvwxyz&quot;;
+let password = &quot;&quot;;
+password += small.charAt(rgen.nextInt(small.length));
+...
+</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/randomText" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/randomText.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	RandomText</h2>
+<p>
+	For test purposes it is sometimes helpful to be able to generate random text.&nbsp; That&#39;s not so hard.&nbsp; We start again with the top-down approach.&nbsp; Let&#39;s assume we have a function createRandomSentence() that generates a random sentence.&nbsp; Then we could create a random text by simply creating several random sentences.&nbsp; The createRandomSentence() function, in turn, is easy if we assume there is a function called createRandomWord(), because then we would just take somewhere between three and five words, put spaces between them and add a period at the end.&nbsp; Also the createRandomWord() function is not that difficult, because words consist of lower case letters, and have a length of about 3 to 8 letters, so</p>
+<pre style="margin-left: 40px;">
+function createRandomWord() {
+&nbsp;&nbsp;&nbsp; let word = &quot;&quot;;
+&nbsp;&nbsp;&nbsp; let nrOfCharsInWord = rgen.nextInt(3, 8);
+&nbsp;&nbsp;&nbsp; for (let i = 0; i &lt; nrOfCharsInWord; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; word += String.fromCharCode(&#39;a&#39;.charCodeAt(0) + rgen.nextInt(26));
+&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp; return word;
+}</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/palindrome" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/palindrome.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Palindrome</h2>
+<p>
+	Words that remain the same when reversed, such as &quot;racecar&quot; or &quot;pensioner&quot;, are also called palindromes.&nbsp; We want to write a function called isPalindrome(String s), which determines if a string is a palindrome.&nbsp; To do this, we write a function reverse() that reverses a given string, and then compare the original with the reversed string using equals().&nbsp; If both are equal, it is a palindrome.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/countUpperCase" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/countUpperCase.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	CountUpperCase</h2>
+<p>
+	Here we should write a function that counts the uppercase letters in a string.&nbsp; This can be very useful, for example, if you want to determine whether a certain text is German or English: English text has on average less capital letters per sentence.&nbsp; We can either use the character class or the function we wrote above.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/readOneChar" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/readOneChar.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	ReadOneChar</h2>
+<p>
+	We want the user to be able to enter only one letter. The user should not be able to enter zero or more than one letter, but only exactly one letter.&nbsp; Therefore we want to write a function readOneChar(), which returns one char as return value.</p>
+<p>
+	There is the readString() function for reading strings.&nbsp; Hence, we use the loop-and-a-half, and use as abort criterion that the string read should be of length one.</p>
+<pre style="margin-left: 40px;">
+while (true) {
+&nbsp;&nbsp; &nbsp;s = await readLine(msg);
+&nbsp;&nbsp; &nbsp;if (s.length == 1)
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;break;
+&nbsp;&nbsp; &nbsp;println(&quot;Please, only enter one character:&quot;);
+}</pre>
+<p>
+	.</p>
+<h2>
+	<img alt="" src="img/bdedbd5d-3b32-412e-9bcc-fccde618d3bb.png" style="margin-left: 10px; margin-right: 10px; width: 200px; height: 203px; float: right;" />Encrypt</h2>
+<p>
+	Another interesting application that we can now easily implement is a small encryption program.&nbsp; We use the so-called Caesar cipher, named after Julius Caesar [2].&nbsp; To encrypt a text using Caesar&#39;s cipher, the letters in a given text are simply shifted by a fixed number, the key.&nbsp; For example, if the key is four, then an &#39;a&#39; becomes an &#39;e&#39;, a &#39;b&#39; becomes an &#39;f&#39;, etc.&nbsp; To decrypt, the process is simply reversed.</p>
+<p>
+	To implement this in code, we write two functions, encrypt() and decrypt(), one for encrypting, the other for decrypting.&nbsp; Both take two parameters, a string and an int, the key.&nbsp; One returns the encrypted text as a string, the other returns the decrypted text.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/encrypt" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/encrypt.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<p>
+	.</p>
+<p>
+	Note: in order not to make it too complicated, it makes sense to convert the text to lower case before starting the encryption.&nbsp; And the remainder operator &#39;%&#39; is very practical here:</p>
+<pre style="margin-left: 40px;">
+function encryptChar(c, key) {
+&nbsp;&nbsp;&nbsp; let d = c.charCodeAt(0) - &#39;a&#39;.charCodeAt(0);
+&nbsp;&nbsp;&nbsp; let e = d + key;
+&nbsp;&nbsp;&nbsp; let f = e % 26;
+&nbsp;&nbsp;&nbsp; let g = String.fromCharCode(f + &#39;a&#39;.charCodeAt(0));
+&nbsp;&nbsp;&nbsp; return g;
+}
+</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/abjad" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/abjad.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Abjad</h2>
+<p>
+	Around 1500 B.C. the Phoenicians developed the first alphabet script, a left-hand consonant script. Consonant scripts are writing systems in which only&nbsp; consonants are being used [2].</p>
+<p>
+	To show that such a script actually can be readable, archaeologists have commissioned us to write a console program that removes all vowels from a given text.&nbsp; We can proceed as follows:</p>
+<ul>
+	<li>
+		with readLine() we ask the user to enter a normal text,</li>
+	<li>
+		we then look for vowels and remove them, and</li>
+	<li>
+		we then output the result using println().</li>
+</ul>
+<p>
+	Ideally we should remember the top-down approach, i.e. we should perhaps assume that the functions removeVowels() and isVowel() exist, and then implement them later.&nbsp; You could also use the replace() function of the String class, but more about this in the next project.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/franconian" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/franconian.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Franconian</h2>
+<p>
+	The language of the Franks, also called &#39;lingua franca&#39;, has been wrongly forgotten.&nbsp; The &#39;lingua franca&#39; (Italian for &#39;Franconian language&#39;) is a Romance-based pidgin language. Pidgin language or pidgin refers to a reduced form of language that is used by people of different languages to communicate [3].</p>
+<p>
+	In order to contribute to the understanding of peoples, we should write a German-Franconian translation program. In Franconian the following phonetic simplifications take place (also known as &quot;inner-German weakening of consonants&quot;):</p>
+<ul>
+	<li>
+		t -&gt; d</li>
+	<li>
+		p -&gt; b</li>
+	<li>
+		k -&gt; g</li>
+</ul>
+<p>
+	For example, the word &#39;Politiker&#39; (politician) becomes &#39;Bolidiger&#39; in Franconian.</p>
+<p>
+	So let us write a function translateGermanToFranconian(), which has a string as parameter with the German text, and returns a string, which is the translated Franconian version.&nbsp; For this you could use the replaceAll() function of the String class:</p>
+<pre style="margin-left: 40px;">
+String german = &quot;politiker&quot;;
+String franconian = german.replaceAll(&#39;t&#39;,&#39;d&#39;);
+...
+</pre>
+<p>
+	But replaceAll() and also replace() use &quot;regular expressions&quot;.&nbsp; So unless you know what those are, you should waiting using them until your second semester.&nbsp; However, a function like the following is all you need:</p>
+<pre style="margin-left: 40px;">
+function translateChar(c) {
+&nbsp;&nbsp;&nbsp; switch (c) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case &#39;t&#39;:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return &#39;d&#39;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case &#39;k&#39;:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return &#39;g&#39;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case &#39;p&#39;:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return &#39;b&#39;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; default:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return c;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/pigLatin" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/pigLatin.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	PigLatin</h2>
+<p>
+	Pig Latin [5] is a secret language for children that has very simple rules:</p>
+<ul>
+	<li>
+		if a word begins with a consonant, then the consonant is moved to the end of the word and the syllable &quot;ay&quot; is appended.&nbsp; So &quot;loser&quot; becomes &quot;oserlay&quot; or &quot;button&quot; becomes &quot;uttonbay&quot;,</li>
+	<li>
+		if a word begins with a vowel, then only the syllable &quot;ay&quot; is appended. So &quot;eagle&quot; becomes &quot;eagleay&quot; and &quot;america&quot; becomes &quot;amercaay&quot;.</li>
+</ul>
+<p>
+	Hence, we should write another console program that asks the user for an English sentence and then translates it into Pig Latin.&nbsp; Here, too, we should use of the top-down approach.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/yodaTalk" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/yodaTalk.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	YodaTalk</h2>
+<p>
+	In the typology of languages [6], the sentence structure subject-verb-object (SVO), i.e. the subject is in the first place, the verb in the second and the object in the third, occurs very frequently. About 75% of all languages in the world follow this or a very similar pattern.&nbsp; We know that Yoda comes from the swamp planet Dagobah and there the preferred sentence construction is object, subject verb (O,SV).</p>
+<p>
+	For example, the English sentence,</p>
+<p style="margin-left: 40px;">
+	You are lucky.</p>
+<p>
+	translates into &quot;Yodish&quot;:</p>
+<p style="margin-left: 40px;">
+	Lucky, you are.</p>
+<p>
+	To simplify interplanetary communication, it is now our task to write a console program that translates a given text from English into Yodish.&nbsp; We can assume that each sentence entered always consists of three words, always in the order SVO.</p>
+<p>
+	Here&#39;s what we could do:</p>
+<ul>
+	<li>
+		we ask the user to enter an English text,</li>
+	<li>
+		then we identify the three elements subject, verb and object using a StringTokenizer,</li>
+	<li>
+		and using println(), we then output the translated Yodish in the form object, subject verb.</li>
+</ul>
+<p>
+	Of course we use the top-down approach again and implement a function called translateFromEnglishToYodish().</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/randomGeneratorTester" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/randomGeneratorTester.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	RandomGenerator</h2>
+<p>
+	We want to write our own RandomGenerator class.&nbsp; This is not so difficult when we know that there is a function called Math.random() in standard JavaScript.&nbsp; This function returns a floating point number between 0 and 1, including 0, but excluding 1. If we want to use it to generate a number between 1 and 6, this is how it works:</p>
+<pre style="margin-left: 40px;">
+let diceRoll = 1 + (int)(Math.random() * 6);</pre>
+<p>
+	With this knowledge we want to write a class called RandomGenerator, that has the methods nextInt(int a, int b), nextInt(int b), nextBoolean() and nextColor().&nbsp; In the future we can always use our own class instead of the ACM class, if we want to.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/counter" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/counter.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Counter</h2>
+<p>
+	We want to create a class Counter that can act as a counter.&nbsp; The class should have a private instance variable called count.&nbsp; In the constructor, this variable is to be set to the value 0.&nbsp; Then there should be a method called getValue(), which simply returns the current value of the variable count.&nbsp; And there should be a method called incrementCounter(), which increases the value of the variable count by one.&nbsp; Can you prevent somebody else from messing with your counter? (Closure)</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/pointTester" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/pointTester.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Point</h2>
+<p>
+	Next we want to write a class Point.&nbsp; This should correspond to a point in two-dimensional space, i.e. have an x and a y coordinate.&nbsp; The class should have a constructor of the form Point(int x, int y), and the methods: getX(), getY(), move(int dx, int dy), equals(Point p), add(Point p), and toString().</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/connectTwoMovingPoints" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/connectTwoMovingPoints.png" style="width: 200px; height: 200px; display: block;" />Try it</a></div>
+<h2>
+	ConnectTwoMovingPoints</h2>
+<p>
+	Our class Point seems relatively boring on its own.&nbsp; But if we use it for the motion of two points which are connected by a colored line, then this actually looks quite nice.</p>
+<p>
+	We start with the Point class, which, however, has slightly different requirements than the one of the last project.&nbsp; It should be as simple as possible.&nbsp; It should have four instance variables, namely x, y, vx and vy.&nbsp; The constructor should have no parameters, and it should initialize the instance variables with some small random values.&nbsp; This Point class should have only one method:</p>
+<pre style="margin-left: 40px;">
+&nbsp;&nbsp;&nbsp; move() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.x += this.vx;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.y += this.vy;
+&nbsp;&nbsp;&nbsp; }</pre>
+<p>
+	We want to use this class in our graphics program ConnectTwoMovingPoints:</p>
+<pre style="margin-left: 40px;">
+let p1;
+let p2;
+
+function setup() {
+&nbsp;&nbsp;&nbsp; ...
+&nbsp;&nbsp;&nbsp; p1 = new Point();
+&nbsp;&nbsp;&nbsp; p2 = new Point();
+}
+
+function draw() {
+&nbsp;&nbsp;&nbsp; p1.move();
+&nbsp;&nbsp;&nbsp; p2.move();
+&nbsp;&nbsp;&nbsp; checkForCollisionWithWall(p1);
+&nbsp;&nbsp;&nbsp; checkForCollisionWithWall(p2);
+&nbsp;&nbsp;&nbsp; drawConnection(p1, p2);
+&nbsp;&nbsp;&nbsp; update();
+}</pre>
+<p>
+	In our game loop, we move the two points, check if the points are still in the field, and then connect the two points with a line.&nbsp; That&#39;s actually quite simple.&nbsp; However, if you only want to display ten lines at a time and want to delete the older lines again, you need arrays (next chapter).</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/blackjack" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/blackjack.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Blackjack</h2>
+<p>
+	According to Wikipedia, &quot;Blackjack is the most widely played card game offered in casinos&quot; [9].&nbsp; We want to implement a slightly simpler version of this game.</p>
+<p>
+	Instead of cards, we simply use numbers, numbers between 1 and 11.&nbsp; The computer plays the dealer and starts by generating a random number between 17 and 25. Then it&#39;s the player&#39;s turn.&nbsp; She starts with a card, i.e. a random number between 1 and 11, and can then decide whether she wants another card.&nbsp; If yes, another random number between 1 and 11 is generated&nbsp; and added to the current &quot;hand&quot;.&nbsp; When the player no longer wishes to have a new card, the &quot;hand&quot; of the player is compared with that of the computer.</p>
+<p>
+	The winner is whoever has 21 or less points and has more than the other player.&nbsp; Otherwise, it&#39;s a draw.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/simpleCraps" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/simpleCraps.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	SimpleCraps</h2>
+<p>
+	&quot;Craps or Seven Eleven is a dice game that enjoys great popularity, especially in the USA.&quot; [10]</p>
+<p>
+	We will implement a simpler version of Craps:&nbsp; We have just a simple dice.&nbsp; The player starts with credits of 100 Euro.&nbsp; In each round, 10 Euro are bet and the player bets on one of the following outcomes:</p>
+<ul>
+	<li>
+		odd</li>
+	<li>
+		even</li>
+	<li>
+		high (4,5,6)</li>
+	<li>
+		low (1,2,3)</li>
+</ul>
+<p>
+	The game is over when the player has no more credits.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/factorial" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/factorial.png" style="width: 220px; height: 245px; display: block;" />Try it</a></div>
+<h2>
+	Factorial</h2>
+<p>
+	The factorial of a number is the product of all integer numbers less than or equal to that number.&nbsp; For example, the factorial of 3 is:</p>
+<pre>
+	3! = 1 * 2 * 3 = 6</pre>
+<p>
+	We want to write a function called calculateFactorial(int n) which calculates the factorial of the number n.&nbsp; With that function we then want to list the factorials of the numbers from 1 to 20.&nbsp; Probably using a for-loop is a good idea.</p>
+<p>
+	The factorials have the property that they become very large very quickly.&nbsp; And that leads to a problem, because computers do have some problems, when it comes to large numbers!&nbsp; What does JavaScript say when the numbers get to large?</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/rabbits" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/rabbits.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Rabbits</h2>
+<p>
+	Anyone who has ever had rabbits knows that they have an interesting characteristic: they reproduce rapidly (that&#39;s why they are called rabbits).&nbsp; To see how rapidly, let us write a program that calculates how our rabbit population develops over the months.&nbsp; We follow the model of Fibonacci [12]:</p>
+<ul>
+	<li>
+		&quot;Each pair of rabbits throws another pair of rabbits every month.</li>
+	<li>
+		A newborn couple only has offspring in the second month of its life (the gestation period of rabbits is about one month).</li>
+	<li>
+		All rabbits are in an enclosed space so that no animal can leave the population and none can come in from the outside.&quot;</li>
+</ul>
+<p>
+	If we write the simulation correctly, then the Fibonacci sequence, i.e. the numbers 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, ... should come out.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/wordTwist" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/wordTwist.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	WordTwist</h2>
+<p>
+	The WordTwist game is about recognizing a word in which some letters have been swapped.&nbsp; So, for example, we should realize that the word &quot;nhickce&quot; actually originated from the word &quot;chicken&quot;.</p>
+<p>
+	We begin with the starting word, e.g. &quot;chicken&quot;, and swap some letters.&nbsp; We show this word to the user, and he should then guess which was the original word.&nbsp; If we use the top-down approach again (as we always should).&nbsp; Then it makes sense to write a function scrambleWord(String word) that takes the starting word as parameter and returns the scrambled word as return value.&nbsp; If we continue the top-down approach, it also makes sense to write a function called randomSwap(String word) that simply swaps two random letters in the word.&nbsp; If we call this function several times, the result is a well-shuffled word. What we still need is a function that picks a random word to start with:</p>
+<pre style="margin-left: 40px;">
+function pickGuessWord() {
+&nbsp;&nbsp;&nbsp; let rgen = new RandomGenerator();
+&nbsp;&nbsp;&nbsp; switch (rgen.nextInt(0, 3)) {
+&nbsp;&nbsp;&nbsp; case 0:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return &quot;dog&quot;;
+&nbsp;&nbsp;&nbsp; case 1:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return &quot;cat&quot;;
+&nbsp;&nbsp;&nbsp; default:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return &quot;chicken&quot;;
+&nbsp;&nbsp;&nbsp; }
+}</pre>
+<p>
+	.</p>
+<hr />
+<h1>
+	Challenges</h1>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/hangman" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/hangman.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	Hangman</h2>
+<p>
+	Hangman is a simple letter game [12].&nbsp; Although it is a graphical game originally, we will implement a text-based version here.&nbsp; It starts with the computer picking a random word.&nbsp; The player may then guess one letter at a time.&nbsp; The program then shows whether this letter occurs in the word and if it does, at which position it occurs.&nbsp; This is then repeated until the word has been guessed.&nbsp; At the end the user should see how many attempts were necessary to guess the word.&nbsp; However, only failed attempts are counted.</p>
+<p>
+	We need two instance variables,</p>
+<pre style="margin-left: 40px;">
+let guessWord;
+let hintWord;</pre>
+<p>
+	where guessWord contains the word to be guessed (e.g. &quot;mother&quot;) and hintWord contains the letters that were guessed correctly so far, in the beginning it contains only dashes (e.g. &quot;------&quot;).&nbsp; We need to initialize both guessWord and hintWord:</p>
+<pre style="margin-left: 40px;">
+guessWord = pickGuessWord();
+hintWord = createHintWord();</pre>
+<p>
+	where the function pickGuessWord() already exists (see WordTwist above) and we still have to write the function createHintWord().</p>
+<p>
+	After that the game loop starts: In the first step we show the player the hintWord so that she has an idea how many letters the word contains.&nbsp; Then we ask the player to enter a letter.&nbsp; Here we can use the function readOneChar() from the project ReadOneChar.&nbsp; By means of <em>includes()</em>,</p>
+<pre style="margin-left: 40px;">
+let c = await readChar();
+if (guessWord.<span style="color:#0000ff;">includes</span>(&quot;&quot; + c)) {
+&nbsp;&nbsp; &nbsp;buildNewHintWord(c);
+}</pre>
+<p>
+	we can determine if the new letter appears in the guessWord.&nbsp; If yes, we must construct a new hintWord using the buildNewHintWord(c) function.&nbsp; This function should insert the correct letter in the correct place in hintWord, and the new hintWord should then be displayed to the player.</p>
+<p>
+	The abort criterion is relatively simple, if there are no more dashes &quot;-&quot; in the hintWord, then the player has guessed the word.&nbsp; Alternatively we could also compare guessWord and hintWord, if they are equal the game is over.</p>
+<p>
+	.</p>
+<div style="display:block; float: right; margin: 10px;">
+	<a href="./src/tryIt.html?name=Pr5_MindReader/mindReader" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/mindReader.png" style="width: 220px; height: 124px; display: block;" />Try it</a></div>
+<h2>
+	MindReader</h2>
+<p>
+	This game is about mind reading.&nbsp; It is inspired by a coin toss where we have heads and tails.&nbsp; But instead of tossing a coin, the player simply picks either heads or tails.&nbsp; The computer now tries to predict what the player guessed.&nbsp; If the prediction of the computer was correct, the computer receives one point, otherwise the player gets one.&nbsp; Whoever gets 25 points first, wins.&nbsp; The idea of the game is based on a handout by Professor Raja Sooriamurthi, who in turn was inspired by Professor Gregory Rawlins [13].</p>
+<p>
+	If we use the top-down approach, we get the following rough structure for the game:</p>
+<ul>
+	<li>
+		the computer makes a prediction, either head (&#39;h&#39;) or tail (&#39;t&#39;) (computerMakePrediction()),</li>
+	<li>
+		the player makes his choice, either head or tail (humanMakePick()),</li>
+	<li>
+		the prediction of the computer is displayed (revealPrediction()),</li>
+	<li>
+		the computers prediction is compared with the selection of the player and depending on whether the computer has guessed correctly or not, either the computer gets a point or the player.</li>
+</ul>
+<p>
+	The whole thing is then repeated until either one has reached 25 points.</p>
+<p>
+	For the game we need four instance variables:</p>
+<pre style="margin-left: 40px;">
+let computerGuess;
+let humanGuess;
+let computerScore = 0;
+let humanScore = 0;
+let predictor;</pre>
+<p>
+	The character entered by the player, the character predicted by the computer, as well as the scores, i.e. the player&#39;s score and the computer&#39;s score.</p>
+<p>
+	We could write our own predictor (see extensions), or we can use the one from Professor Sooriamurthi:</p>
+<pre style="margin-left: 40px;">
+predictor = new MindReaderPredictor();</pre>
+<p>
+	For this to work we must include the MindReaderPredictor.js file at the beginning of our code with the line:</p>
+<pre style="margin-left: 40px;">
+include(&quot;Pr5_MindReader/mindReaderPredictor.js&quot;);</pre>
+<p>
+	The class MindReaderPredictor has two functions, makePrediction() and addNewGuess(char c).&nbsp; The first function tries to make a prediction, so it returns either &#39;h&#39; or &#39;t&#39;.&nbsp; The second adds a new player guess to the Predictor database, allowing the Predictor to make better predictions.&nbsp; So the Predictor tries to learn from the player.</p>
+<p>
+	Extensions: One can come up with many extensions for this game. e.g.:</p>
+<ul>
+	<li>
+		you could play several games in a row, but MindReaderPredictor should not be reinitialized each time, or</li>
+	<li>
+		you could write your own MindReaderPredictor class, a very simple version would just randomly chooses between &#39;h&#39; and &#39;t&#39;.</li>
+</ul>
+<p>
+	.</p>
+<hr />
+<h1>
+	Questions</h1>
+<ol>
+	<li>
+		Give an example of a class and an example of an object.<br />
+		&nbsp;</li>
+	<li>
+		&quot;arnold&quot; is an &quot;actor&quot;. Is &quot;arnold&quot; an object or a class?<br />
+		&nbsp;</li>
+	<li>
+		What is usually the job of a constructor?<br />
+		&nbsp;</li>
+	<li>
+		It is good style to give each class a toString() method.&nbsp; What should the toString() method do?<br />
+		&nbsp;</li>
+	<li>
+		How do you convert a string containing a number, e.g. &quot;42&quot;, into an integer number?<br />
+		&nbsp;</li>
+	<li>
+		Strings are immutable, what does that mean?<br />
+		&nbsp;</li>
+	<li>
+		If you want to compare strings and numbers you have to be a little careful.&nbsp; What is the difference between the &quot;==&quot; and the &quot;===&quot; operators?<br />
+		&nbsp;</li>
+	<li>
+		The class String has many methods.&nbsp; We used the following:<br />
+		substring()<br />
+		length()<br />
+		charAt()<br />
+		toLowerCase()<br />
+		indexOf()<br />
+		Briefly describe what each of these methods does.<br />
+		&nbsp;</li>
+	<li>
+		Write example code that reverses a string, e.g. converts the word &quot;STRESSED&quot; into the word &quot;DESSERT&quot;. (The pure JavaScript code is sufficient, a class or method declaration is not needed).<br />
+		&nbsp;</li>
+	<li>
+		What is the StringTokenizer class used for?<br />
+		&nbsp;</li>
+	<li>
+		The class StringTokenizer takes a string as parameter and has two methods called hasMoreTokens() and nextToken().&nbsp; Write code that asks the user for a sentence, and then outputs the individual words of the sentence, line by line.</li>
+</ol>
+<p>
+	.</p>
+<hr />
+<h1>
+	References</h1>
+<p>
+	The references from Chapter 2 are still important here. The Wikipedia also contains a lot of information.</p>
+<p>
+	[1] Caesar cipher, <a href="https://en.wikipedia.org/w/index.php?title=Caesar_cipher&amp;oldid=702242426">https://en.wikipedia.org/w/index.php?title=Caesar_cipher&amp;oldid=702242426</a> (last visited Feb. 17, 2016).</p>
+<p>
+	[2] Abjad, <a href="https://en.wikipedia.org/w/index.php?title=Abjad&amp;oldid=704692935">https://en.wikipedia.org/w/index.php?title=Abjad&amp;oldid=704692935</a> (last visited Feb. 17, 2016).</p>
+<p>
+	[3] Pidgin-Sprachen, <a href="https://de.wikipedia.org/w/index.php?title=Pidgin-Sprachen&amp;oldid=147087583">https://de.wikipedia.org/w/index.php?title=Pidgin-Sprachen&amp;oldid=147087583</a> (last visited Feb. 17, 2016).</p>
+<p>
+	[4] String (Java Platform SE 7 ) - Oracle Documentation, <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html">https://docs.oracle.com/javase/7/docs/api/java/lang/String.html</a></p>
+<p>
+	[5] Pig Latin, <a href="https://de.wikipedia.org/w/index.php?title=Pig_Latin&amp;oldid=149209295">https://de.wikipedia.org/w/index.php?title=Pig_Latin&amp;oldid=149209295</a> (Abgerufen: 17. Februar 2016, 20:54 UTC).</p>
+<p>
+	[6] Sprachtypologie, <a href="https://de.wikipedia.org/w/index.php?title=Sprachtypologie&amp;oldid=149705787">https://de.wikipedia.org/w/index.php?title=Sprachtypologie&amp;oldid=149705787</a> (Abgerufen: 17. Februar 2016, 21:10 UTC).</p>
+<p>
+	[7] ELIZA, <a href="https://en.wikipedia.org/w/index.php?title=ELIZA&amp;oldid=704986757">https://en.wikipedia.org/w/index.php?title=ELIZA&amp;oldid=704986757</a> (last visited Feb. 17, 2016).</p>
+<p>
+	[8] Telemarketing-Software Samantha, <a href="http://de.engadget.com/2013/12/11/audio-telemarketing-software-samatha-streitet-kategorisch-ab-e/">http://de.engadget.com/2013/12/11/audio-telemarketing-software-samatha-streitet-kategorisch-ab-e/</a></p>
+<p>
+	[9] Blackjack, <a href="https://en.wikipedia.org/wiki/Blackjack">https://en.wikipedia.org/wiki/Blackjack</a></p>
+<p>
+	[10] Craps, <a href="https://de.wikipedia.org/wiki/Craps">https://de.wikipedia.org/wiki/Craps</a></p>
+<p>
+	[11] Fibonacci-Folge, <a href="https://de.wikipedia.org/wiki/Fibonacci-Folge">https://de.wikipedia.org/wiki/Fibonacci-Folge</a></p>
+<p>
+	[12] Galgenmännchen, <a href="https://de.wikipedia.org/wiki/Galgenmännchen">https://de.wikipedia.org/wiki/Galgenmännchen</a></p>
+<p>
+	[13] Mind Reader: a program that predicts choices, <a href="http://nifty.stanford.edu/2007/raja-mindreader/">http://nifty.stanford.edu/2007/raja-mindreader/</a></p>
+<p>
+.</p>
+<p class="footer">
+Copyright &copy; 2016-2023 <a href="http://www.lano.de">Ralph P. Lano</a>. All rights reserved.
+</p>
+</div>
+</div>
+</center>
+</body>
+
+</html>

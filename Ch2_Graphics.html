@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>JavaScript: Ch2 Graphics</title>
+	<meta name="title" content="Variations on a Theme: JavaScript: Ch2 Graphics">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta charset="UTF-8">
+	<meta name="description" content="An object-oriented Introduction">
+	<meta name="keywords" content="JavaScript,object orientation,introduction">
+	<meta name="author" content="Ralph P. Lano">
+	<meta name="robots" content="index,follow">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="book.css">
+</head>
+
+<body>
+	<center>
+		<div id="wrap">
+			<ul class="sidenav">
+				<p><a href="../index.html">Variations on a Theme</a><a href="index.html">JavaScript</a></p>
+				<li><a href="Ch1_Karel.html">Karel</a></li>
+				<li><a href="Ch2_Graphics.html">Graphics</a></li>
+				<li><a href="Ch3_Console.html">Console</a></li>
+				<li><a href="Ch4_Agrar.html">Agrar</a></li>
+				<li><a href="Ch5_MindReader.html">MindReader</a></li>
+				<li><a href="Ch6_Swing.html">Swing</a></li>
+				<li><a href="Ch7_Asteroids.html">Asteroids</a></li>
+				<li><a href="Ch8_Stocks.html">Stocks</a></li>
+				<li><a href="index.html"> </a></li>
+				<li><a href="AppA_Primer.html">Primer</a></li>
+				<li><a href="AppB_Libraries.html">Libraries</a></li>
+				<li><a href="AppC_Ideas.html">Ideas</a></li>
+			</ul>
+			<div class="content">
+				<p>
+					<img alt="" src="img/6c277541-8244-48f6-816a-f797ed65f8e5.png" style="display: block; margin-left: auto;  margin-right: auto; width: 230px; height: 229px;" /></p>
+				<h1>
+					Graphics</h1>
+				<p>
+					Writing graphics programs is almost as easy as writing Karel programs.&nbsp; In this chapter we will learn how to write our first graphics programs.&nbsp; We are also taking our first steps towards object-oriented programming.</p>
+				<p>
+					.</p>
+				<h2>
+					<img alt="" src="img/felt.jpg" style="margin-left: 10px; margin-right: 10px; width: 323px; height: 231px; float: right;" />Graphics Model</h2>
+				<p>
+					The graphic model we will use is very simple and may remind us of our time in kindergarten, when we still created the greatest works of art with pieces of felt.&nbsp; There are different pre-cut shapes, but you can also cut out your own shapes and arrange them on a felt board to create major works of art.</p>
+				<p>
+					In our &#39;felt assortment&#39; there are rectangles (GRect), circles (GOval), lines (GLine), polygons (GPolygon), arcs (GArc), images (GImage) and labels (GLabel).&nbsp; These can be of any color and size, and we can place them anywhere on our felt board.</p>
+				<p>
+					.</p>
+				<h2>
+					Graphics Programs</h2>
+				<p>
+					Our basic structure, so to speak our felt board, is the graphics program.&nbsp; It is very similar to our Karel programs:</p>
+<pre style="margin-left: 40px;">
+function setup() {
+&nbsp; createCanvas(300, 150);
+&nbsp; frameRate(5);
+	<span style="color:#0000ff;">// your code...</span>
+}
+
+function draw() {
+&nbsp; update();
+}</pre>
+				<p>
+					Instead of the <em>run()</em>, we now have the <em>setup()</em> function.&nbsp; So our code goes into the <em>setup()</em> function&nbsp; We will ignore the <em>draw()</em> function for quite a while.</p>
+				<p>
+					.</p>
+				<h2>
+					<img alt="" src="img/43801388-ac9a-4677-8b42-6011d9d166c7.png" style="height: 195px; width: 287px; float: right; margin-left: 10px; margin-right: 10px;" />GRect</h2>
+				<p>
+					We get started by drawing rectangles, which we call GRect.&nbsp; A rectangle has a width and height, as well as an x and y position.&nbsp; The following two lines show how to create and draw a rectangle:</p>
+<pre style="margin-left: 40px;">
+let fritz = new GRect(50, 50);
+add(fritz, 150, 100);</pre>
+				<p>
+					In the first line we create a new rectangle that is 50 pixels wide and 50 pixels high.&nbsp; The rectangle also gets a name, it is called &#39;fritz&#39;.&nbsp; The name can be almost arbitrary, and &#39;fritz&#39; is as good a name as any.&nbsp; It&#39;s like we picked one of the felt rectangles and we are still holding it in our hands.&nbsp; Next, we have to add it to our felt board, and we do that with the second line: we add &#39;fritz&#39; at the position (150, 100) to our felt board.</p>
+				<p>
+					The felt board is actually called canvas.&nbsp; It is usually a little more than 300 pixels wide and just under 150 pixels high.&nbsp; But we can also make it bigger or smaller.&nbsp; Very important, x goes from left to right as usual, but y goes from top to bottom, this may be a little unusual.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Ch2_Graphics/blueRect" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/blueRect.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					Colors</h2>
+				<p>
+					Playing with felt pieces would be quite boring if all felt pieces had the same color.&nbsp; It is the same with graphics programs.&nbsp; So if we want to change the color of our rectangle, we set its color with the following line:</p>
+<pre style="margin-left: 40px;">
+fritz.setColor(Color.BLUE);</pre>
+				<p>
+					In this case, the border of &#39;fritz&#39; is drawn in blue.&nbsp; In fact, we say, &#39;hey fritz, why don&#39;t you change your color to blue&#39;.</p>
+				<p>
+					Filled rectangles are of course much nicer. So we can tell &#39;fritz&#39; that it should be filled:</p>
+<pre style="margin-left: 40px;">
+fritz.setFilled(true);</pre>
+				<p>
+					Sometimes you want the color of the border to be different from the color of the inside.&nbsp; For this &#39;fritz&#39; has the setFillColor() method:</p>
+<pre style="margin-left: 40px;">
+fritz.setFillColor(Color.YELLOW);</pre>
+				<p>
+					Now &#39;fritz&#39; is a yellow rectangle with a blue border.</p>
+				<p>
+					.</p>
+				<h2>
+					<img alt="" src="img/church2.png" style="height: 100px; width: 200px; float: right; margin-left: 10px; margin-right: 10px;" />Multiple Rectangles</h2>
+				<p>
+					Playing with felt pieces would also be boring if there were only one felt piece.&nbsp; Similarly, we can add as many rectangles as we want.&nbsp; We just have to make sure that every new rectangle has a different name:</p>
+<pre style="margin-left: 40px;">
+let lisa = new GRect(30, 100);
+lisa.setColor(Color.MAGENTA);
+lisa.setFilled(true);
+lisa.setFillColor(Color.CYAN);
+add(lisa, 120, 50);</pre>
+				<p>
+					If we add these lines to our program above, we see two rectangles, &#39;fritz&#39; and &#39;lisa&#39;.</p>
+				<p>
+					.</p>
+				<h2>
+					Messages</h2>
+				<p>
+					Messages, functions, methods, commands: different names for the same concept.&nbsp; With Karel they were called move() and turnLeft(). Now they are called setColor() and setFilled().&nbsp; We can write our own, like moveToWall(), or use existing ones.&nbsp; With Karel it was a little easier, because there was only one Karel.&nbsp; Now it gets a little bit more complicated, because there can be more than just one rectangle.&nbsp; That&#39;s why we always have to say for whom the message is intended, so</p>
+<pre style="margin-left: 40px;">
+fritz.setColor(Color.BLUE);</pre>
+				<p>
+					changes the color of &#39;fritz&#39;, but</p>
+<pre style="margin-left: 40px;">
+lisa.setColor(Color.BLUE);</pre>
+				<p>
+					changes the color of &#39;lisa&#39;.&nbsp; In the first case we send the message to &#39;fritz&#39;, in the second to &#39;lisa&#39;.&nbsp; What message are we sending?&nbsp; The &#39;setColor()&#39; message.&nbsp; Alternatively, we say that we call the &#39;setColor()&#39; method of &#39;fritz&#39;, or we let &#39;fritz&#39; execute the &#39;setColor()&#39; method.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Ch2_Graphics/flag" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/flag.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					Exercise: Flag</h2>
+				<p>
+					Karel always wanted to travel.&nbsp; To get him in the mood for his big trip, we want to write a graphics program that draws the flag of the country he would like to travel to.&nbsp; (However, Karel only likes countries with simple flags!)</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<h2>
+					<img alt="" src="img/6cf8e36c-2a9c-4214-9aa8-b4f945a7b68d.png" style="height: 118px; width: 216px; float: right; margin-left: 10px; margin-right: 10px;" />GOval</h2>
+				<p>
+					If we want to draw circles or ellipses then we use GOval.&nbsp; GOval has a width and height like a rectangle, and the ellipse drawn is bordered by this rectangle, so to speak.&nbsp; Otherwise a GOval has the same methods as a GRect.&nbsp; The syntax is also identical:</p>
+<pre style="margin-left: 40px;">
+let redDisk = new GOval(20, 20);
+redDisk.setColor(Color.RED);
+redDisk.setFilled(true);
+add(redDisk, 125, 125);</pre>
+				<p>
+					.</p>
+				<h2>
+					GLine</h2>
+				<p>
+					To draw lines there is the class GLine.&nbsp; It needs the x and y coordinates of the two points that should be connected by the line:</p>
+<pre style="margin-left: 40px;">
+let leftRoof = new GLine(125, 95, 165, 65);
+add(leftRoof);</pre>
+				<p>
+					Lines can also be colored.&nbsp; If you want to, you can also change the thickness of lines, or you could draw several lines next to each other.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Ch2_Graphics/house" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/house.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					Exercise: House with Tree</h2>
+				<p>
+					By now we know enough to create our first piece of digital art: as in kindergarten we want to draw a tree, a house with a roof and the sun. For this we use nicely colored GOvals, GRects and GLines.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Ch2_Graphics/ohmLogo" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/ohmLogo.png" style="width: 200px; height: 123px; display: block;" />Try it</a></div>
+				<h2>
+					GImage</h2>
+				<p>
+					Quite useful is the GImage class.&nbsp; It allows us to add images to our canvas:</p>
+<pre style="margin-left: 40px;">
+let om = new GImage(60, 10,  
+         &quot;Ch2_Graphics/TH-Nuernberg-Logo.jpg&quot;);
+om.scale(1.7);
+add(om);</pre>
+				<p>
+					The GImage class understands the gif, jpg and png formats. Also, images can be scaled with the <em>scale()</em> method.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<h2>
+					<img alt="" src="img/e88d833e-d968-478e-b805-dd8c89ef7462.png" style="margin-left: 10px; margin-right: 10px; width: 285px; height: 165px; float: right;" />GLabel</h2>
+				<p>
+					From time to time we need some text with our graphics, then the GLabel comes in handy.&nbsp; It is as easy to use as the other graphic objects:</p>
+<pre style="margin-left: 40px;">
+let hans = new GLabel(&quot;Hello World!&quot;);
+add(hans, 40, 85);</pre>
+				<p>
+					If we don&#39;t like the font of our label, we can change it.&nbsp; You can choose the font type, the font size, and if you like you can also use an italic or bold font:</p>
+<pre style="margin-left: 40px;">
+hans.setFont(&#39;Arial&#39;);
+hans.setFontSize(36);
+hans.setColor(Color.RED);</pre>
+				<p>
+					You have to be a little careful with the positioning: GLabels are positioned with respect to their baseline.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Ch2_Graphics/helloWorld" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/helloWorld.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					Exercise: HelloWorld</h2>
+				<p>
+					As a little exercise we write our first &#39;Hello World&#39; program.&nbsp; Simply insert the lines above into the <em>setup()</em> function of a graphics program and execute it.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<p>
+					<img alt="" src="img/267c57ab-04ec-4984-8721-2a6d1f6321af.png" style="margin-left: 10px; margin-right: 10px; width: 246px; height: 148px; float: right;" /></p>
+				<h2>
+					GArc</h2>
+				<p>
+					GArc draws an arc, i.e. a part of a circle or an ellipse.&nbsp; As with the ellipse we have to specify its width and height, as well as where the arc should be drawn. In addition, we need to specify which part of the arc should be drawn. This we do by specifying where the arc should begin (in degrees) and how long it should go (also in degrees):</p>
+<pre style="margin-left: 40px;">
+let archie = new GArc(150, 150, 0, 45);
+add(archie, 75, 25);</pre>
+				<p>
+					The above lines draw an arc starting at 0 degrees and spanning 45 degrees counter-clockwise.</p>
+				<p>
+					In the projects we will see how useful and versatile arcs are.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Ch2_Graphics/pacMan" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/pacMan.png" style="width: 200px; height: 133px; display: block;" />Try it</a></div>
+				<h2>
+					Exercise: PacMan</h2>
+				<p>
+					A first practical application for an arc is PacMan.&nbsp; It is simply a filled GArc starting at 45 degrees and spanning an arc of 270 degrees.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<p>
+					<img alt="" src="img/4d193855-1faa-4db8-b0a2-bf93cbe03b71.png" style="margin-left: 10px; margin-right: 10px; width: 193px; height: 127px; float: right;" /></p>
+				<h2>
+					GPolygon</h2>
+				<p>
+					GPolygon is the last graphics class we need to learn.&nbsp; A polygon is made up of points, also called vertices, connected by lines. With addVertex() we add one point after the other.&nbsp; The polygon itself knows how to connect the points.&nbsp; Polygons are always closed, so you can fill them if you want to.</p>
+<pre style="margin-left: 40px;">
+let diamond = new GPolygon();
+diamond.addVertex(0, 0);
+diamond.addVertex(50, 50);
+diamond.addVertex(100, 0);
+diamond.addVertex(50, -50);
+add(diamond, 50, 50);</pre>
+				<p>
+					.</p>
+				<h2>
+					Window Size</h2>
+				<p>
+					Sometimes we want a different sized window.&nbsp; This can be done quite simply by modifying the line</p>
+<pre style="margin-left: 40px;">
+createCanvas(300, 150);</pre>
+				<p>
+					at the beginning of our <em>setup()</em> method.</p>
+				<p>
+					.</p>
+				<h2>
+					Object Orientation</h2>
+				<p>
+					Although we have not explicitly mentioned this, in the examples above we have been using objects and classes.&nbsp; Because fritz, lisa, hans and archie are objects, and GRect, GOval, GLabel are classes.&nbsp; At the beginning it is not always easy to distinguish between the two, but it actually is not that difficult:</p>
+				<ul>
+					<li>
+						For example, we say &#39;fritz is a GRect&#39; or &#39;archie is a GArc&#39;.&nbsp; But we never say &#39;GRect is a fritz&#39;.</li>
+					<li>
+						We can have several objects, e.g. there is a fritz and a lisa object (both are GRects), but there is only one GRect class.</li>
+				</ul>
+				<p>
+					To make this clear in the code, the names of objects always start with lowercase letters, while class names always start with uppercase letters.</p>
+				<p>
+					<strong>SEP: Objects start with lowercase letters, classes with uppercase letters.</strong></p>
+				<p>
+					.</p>
+				<hr />
+				<h1>
+					Review</h1>
+				<p>
+					What have we learned in this chapter?&nbsp; We have</p>
+				<ul>
+					<li>
+						created our first graphics program,</li>
+					<li>
+						got to know the classes GRect, GOval, GLine, GImage, GLabel, GArc and GPolygon,</li>
+					<li>
+						seen how we can change the color of objects,</li>
+					<li>
+						seen that messages, functions, methods and commands are all the same and</li>
+					<li>
+						we learned to use more than one object.</li>
+				</ul>
+				<p>
+					But the most important thing in this chapter was that we took our first steps in object orientation.</p>
+				<p>
+					.</p>
+				<hr />
+				<h1>
+					Projects</h1>
+				<p>
+					With our new skills, we will now realize a few interesting graphics projects.&nbsp; You can find many more examples in Eric Roberts&#39;s book [3].</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Pr2_Graphics/skyscraper" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/skyscraper.png" style="width: 200px; height: 133px; display: block;" />Try it</a></div>
+				<h2>
+					Skyscraper</h2>
+				<p>
+					Karel loves Chicago, and Chicago is full of skyscrapers.&nbsp; So we want to draw a high-rise at night for Karel.&nbsp; Basically, it is just a few GRects.&nbsp; With the following line</p>
+<pre style="margin-left: 40px;">
+setBackground(Color.DARK_GRAY);</pre>
+				<p>
+					we can set the background color of the canvas to dark grey.&nbsp; If you want you can introduce a function called drawWindows(), which is responsible for drawing the windows.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Pr2_Graphics/wall" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/wall.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					Wall</h2>
+				<p>
+					Next we want to build a wall consisting of 15 bricks (GRect).&nbsp; At the moment this is still a lot of code to write. Later we will see how to do this a lot easier.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Pr2_Graphics/archery" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/archery.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					Archery</h2>
+				<p>
+					Karel likes to practice archery from time to time (remember RobinHoodKarel).&nbsp; So he needs a target for that.&nbsp; This consists of an inner red ring with 20 pixels diameter, a middle white ring with 40 pixels diameter and an outer red ring with 60 pixels diameter.&nbsp; If you like, you can use functions for your code to become more readable (our first SEP), namely drawInnerRing(), drawMiddleRing() and drawOuterRing().</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Pr2_Graphics/olympicGames" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/olympicGames.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					OlympicGames</h2>
+				<p>
+					Archery has been an Olympic discipline since 1972, and that is why Karel is planning to qualify for the next Olympic Games.&nbsp; He still has to practice a lot, but in the meantime we&#39;ll draw the Olympic rings for him.</p>
+				<p>
+					There are several approaches to solve the problem.</p>
+				<ol>
+					<li>
+						The first is to paint only the borders of the GOval, so we set setFilled(false). Then the rings are very thin and don&#39;t look quite right.</li>
+					<li>
+						Paint two GOvals, one slightly larger with the desired color and the other slightly smaller with white color.&nbsp; However, at the intersections this looks a little funny.</li>
+					<li>
+						Finally, we can paint several rings (e.g. five), each with a thickness of one, on top of each other.&nbsp; This looks pretty decent.</li>
+				</ol>
+				<p>
+					However, this is still not perfect, when comparing it to the original on Wikipedia [7]. Graphics is hard.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Pr2_Graphics/pieChart" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/pieChart.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					PieChart</h2>
+				<p>
+					A nice application for GArcs are pie charts.&nbsp; In this small project we want to create a simple pie chart, consisting of three GArcs.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Pr2_Graphics/smiley" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/smiley.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					Smiley</h2>
+				<p>
+					In later projects we will need a smiley face.&nbsp; A smiley consists of a GOval for the face, two small GOvals for the left and the right eye and a GArc for the mouth.&nbsp; If you draw more complicated graphics, it always makes sense to draw the design first on a piece of paper.&nbsp; This makes it easy to read of the coordinates.</p>
+				<p>
+					Also with the smiley program we can use functions to make our code more readable.&nbsp; For example, the functions could be drawFace(), drawLeftEye(), drawRightEye() and drawMouth().</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Pr2_Graphics/hexagon" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/hexagon.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					Hexagon</h2>
+				<p>
+					To familiarize ourselves a bit with the GPolygon class, we want to draw a hexagon.&nbsp; Hexagons are cool because they always remind Karel of bees, and they make Karel&#39;s favorite food: honey.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Pr2_Graphics/spaceShip" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/spaceShip.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					SpaceShip</h2>
+				<p>
+					In chapter seven we want to program the classic game Asteroids.&nbsp; For that we need a spaceship.&nbsp; The GPolygon is suitable for both the spaceship and the asteroids.&nbsp; So in this exercise we want to construct a spaceship from a polygon.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Pr2_Graphics/trafficLight" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/trafficLight.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					TrafficLight</h2>
+				<p>
+					A traffic light consists of a black rectangle and three colored circles.&nbsp; This can be easily constructed from one GRect and three GOvals.&nbsp; We&#39;ll animate the traffic light later.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Pr2_Graphics/heart" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/heart.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					Heart</h2>
+				<p>
+					Karel would like to draw a heart for his great love.&nbsp; For this we need two red GOvals and one red GPolygon.&nbsp; Of course they should be filled, otherwise you can see how it was constructed.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Pr2_Graphics/carSymbol" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/carSymbol.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					CarSymbol</h2>
+				<p>
+					Karel loves cars, and of course Mercedes is his favorite car.&nbsp; In this project we want to create a logo for our favorite car (not necessarily Mercedes) using graphics objects.&nbsp; The Mercedes example consists of GOvals and GArcs.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Pr2_Graphics/yinYang" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/yinYang.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					YinYang</h2>
+				<p>
+					Karel is fascinated by philosophy.&nbsp; A few days ago he read about Yin and Yang in Wikipedia [6]:</p>
+				<p style="margin-left: 40px;">
+					&quot;The highest Yin is cold, the highest Yang is hot.<br />
+					Cold springs from the sky, heat flows from the earth.<br />
+					If they penetrate each other and achieve harmony in the process,<br />
+					all things come out of it.&quot;</p>
+				<p>
+					We can draw the YinYang symbol using GOvals and GArcs.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Pr2_Graphics/piano" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/piano.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					Piano</h2>
+				<p>
+					Of course Karel loves music.&nbsp; And in his spare time, he&#39;s always jingles on the piano.&nbsp; Therefore we draw a keyboard for him, consisting of eight white and five black keys (GRects).&nbsp; By chapter seven our piano will also make music...</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<div style="display:block; float: right; margin: 10px;">
+					<a href="./src/tryIt.html?name=Pr2_Graphics/sevenSegmentDisplay" style="display: block; text-align: center;" target="_blank"><img alt="" src="img/sevenSegmentDisplay.png" style="width: 200px; height: 100px; display: block;" />Try it</a></div>
+				<h2>
+					SevenSegmentDisplay</h2>
+				<p>
+					The seven-segment display is mainly used in digital devices to display numbers.&nbsp; The digits are composed of seven individual &quot;lines&quot;, also called segments [8].&nbsp; We can create a seven-segment display from seven red rectangles.&nbsp; Later we will also breathe life into the seven-segment display.</p>
+				<p>
+					.</p>
+				<p>
+					.</p>
+				<hr />
+				<h1>
+					Questions</h1>
+				<ol>
+					<li>
+						Which of the graphics classes would you use to draw a star?<br />
+						&nbsp;</li>
+					<li>
+						In the following code, is &#39;fritz&#39; an object or a class?<br />
+						<span style="font-family:courier new,courier,monospace;">&nbsp;&nbsp;&nbsp; let fritz = new GRect(50,50);</span><br />
+						&nbsp;</li>
+					<li>
+						What is the difference between setColor() and setFillColor()?<br />
+						&nbsp;</li>
+					<li>
+						What are messages, what are they used for?<br />
+						&nbsp;</li>
+					<li>
+						Name five graphics classes you have learned this semester.<br />
+						&nbsp;</li>
+					<li>
+						What is in the graphics.js file?<br />
+						&nbsp;</li>
+					<li>
+						Name three classes that can be found in the &#39;acm.graphics&#39; package.<br />
+						&nbsp;</li>
+					<li>
+						Write code that fills the following rectangle with green color:<br />
+						<span style="font-family:courier new,courier,monospace;">&nbsp;&nbsp;&nbsp; let fritz = new GRect(50,50);</span><br />
+						&nbsp;</li>
+					<li>
+						What is a polygon?&nbsp; Give an example for its application.<br />
+						&nbsp;</li>
+					<li>
+						Draw the Audi logo using GOvals.</li>
+				</ol>
+				<p>
+					.</p>
+				<hr />
+				<h1>
+					References</h1>
+				<p>
+					Details about the ACM graphics library can be found on the pages of the ACM Java Task Force [1].&nbsp; There you will also find a nice tutorial [2].&nbsp; The book by Eric Roberts (who is also behind the Java Task Force) is a classic and a true treasure chest, full of examples and deep insights.&nbsp; Many of the examples in this chapter are inspired by his book and by the &#39;Programming Methodologies&#39; lecture [4].</p>
+				<p>
+					[1] ACM Java Task Force, <a href="http://cs.stanford.edu/people/eroberts/jtf/">cs.stanford.edu/people/eroberts/jtf/</a></p>
+				<p>
+					[2] ACM Java Task ForceTutorial , <a href="http://cs.stanford.edu/people/eroberts/jtf/tutorial/index.html">cs.stanford.edu/people/eroberts/jtf/tutorial/index.html</a></p>
+				<p>
+					[3] The Art and Science of Java, von Eric Roberts, Addison-Wesley, 2008</p>
+				<p>
+					[4] CS106A - Programming Methodology - Stanford University, <a href="https://see.stanford.edu/Course/CS106A">https://see.stanford.edu/Course/CS106A</a></p>
+				<p>
+					[5] Filz, <a href="http://www.desertblossomlearning.com/store/feltstories/images/1047-shapes.jpg">http://www.desertblossomlearning.com/store/feltstories/images/1047-shapes.jpg</a></p>
+				<p>
+					[6] Seite &bdquo;Yin und Yang&ldquo;. In: Wikipedia, Die freie Enzyklopädie. URL: <a href="https://de.wikipedia.org/w/index.php?title=Yin_und_Yang&amp;oldid=149503099">https://de.wikipedia.org/w/index.php?title=Yin_und_Yang&amp;oldid=149503099</a></p>
+				<p>
+					[7] Seite &bdquo;Olympic symbols&ldquo;. In: Wikipedia, Die freie Enzyklopädie. URL: <a href="https://en.wikipedia.org/wiki/Olympic_symbols">https://en.wikipedia.org/wiki/Olympic_symbols</a></p>
+				<p>
+					[8] Segmentanzeige, <a href="https://de.wikipedia.org/wiki/Segmentanzeige">https://de.wikipedia.org/wiki/Segmentanzeige</a></p>
+				<p>
+					.</p>
+				<p class="footer">
+					Copyright &copy; 2016-2023 <a href="http://www.lano.de">Ralph P. Lano</a>. All rights reserved.
+				</p>
+			</div>
+		</div>
+	</center>
+</body>
+
+</html>
