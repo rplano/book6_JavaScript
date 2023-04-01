@@ -2,6 +2,7 @@
 async function setup() {
   createConsole();
   // setFont('30px Arial');
+  
   clear();
   print('hi ');
   println('there');
