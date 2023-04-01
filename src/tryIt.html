@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+
+  <link rel="stylesheet" type="text/css" href="style2.css">
+
+  <!-- order is importent! -->
+  <script src="./libraries/p5.min.js"></script>
+  <!-- <script src="./libraries/p5.sound.min.js"></script>
+  <script src="./libraries/graphics.js"></script>
+  <script src="./libraries/console.js"></script> -->
+  <script src="./libraries/utils.js"></script>
+</head>
+
+<body>
+  <div style="width: 560px; height: 610px">
+    <div class="htmlexample" style="width: 560px; height: 580px">
+      <!--      <h4 id="h4">Code:</h4> -->
+      <div class="codePanel" id="codePanel">
+        <textarea id="code" class="code" style="width: 100%; height: 570px;">
+sample code
+    </textarea>
+      </div>
+      <div class="resultsPanel" id="resultsPanel" style="visibility: hidden;">
+        <div>
+          <iframe id="iframe" class="iframe" style="width: 100%; height: 520px"></iframe>
+          <pre id="results" class="results" style="width: 100%; height: 50px"></pre>
+        </div>
+      </div>
+    </div>
+    <div style="text-align: right;">
+      <label for="load" class="run" id="load_label">Load</label>
+      <input type="file" id="load">
+      <a onclick="saveClicked(); return false" href="#" class="run" id="save">Save</a>
+      <a onclick="runClicked(); return false" href="#" class="run" id="run">Run</a>
+    </div>
+  </div>
+
+  <script>
+    function loadClicked(ev) {
+      // console.log("loadClicked");
+      let input = ev.target;
+      let reader = new FileReader();
+      reader.onload = function () {
+        // get code
+        let code = reader.result;
+        // display code
+        let codeElement = document.getElementById("code");
+        codeElement.value = code;
+        // console.log(code);
+      };
+      reader.readAsText(input.files[0]);
+    }
+
+    function saveClicked() {
+      // console.log("saveClicked");
+      let fileName = prompt("Please enter file name:", "test.js");
+      let fw = new Utils.FileWriter(fileName);
+      let codeElement = document.getElementById("code");
+      let code = codeElement.value;
+      // console.log(code);
+      fw.append(code);
+      fw.close();
+    }
+
+    function runClicked() {
+      const resultsPanel = document.getElementById("resultsPanel");
+      const codePanel = document.getElementById("codePanel");
+      const load = document.getElementById("load_label");
+      const save = document.getElementById("save");
+      const run = document.getElementById("run");
+      if (run.innerText === "Run") {
+        resultsPanel.style.visibility = 'visible';
+        codePanel.style.visibility = 'hidden';
+        load.style.visibility = 'hidden';
+        save.style.visibility = 'hidden';
+        run.innerText = "Edit";
+        runCode();
+      } else {
+        resultsPanel.style.visibility = 'hidden';
+        codePanel.style.visibility = 'visible';
+        load.style.visibility = 'visible';
+        save.style.visibility = 'visible';
+        run.innerText = "Run";
+      }
+    }
+
+    function runCode() {
+      const iframeElement = document.getElementById("iframe");
+      iframeElement.setAttribute('src', './tryItIFrame.html?name=' + name);
+    }
+
+    function addTabToTextArea() {
+      document.getElementById('code').addEventListener('keydown', function (e) {
+        if (e.key == 'Tab') {
+          e.preventDefault();
+          var start = this.selectionStart;
+          var end = this.selectionEnd;
+
+          // set textarea value to: text before caret + tab + text after caret
+          this.value = this.value.substring(0, start) +
+            "\t" + this.value.substring(end);
+
+          // put caret at right position again
+          this.selectionStart =
+            this.selectionEnd = start + 1;
+        }
+      });
+    }
+
+    // get name of program to load
+    let params = (new URL(document.location)).searchParams;
+    let name = params.get('name');
+    document.title = 'TryIt: ' + name;
+
+    // load program
+    let code = "";
+    // let fr = new FileReader2(name);
+    let fr = new Utils.FileReader(name + '.js');
+    while (true) {
+      let line = fr.readLine();
+      if (line == null)
+        break;
+      code += line + "\n";
+    }
+    fr.close();
+    // console.log(code);
+
+    // display program
+    const codeElement = document.getElementById("code");
+    codeElement.value = code;
+
+    addTabToTextArea();
+
+    //let script = document.createElement('script');
+    //script.setAttribute('src', name);
+    //document.head.appendChild(script);
+
+    // add event listener to input file tag:
+    document.getElementById('load').addEventListener('change', function (e) {
+      loadClicked(e);
+    });
+  </script>
+</body>
+
+</html>

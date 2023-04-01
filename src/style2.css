@@ -3,6 +3,8 @@ body {
   margin: 2px;
   padding: 0;
   /* background-color: aqua; */
+  font-size: 11px;
+  font-family: Arial, sans-serif;
 }
 
 .codePanel,
@@ -14,19 +16,27 @@ body {
 }
 
 .run {
-  display: block;
+  display: inline;
   text-align: right;
-  /* color: rgb(39, 39, 39); */
-  color: red;
+  /* color: rgb(39, 39, 39); 
+  color: red;*/
+  color:#34ade3;
   text-decoration: none;
   font-weight: bold;
+  font-size: 1.3em;
+  padding: 10px;
+  cursor: pointer;
   /* background-color: green; */
+}
+
+input[type="file"] {
+  display: none;
 }
 
 .code {
   font-family: Menlo, consolas, monospace;
   border: 1px solid black;
-  font-size: 80%;
+  font-size: 100%;
   box-sizing: border-box;
 }
 
@@ -39,13 +49,22 @@ body {
   border: 1px solid black;
   padding: 0.5em;
   font-family: Menlo, consolas, monospace;
-  font-size: 0.8em;
+  font-size: 100%;
   overflow: auto;
   margin: 0px;
   resize: both;
   box-sizing: border-box;
 }
 
+canvas {
+  border: 1px solid black;
+}
+
+#console {
+  border: 1px solid black;
+  font-family: Menlo, consolas, monospace;
+  font-size: 100%;
+}
 
 /* .htmlexample { */
 /* flex-direction: row; */
