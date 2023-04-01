@@ -1,0 +1,77 @@
+/* 
+ * begin flexbox 
+ * @see https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+ * @see https://codepen.io/micjamking/pen/QdojLz
+ */
+.wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  height: 100%;
+}
+
+/* We tell all items to be 100% width, via flex-basis */
+.wrapper>* {
+  flex: 1 100%;
+}
+
+.header,
+.footer,
+.aside,
+.main {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  background-color: red;
+}
+
+/*
+.main, .aside {
+  align-content: stretch;
+  background-color: red;
+}
+*/
+/* We rely on source order for mobile-first approach
+ * in this case:
+ * 1. header
+ * 2. article
+ * 3. aside 1
+ * 4. aside 2
+ * 5. footer
+ */
+
+/* Medium screens */
+@media all and (min-width: 600px) {
+
+  /* We tell both sidebars to share a row */
+  .aside {
+    flex: 1 auto;
+  }
+}
+
+/* Large screens */
+@media all and (min-width: 800px) {
+
+  /* We invert order of first sidebar and main
+   * And tell the main element to take twice as much width as the other two sidebars 
+   */
+  .main {
+    flex: 3 0px;
+  }
+
+  .aside-1 {
+    order: 1;
+  }
+
+  .main {
+    order: 2;
+  }
+
+  .aside-2 {
+    order: 3;
+  }
+
+  .footer {
+    order: 4;
+  }
+}

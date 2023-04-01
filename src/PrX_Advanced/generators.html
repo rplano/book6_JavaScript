@@ -1,0 +1,41 @@
+<html>
+
+<script>
+    // define functions:
+    //const sleep = (milliseconds = 500) => new Promise(resolve => setTimeout(resolve, milliseconds));
+    const sleep = function (milliseconds = 500) {
+        return new Promise(
+            function (resolve) {
+                return setTimeout(resolve, milliseconds);
+            })
+    };
+
+    function* gen() {
+        console.log("generator: ");
+        yield 0;
+        for (let i = 1; i < 10; i++) {
+            console.log(i);
+            yield i;
+        }
+        console.log("10");
+        return 10;
+    }
+
+    async function name() {
+        let func = gen();
+        while (true) {
+            let res = func.next();
+            console.log("next: ", res);
+            await sleep(1000);
+            if (res.done) {
+                break;
+            }
+        }
+    };
+
+    // call name:
+    name().then(() => console.log("done."));
+
+</script>
+
+</html>

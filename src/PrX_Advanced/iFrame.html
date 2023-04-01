@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+  <div class="htmlexample">
+    <div class="codePanel">
+      <h4>Code:</h4>
+      <textarea id="code" class="code" rows="20" cols="60" wrap="off" spellcheck="false">
+sample code
+    </textarea><a onclick="runCode(); return false" href="#" class="run">Run</a>
+    </div>
+
+    <div class="resultsPanel">
+      <h4>Results:</h4>
+      <div style="position: relative">
+        <iframe id="iframe" class="output" src="http://www.google.com" style="width: 400px; height: 300px" width="400" height="300"></iframe>
+        <pre id="results" class="results"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function runCode() {
+      alert('hi');
+      // get modified program
+      // const codeElement = document.getElementById("code");
+      // let modifiedCode = codeElement.value;
+      // modifiedCode = encodeURIComponent(modifiedCode);
+      // // console.log("runCode()" + modifiedCode);
+
+      // change src element of iframe
+      const iframeElement = document.getElementById("iframe");
+      //iframeElement.setAttribute('src', 'http://www.google.com');
+    }
+    
+  </script>
+</body>
+
+</html>
