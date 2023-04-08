@@ -74,6 +74,7 @@ function createRandomFood() {
 		food.setFilled(true);
 		food.setFillColor(rgen.nextColor());
 		add(food, rgen.nextInt(3 * WIDTH) - WIDTH, rgen.nextInt(HEIGHT));
+		sendToBack(food);
 	}
 }
 

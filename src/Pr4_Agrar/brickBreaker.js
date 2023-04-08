@@ -32,9 +32,9 @@ function setup() {
   createCanvas(WIDTH, HEIGHT);
   frameRate(FPS);
 
-  createBall();
-  createPaddle();
   createBricks();
+  createPaddle();
+  createBall();
 }
 
 function draw() {

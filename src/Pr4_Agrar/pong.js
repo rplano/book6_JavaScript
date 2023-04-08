@@ -32,11 +32,6 @@ function setup() {
 
 	setBackground(Color.BLACK);
 
-	ball = new GOval(WIDTH / 2, HEIGHT / 2, BALL_SIZE, BALL_SIZE);
-	ball.setColor(Color.WHITE);
-	ball.setFilled(true);
-	add(ball);
-
 	leftPaddle = new GRect(PADDLE_SEPARATION, HEIGHT / 2,
 		PADDLE_WIDTH, PADDLE_HEIGHT);
 	leftPaddle.setColor(Color.WHITE);
@@ -48,6 +43,11 @@ function setup() {
 	rightPaddle.setColor(Color.WHITE);
 	rightPaddle.setFilled(true);
 	add(rightPaddle);
+
+	ball = new GOval(WIDTH / 2, HEIGHT / 2, BALL_SIZE, BALL_SIZE);
+	ball.setColor(Color.WHITE);
+	ball.setFilled(true);
+	add(ball);
 
 	printHelp();
 }
