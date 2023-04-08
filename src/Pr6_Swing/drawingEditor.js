@@ -51,8 +51,8 @@ function initColorSelector() {
 }
 
 function actionPerformed(e) {
-	println("Color:" + cBoxColorPicker.getSelectedItem());
-	println("Rect:" + rBtnRect.isSelected());
-	println("Oval:" + rBtnOval.isSelected());
-	println("Filled:" + cBtnFilled.isSelected());
+	print("Color:" + cBoxColorPicker.getSelectedItem());
+	print("Rect:" + rBtnRect.isSelected());
+	print("Oval:" + rBtnOval.isSelected());
+	print("Filled:" + cBtnFilled.isSelected());
 }
