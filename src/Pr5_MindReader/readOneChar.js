@@ -20,7 +20,7 @@ async function readOneChar(msg) {
 	let s;
 	while (true) {
 		s = await readLine(msg);
-		if (s.length == 1)
+		if (s.length === 1)
 			break;
 		println("You idiot, you must enter only one character:");
 	}
