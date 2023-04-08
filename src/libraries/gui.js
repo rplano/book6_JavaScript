@@ -82,6 +82,7 @@ function createGUI(_WIDTH, _HEIGHT) {
     // find body tag 
     let body = document.getElementsByTagName('body')[0];
     body.appendChild(panel.element);
+    panel.windw.focus();
 }
 
 function updateJSCanvas(canvas) {
@@ -124,7 +125,14 @@ function removeWidget(obj, where) {
 }
 
 function addActionListener(obj) {
-    if (obj instanceof JSAbstractButton) {
+    if (obj instanceof JSComboBox) {
+        obj.element.addEventListener('change',
+        function (ev) {
+            let ae = new ActionEvent(ev.target.id, obj);
+            window.actionPerformed(ae);
+        }
+    );
+    } else if (obj instanceof JSAbstractButton) {
         obj.element.addEventListener('click',
             function (ev) {
                 let ae = new ActionEvent(ev.target.id, obj);
@@ -293,6 +301,59 @@ class JSTextField extends JSObject {
     }
 }
 
+// println(escapeHtml(display.getHtml()));
+// const escapeHtml = (unsafe) => {
+//     return unsafe.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+// }
+class JSHtmlTextArea extends JSObject {
+    constructor(text, rows, cols) {
+        super();
+        // var textEditor = document.createElement('div');
+        // textEditor.setAttribute('id', 'textEditor');
+        // textEditor.setAttribute('contentEditable', 'true');
+        this.element = document.createElement('div');
+        this.element.setAttribute('id', 'textEditor');
+        this.element.setAttribute('contentEditable', 'true');
+        if (text !== undefined) {
+            this.element.value = text;
+        }
+        if (rows !== undefined) {
+            this.element.rows = rows;
+        }
+        if (cols !== undefined) {
+            this.element.cols = cols;
+        }
+        this.element.style.padding = DEFAULT_PADDING;
+        // this.element.style.margin = DEFAULT_MARGIN;
+        this.element.style.margin = ZERO_MARGIN;
+        this.element.style.textAlign = 'left';
+        this.element.style.font = '14px Arial';
+        this.element.style.border = '1px solid lightgray';
+        // this.element.style.width = '100%';
+        // this.element.style.height = '100%';
+    }
+
+    getText() {
+        return this.element.textContent;
+    }
+
+    setText(text) {
+        this.element.textContent = text;
+    }
+
+    getHtml() {
+        return this.element.innerHTML;
+    }
+
+    setHtml(html) {
+        this.element.innerHTML = html;
+    }
+
+	// https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
+    applyStyleCommand(cmd) {
+         document.execCommand(cmd, false, null);
+    }
+}
 
 class JSTextArea extends JSObject {
     constructor(text, rows, cols) {

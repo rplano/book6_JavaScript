@@ -14,6 +14,7 @@ var CONSOLE_ROWS = 10;
 var CONSOLE_COLS = 32;
 
 var textarea;
+var textKeyDown;   // needed for readLine()
 var textEntered = '';   // needed for readLine()
 var enterPressed = false; // needed for readLine()
 
@@ -25,6 +26,7 @@ function createConsole(rows, cols) {
         }
         // textarea.append(msg);
         textarea.value += msg;
+        textarea.scrollTop = textarea.scrollHeight;
     }
 
     // redefine clear():
@@ -49,17 +51,23 @@ function createConsole(rows, cols) {
         CONSOLE_ROWS = rows;
     }
 
-    // add key listeners
-    document.addEventListener('keydown',
+    // // add key listeners
+    // document.addEventListener('keydown',
+    //     function (ev) {
+    //         keyDown(ev.key, ev.code);
+    //     }
+    // );
+    document.addEventListener('keyup',
         function (ev) {
-            keyDown(ev.key, ev.code);
+            keyUp(ev.key, ev.code);
         }
     );
-    document.addEventListener('keypress',
-        function (ev) {
-            keyPress(ev.key, ev.code);
-        }
-    );
+    // // not working on Android Chrome:
+    // document.addEventListener('keypress',
+    //     function (ev) {
+    //         keyPress(ev.key, ev.code);
+    //     }
+    // );
 
     // create text area
     textarea = document.createElement('textarea');
@@ -70,7 +78,8 @@ function createConsole(rows, cols) {
     // textarea.style.position = "absolute";
     // textarea.style.left = '0px';
     // textarea.style.top = '0px';
-    textarea.readOnly = true;
+    textarea.readOnly = false; // needed for mobile devices to show keyboard
+    // textarea.readOnly = true; 
 
     // add text area to body
     let _body = document.getElementsByTagName('body')[0];
@@ -83,20 +92,24 @@ function setFont(fon) {
     textarea.style.font = fon;   // '30px Arial'
 }
 
-function keyDown(key, code) {
-    // console.log('keyDown(' + key + ',' + code + ')');
-    if (key === 'Backspace' && textarea !== undefined) {
-        textarea.value = textarea.value.slice(0, -1);
-        textEntered = textEntered.slice(0, -1);
-    }
-}
+// function keyDown(key, code) {
+//     // console.log('keyDown(' + key + ',' + code + ')');
+//     // textKeyDown = textarea.value;
+//     // if (key === 'Backspace' && textarea !== undefined) {
+//     //     // textarea.value = textarea.value.slice(0, -1);
+//     //     textEntered = textEntered.slice(0, -1);
+//     // }
+// }
 
-function keyPress(key, code) {
-    if (key === 'Enter') {
+function keyUp(key, code) {
+    // console.log('keyUp(' + key + ',' + code + ')');
+    let textKeyUp = textarea.value;
+    let dif = textKeyUp.length - textKeyDown.length;
+    let lastChar = textKeyUp.slice(-1);
+    if (lastChar === '\n' || lastChar === '\r') {
         enterPressed = true;
-    } else if (textarea !== undefined) {
-        textarea.value += key;
-        textEntered += key;
+    } else if (dif >= 0) {
+        textEntered = textarea.value.substring(textKeyDown.length, textKeyUp.length);
     }
 }
 
@@ -105,6 +118,7 @@ function println(msg) {
         msg = '';
     }
     textarea.value += msg + '\n';
+    textarea.scrollTop = textarea.scrollHeight;
 }
 
 function readLine(msg) {
@@ -115,13 +129,14 @@ function readLine(msg) {
 
     enterPressed = false;
     textEntered = '';
+    textKeyDown = textarea.value;
     return new Promise((resolveOuter) => {
         resolveOuter(
             new Promise((resolveInner) => {
                 var check = function () {
                     if (enterPressed) {
                         // print('Enter');
-                        textarea.value += '\n';
+                        // textarea.value += '\n';
                         resolveInner(textEntered);
                     } else {
                         // print('No Enter');

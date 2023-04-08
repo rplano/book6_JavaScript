@@ -22,7 +22,7 @@ function update() {
     }
     // needed for key focus:
     const canvas = document.getElementById('defaultCanvas0');
-    canvas.setAttribute('tabindex',0);
+    canvas.setAttribute('tabindex', 0);
     canvas.focus();
 }
 
@@ -51,6 +51,10 @@ function getElementsAt(x, y) {
 }
 
 function add(obj, x, y) {
+    addToFront(obj, x, y)
+}
+
+function addToBack(obj, x, y) {
     // obj.setLocation(0, 0);
     if ((x !== undefined) && (y !== undefined)) {
         obj.setLocation(x, y);
@@ -59,7 +63,7 @@ function add(obj, x, y) {
     // gobjects.push(obj);
 }
 
-function addAtEnd(obj, x, y) {
+function addToFront(obj, x, y) {
     // obj.setLocation(0, 0);
     if ((x !== undefined) && (y !== undefined)) {
         obj.setLocation(x, y);
@@ -68,12 +72,12 @@ function addAtEnd(obj, x, y) {
     gobjects.push(obj);
 }
 
-function sendToBack(obj) {
+function sendToFront(obj) {
     removeObj(obj);
     gobjects.push(obj);
 }
 
-function sendToFront(obj) {
+function sendToBack(obj) {
     removeObj(obj);
     gobjects.unshift(obj);
 }
@@ -604,7 +608,8 @@ class GVideoPreview extends GObject {
     }
 }
 
-class GImage extends GObject {
+// needed for pixel manipulation
+class GImage2 extends GObject {
     constructor(width, height, imageName) {
         if (width !== undefined && height !== undefined && imageName === undefined) {
             // console.log("new (200, 200)");
@@ -710,8 +715,8 @@ class GImage extends GObject {
     }
 }
 
-// needed for Karel
-class GImage2 extends GObject {
+// needed, because GImage2 loads a little slow
+class GImage extends GObject {
 
     constructor(x, y, imageName) {
         if ((x === undefined) && (y === undefined) && (imageName === undefined)) {
@@ -755,84 +760,92 @@ class GImage2 extends GObject {
         }
     }
 
-//     setPixelArray(imgData) {
-//         let that = this; // dirty trick for promise below
+    setPixelArray(pixels) {
+        print('To use setPixelArray() please use the GImage2 class.');
+    }
 
-//         this.image = createImage(imgData.width, imgData.height);
-//         this.image.loadPixels();
-//         for (let i = 0; i < imgData.data.length; i++) {
-//             this.image.pixels[i] = imgData.data[i];
-//         }
-//         this.image.updatePixels();
-//         this.src = 'created';
+    getPixelArray() {
+        print('To use getPixelArray() please use the GImage2 class.');
+    }
 
-//         // we need to remember the imageData
-//         Promise.resolve(imgData).then(function (value) {
-//             that.imageData = value;
-//         })
-//     }
+    //     setPixelArray(imgData) {
+    //         let that = this; // dirty trick for promise below
 
-//     // this is a little tricky, because we must wait until the image has been loaded and drawn
-//     getPixelArray() {
-//         return new Promise((resolveInner) => {
-//             //const canvas = document.getElementById('defaultCanvas0');
-//             const canvas = document.createElement('canvas');
-//             canvas.width = 800;
-//             canvas.height = 800;
-//             const ctx = canvas.getContext('2d');
-//             let img = new Image();
-//             img.onload = () => {
-//                 createImageBitmap(img);
-//                 ctx.drawImage(img, 0, 0);
-//                 let imgData = ctx.getImageData(0, 0, img.width, img.height);
-//                 canvas.remove();
-//                 // print('imageData='+imageData);
-//                 resolveInner(imgData);
-//             }
-//             // img.src = 'Taj_Mahal_(Edited).jpeg';
-//             img.src = this.src;
-//         });
-//     }
+    //         this.image = createImage(imgData.width, imgData.height);
+    //         this.image.loadPixels();
+    //         for (let i = 0; i < imgData.data.length; i++) {
+    //             this.image.pixels[i] = imgData.data[i];
+    //         }
+    //         this.image.updatePixels();
+    //         this.src = 'created';
 
-//     async getImageData() {
-//         let imgData = image.imageData;
-//         if (imgData === undefined) {
-//             imgData = await this.getPixelArray();
-//         }
-//         return imgData;
-//     }
+    //         // we need to remember the imageData
+    //         Promise.resolve(imgData).then(function (value) {
+    //             that.imageData = value;
+    //         })
+    //     }
 
-//     offScreenDrawing() {
-//         // @see https://stackoverflow.com/questions/3892010/create-2d-context-without-canvas
-//         // Create a canvas element
-//         let canvas = document.createElement('canvas');
-//         canvas.width = 500;
-//         canvas.height = 400;
+    //     // this is a little tricky, because we must wait until the image has been loaded and drawn
+    //     getPixelArray() {
+    //         return new Promise((resolveInner) => {
+    //             //const canvas = document.getElementById('defaultCanvas0');
+    //             const canvas = document.createElement('canvas');
+    //             canvas.width = 800;
+    //             canvas.height = 800;
+    //             const ctx = canvas.getContext('2d');
+    //             let img = new Image();
+    //             img.onload = () => {
+    //                 createImageBitmap(img);
+    //                 ctx.drawImage(img, 0, 0);
+    //                 let imgData = ctx.getImageData(0, 0, img.width, img.height);
+    //                 canvas.remove();
+    //                 // print('imageData='+imageData);
+    //                 resolveInner(imgData);
+    //             }
+    //             // img.src = 'Taj_Mahal_(Edited).jpeg';
+    //             img.src = this.src;
+    //         });
+    //     }
 
-//         // Get the drawing context
-//         let ctx = canvas.getContext('2d');
+    //     async getImageData() {
+    //         let imgData = image.imageData;
+    //         if (imgData === undefined) {
+    //             imgData = await this.getPixelArray();
+    //         }
+    //         return imgData;
+    //     }
 
-//         // Then you can do stuff, e.g.:
-//         ctx.fillStyle = '#f00';
-//         ctx.fillRect(20, 10, 80, 50);
+    //     offScreenDrawing() {
+    //         // @see https://stackoverflow.com/questions/3892010/create-2d-context-without-canvas
+    //         // Create a canvas element
+    //         let canvas = document.createElement('canvas');
+    //         canvas.width = 500;
+    //         canvas.height = 400;
 
-//         // Once you've used the canvas, you can of course add it to the document
+    //         // Get the drawing context
+    //         let ctx = canvas.getContext('2d');
 
-//         let element = document.getElementById('canvas_container');
-//         element.appendChild(canvas);
+    //         // Then you can do stuff, e.g.:
+    //         ctx.fillStyle = '#f00';
+    //         ctx.fillRect(20, 10, 80, 50);
 
-//         // Or you could make an image from it:
+    //         // Once you've used the canvas, you can of course add it to the document
 
-//         let new_image_url = canvas.toDataURL();
-//         let img = document.createElement('img');
-//         img.src = new_image_url;
+    //         let element = document.getElementById('canvas_container');
+    //         element.appendChild(canvas);
 
-//         // Or you could access the canvas data as values with:
+    //         // Or you could make an image from it:
 
-//         let image_data = ctx.getImageData(0, 0, canvas.width, canvas.height);
-//         let rgba_byte_array = image_data.data;
-//         rgba_byte_array[0];  // red value for first pixel (top left) in the canvas
-//     }
+    //         let new_image_url = canvas.toDataURL();
+    //         let img = document.createElement('img');
+    //         img.src = new_image_url;
+
+    //         // Or you could access the canvas data as values with:
+
+    //         let image_data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    //         let rgba_byte_array = image_data.data;
+    //         rgba_byte_array[0];  // red value for first pixel (top left) in the canvas
+    //     }
 }
 
 class GCompound extends GObject {

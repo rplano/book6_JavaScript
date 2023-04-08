@@ -91,7 +91,7 @@ function setup() {
 	frameRate(FPS);
 
 	// create karel
-	karel = new GImage2(0, APP_HEIGHT - SIZE, '../libraries/Karel0.png');
+	karel = new GImage(0, APP_HEIGHT - SIZE, '../libraries/Karel0.png');
 
 	// load code
 	let code;
@@ -105,8 +105,10 @@ function setup() {
 
 	// catch infinite loops caused by while-loops
 	const regex = /(while\s*)\(([ a-zA-Z\(\)]+)\)\s*\{/g;
-	code = code.replaceAll(regex, " $1 ( $2 ) { catchInfiniteLoops();");
-	// print(code);
+	// code = code.replaceAll(regex, " $1 ( $2 ) { catchInfiniteLoops();");
+	code = code.replace(regex, " $1 ( $2 ) { catchInfiniteLoops();");
+	//print(code);
+	//console.log('2');
 
 	// run simulation:
 	codeLines.push(';');
@@ -128,9 +130,9 @@ function setup() {
 	simulationRun = false;
 	reset();
 
-	drawKarel();
-	drawDotsAndBeepers();
 	drawWorld();
+	drawDotsAndBeepers();
+	drawKarel();
 }
 
 class InfiniteLoopError extends Error {
@@ -298,9 +300,9 @@ function putBeeper() {
 			codeLines.push('putBeeper();');
 		} else {
 			removeAll();	
-			drawKarel();
-			drawDotsAndBeepers();
 			drawWorld();
+			drawDotsAndBeepers();
+			drawKarel();		
 		}
 	}
 }
@@ -321,9 +323,9 @@ function pickBeeper() {
 			codeLines.push('pickBeeper();');
 		} else {
 			removeAll();
-			drawKarel();
-			drawDotsAndBeepers();
 			drawWorld();
+			drawDotsAndBeepers();
+			drawKarel();		
 		}
 	}
 }
@@ -434,11 +436,6 @@ function drawDotsAndBeepers() {
 				//const beeper = new acm.GOval(j * SIZE,i  * SIZE, SIZE, SIZE);
 				//beeper.color = 'rgb(255,0,0)';
 				//super.add(beeper);
-				const label = new GLabel((j + 0.5) * SIZE - 3, (i + 0.5) * SIZE + 3, s);
-				// label.font = '10px Arial';
-				label.setFont('Arial');
-				label.setFontSize(10);
-				add(label);
 				const beeper = new GPolygon((j + 0.5) * SIZE, (i + 0.5) * SIZE);
 				beeper.addVertex(-SIZE / 2, 0);
 				beeper.addVertex(0, -SIZE / 2);
@@ -448,6 +445,11 @@ function drawDotsAndBeepers() {
 				beeper.setFilled(true);
 				beeper.setColor(Color.LIGHT_GRAY);
 				add(beeper);
+				const label = new GLabel((j + 0.5) * SIZE - 3, (i + 0.5) * SIZE + 3, s);
+				// label.font = '10px Arial';
+				label.setFont('Arial');
+				label.setFontSize(10);
+				add(label);
 			} else {
 				const dot = new GOval((j + 0.5) * SIZE, (i + 0.5) * SIZE, 2, 2);
 				add(dot);

@@ -412,7 +412,8 @@ class ArrayList {
     }
 
     get(idx) {
-        return this.arry.at(idx);
+        // return this.arry.at(idx);
+        return this.arry[idx];
     }
 
     remove(value) {
