@@ -18,8 +18,8 @@ async function setup() {
 	createCanvas(400, 200);
 	frameRate(5);
 
-	// let image = new GImage(200, 200, "Ch7_Asteroids/Taj_Mahal_(Edited).jpeg");
-	let image = new GImage("Ch7_Asteroids/Taj_Mahal_(Edited).jpeg");
+	// let image = new GImage2(200, 200, "Ch7_Asteroids/Taj_Mahal_(Edited).jpeg");
+	let image = new GImage2("Ch7_Asteroids/Taj_Mahal_(Edited).jpeg");
 	image.scale(0.25);
 	add(image, 0, 0);
 
@@ -52,7 +52,7 @@ async function createGrayImage(image) {
 		}
 	}
 
-	let gray = new GImage(width, height);
+	let gray = new GImage2(width, height);
 	gray.setPixelArray(pixelsGray);
 	return gray;
 }
@@ -73,7 +73,7 @@ async function createInvertedImage(image) {
 			pixels2[i + 3] = pixels[i + 3];
 	}
 
-	let gray = new GImage(width, height);
+	let gray = new GImage2(width, height);
 	gray.setPixelArray(pixels2);
 	return gray;
 }
