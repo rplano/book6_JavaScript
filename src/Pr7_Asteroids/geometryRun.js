@@ -31,8 +31,8 @@ function setup() {
 	createCanvas(APP_WIDTH, APP_HEIGHT);
 	frameRate(20);
 
-	createRunner();
 	createObstacles();
+	createRunner();
 
 	function createObstacles() {
 		obstacles = [];

@@ -18,7 +18,7 @@ async function setup() {
 	createCanvas(400, 200);
 	frameRate(5);
 
-	let image = new GImage("Pr7_Asteroids/Taj_Mahal_(Edited).jpeg");
+	let image = new GImage2("Pr7_Asteroids/Taj_Mahal_(Edited).jpeg");
 	image.scale(0.5);
 	add(image, 0, 0);
 
@@ -46,7 +46,7 @@ async function flipVertical(image) {
 		}
 	}
 
-	let flipped = new GImage(width, height);
+	let flipped = new GImage2(width, height);
 	flipped.setPixelArray(pixelsFlipped);
 	return flipped;
 }

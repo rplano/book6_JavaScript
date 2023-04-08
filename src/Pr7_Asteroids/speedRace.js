@@ -36,10 +36,10 @@ function setup() {
 	frameRate(25);
 	setBackground(Color.BLACK);
 
-	createMyCar();
-	createOtherCars();
 	drawRoad();
 	drawMiddleLane();
+	createOtherCars();
+	createMyCar();
 
 	function createMyCar() {
 		car = new GRect(CAR_WIDTH, CAR_HEIGHT);

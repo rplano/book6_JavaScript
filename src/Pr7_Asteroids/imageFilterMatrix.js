@@ -54,8 +54,8 @@ async function setup() {
 	createCanvas(2 * SIZE, SIZE);
 	frameRate(5);
 
-	imag = new GImage("Pr7_Asteroids/Taj_Mahal_(Edited).jpeg");
-	// imag = new GImage("Pr7_Asteroids/Mona_Lisa.jpg");
+	imag = new GImage2("Pr7_Asteroids/Taj_Mahal_(Edited).jpeg");
+	// imag = new GImage2("Pr7_Asteroids/Mona_Lisa.jpg");
 	imag.scale(SCALE);
 	add(imag, 0, 0);
 
@@ -92,7 +92,7 @@ async function applyFilter() {
 		}
 	}
 
-	let xored = new GImage(width, height);
+	let xored = new GImage2(width, height);
 	xored.setPixelArray(array2);
 	return xored;
 }

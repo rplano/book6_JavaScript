@@ -37,8 +37,8 @@ function setup() {
   createCanvas(APP_WIDTH, APP_HEIGHT);
   frameRate(FPS);
 
-  createSpaceShip();
   createAsteroids();
+  createSpaceShip();
 }
 
 function draw() {
@@ -83,7 +83,7 @@ function fireBullet() {
     bullet.vx = Math.sin(spaceShip.angle) * BULLET_SPEED;
     bullet.vy = -Math.cos(spaceShip.angle) * BULLET_SPEED;
     add(bullet);
-    sendToBack(bullet);
+    // sendToBack(bullet);
   }
 }
 

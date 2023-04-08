@@ -22,7 +22,7 @@ async function setup() {
 	createCanvas(2*SIZE, SIZE);
 	frameRate(5);
 
-	let image = new GImage("Pr7_Asteroids/Mona_Lisa.jpg");
+	let image = new GImage2("Pr7_Asteroids/Mona_Lisa.jpg");
 	image.scale(SCALE);
 	add(image, 0, 0);
 
@@ -58,7 +58,7 @@ async function createReducedColorImage(image) {
 		}
 	}
 
-	let img = new GImage(width, height);
+	let img = new GImage2(width, height);
 	img.setPixelArray(pixelsReduced);
 	return img;
 }

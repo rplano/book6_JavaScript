@@ -22,10 +22,10 @@ async function setup() {
 	createCanvas(400, 400);
 	frameRate(5);
 
-	let image1 = new GImage("Pr7_Asteroids/Taj_Mahal_(Edited).jpeg");
+	let image1 = new GImage2("Pr7_Asteroids/Taj_Mahal_(Edited).jpeg");
 	let grayImage1 = await createGrayImage(image1);
 
-	let image2 = new GImage("Pr7_Asteroids/Mona_Lisa.jpg");
+	let image2 = new GImage2("Pr7_Asteroids/Mona_Lisa.jpg");
 	let grayImage2 = await createGrayImage(image2);
 
 	grayImage1.scale(0.5);
@@ -63,7 +63,7 @@ async function doImage1XORImage2(grayImage1, grayImage2) {
 		}
 	}
 
-	let xored = new GImage(width, height);
+	let xored = new GImage2(width, height);
 	xored.setPixelArray(xorPixels);
 	return xored;
 }
@@ -91,7 +91,7 @@ async function createGrayImage(image) {
 		}
 	}
 
-	let gray = new GImage(width, height);
+	let gray = new GImage2(width, height);
 	gray.setPixelArray(pixelsGray);
 	return gray;
 }

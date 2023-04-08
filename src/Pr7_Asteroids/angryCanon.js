@@ -36,11 +36,6 @@ function setup() {
 	target.setFilled(true);
 	add(target, 230, APP_HEIGHT - TARGET_SIZE);
 
-	let canon2 = new GOval(50, 50);
-	canon2.setColor(Color.RED);
-	canon2.setFilled(true);
-	add(canon2, 25, APP_HEIGHT - 50);
-
 	canon = new GPolygon();
 	canon.addVertex(-8, -40);
 	canon.addVertex(-8, 10);
@@ -53,6 +48,11 @@ function setup() {
 	canon.setColor(Color.BLACK);
 	canon.setFilled(true);
 	add(canon, 50, APP_HEIGHT - 35);
+
+	let canon2 = new GOval(50, 50);
+	canon2.setColor(Color.RED);
+	canon2.setFilled(true);
+	add(canon2, 25, APP_HEIGHT - 50);
 }
 
 function draw() {
@@ -99,7 +99,6 @@ function fireBullet() {
 		bullet.setColor(Color.GREEN);
 		bullet.setFilled(true);
 		add(bullet, 50 - BULLET_SIZE / 2, APP_HEIGHT - 30 - BULLET_SIZE);
-		sendToBack(bullet);
 	}
 }
 

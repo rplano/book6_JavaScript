@@ -35,8 +35,8 @@ function setup() {
 	createCanvas(APP_WIDTH, APP_HEIGHT);
 	frameRate(20);
 
-	createBall();
 	createNewObjects();
+	createBall();
 
 	function createBall() {
 		ball = new GOval(BALL_DIAM, BALL_DIAM);
