@@ -40,7 +40,7 @@ function actionPerformed(e) {
 	if (e.getActionCommand() == "Clear") {
 		canvas.clear();
 	} else {
-		let entry = db.findEntry(tfSymbol.getText());
+		let entry = db.findEntry(tfSymbol.getText().toLowerCase());
 		// print(entry);
 		if (entry != null) {
 			canvas.addEntry(entry);

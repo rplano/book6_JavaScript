@@ -13,7 +13,7 @@ class StockEntry {
 
 	constructor(line) {
 		let sVals = line.split(",");
-		this.symbol = sVals[0];
+		this.symbol = sVals[0].toLowerCase();
 		this.prices = new ArrayList();
 		for (let i = 1; i < sVals.length; i++) {
 			if (sVals[i] == "null") {

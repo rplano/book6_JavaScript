@@ -18,13 +18,13 @@ async function setup() {
 	createConsole();
 
 	db = new StockDataBase("Pr8_Stocks/SP500_HistoricalStockDataMonthly.csv");
-	
+
 	while (true) {
 		let symbol = await readLine("Enter stock symbol (msft): ");
 		if (symbol == "")
 			break;
 
-		let entry = db.findEntry(symbol);
+		let entry = db.findEntry(symbol.toLowerCase());
 		if (entry != null) {
 			println(entry);
 		} else {
