@@ -3,7 +3,7 @@
  * 
  * Graphics: 4. Video
  * 
- * Draw an image.
+ * Play a video.
  * 
  * @see http://www.VariationenZumThema.de/
  * @author Ralph P. Lano
